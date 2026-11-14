@@ -1,4 +1,4 @@
-"""Statická kontrola pluginu b6 (K1-K9).
+"""Statická kontrola pluginu b6 (K1-K10).
 
 Spustenie: python3 -I testy/kontrola.py   (Windows: py -3 -I testy/kontrola.py)
 Výstup: riadok "OK K<n>" alebo "FAIL K<n>: <dôvod>"; exit 0 iba ak je všetko OK.
@@ -14,6 +14,10 @@ KOREN = Path(__file__).resolve().parent.parent
 PLUGIN = KOREN / "b6"
 DOCS = PLUGIN / "docs"
 SPRIEVODCA = DOCS / "project-memory.html"
+SPRIEVODCA_SKILLY = DOCS / "skills-as-company-knowledge.html"
+SPRIEVODCA_START = DOCS / "getting-started.html"
+SPRIEVODCOVIA_TITLE = [(SPRIEVODCA, "Project memory"), (SPRIEVODCA_SKILLY, "Skills as company knowledge"),
+                       (SPRIEVODCA_START, "Getting started with b6")]
 TEMPLATES = PLUGIN / "skills" / "workflow" / "references" / "templates.md"
 
 SKILLY = ["workflow", "brainstorming", "plan", "build", "wrap-up"]
@@ -177,7 +181,7 @@ def k2():
     cesty = [PLUGIN / "skills" / s / "SKILL.md" for s in SKILLY]
     cesty += [TEMPLATES, PLUGIN / "skills" / "workflow" / "references" / "models.md"]
     cesty += [PLUGIN / "agents" / f"{a}.md" for a in AGENTI]
-    cesty += [PLUGIN / n for n in ("README.md", "LICENSE", "NOTICE")] + [SPRIEVODCA]
+    cesty += [PLUGIN / n for n in ("README.md", "LICENSE", "NOTICE")] + [SPRIEVODCA, SPRIEVODCA_SKILLY, SPRIEVODCA_START]
     chybajuce = [str(c.relative_to(PLUGIN)) for c in cesty if not c.is_file()]
     return "chýbajú: " + ", ".join(chybajuce) if chybajuce else ""
 
@@ -346,8 +350,31 @@ def k9():
     return "chýbajú sekcie: " + ", ".join(chyba) if chyba else ""
 
 
+# B6 iba veľkými písmenami: malé b6 je názov pluginu.
+ZAKAZANE_SLOVA_VELKE = ("B6",)
+ZAKAZANE_SLOVA_BEZ_VELKOSTI = ("strix", "ps-metodika", "fable")
+
+
+def k10():
+    """K10: všetci traja sprievodcovia majú obe jazykové časti, správny title a neobsahujú názvy klienta ani metodiky."""
+    chyby = []
+    for cesta, title in SPRIEVODCOVIA_TITLE:
+        meno = cesta.name
+        if not cesta.is_file():
+            chyby.append(f"{meno}: chýba")
+            continue
+        text = cti(cesta)
+        chyby += [f"{meno}: chýba '{s}'" for s in ('id="lang-sk"', 'id="lang-en"', f"<title>{title}</title>")
+                  if s not in text]
+        chyby += [f"{meno}: obsahuje '{s}'" for s in ZAKAZANE_SLOVA_VELKE
+                  if re.search(rf"(?<![A-Za-z0-9]){re.escape(s)}(?![A-Za-z0-9])", text)]
+        chyby += [f"{meno}: obsahuje '{s}'" for s in ZAKAZANE_SLOVA_BEZ_VELKOSTI
+                  if re.search(rf"(?<![A-Za-z0-9]){re.escape(s)}(?![A-Za-z0-9])", text, re.IGNORECASE)]
+    return "; ".join(chyby)
+
+
 KONTROLY = [("K1", k1), ("K2", k2), ("K3", k3), ("K4", k4), ("K5", k5), ("K6", k6), ("K7", k7), ("K8", k8),
-            ("K9", k9)]
+            ("K9", k9), ("K10", k10)]
 
 
 def main():

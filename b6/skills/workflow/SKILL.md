@@ -25,10 +25,10 @@ Consent means the meaning, in any language ("go", "yes, build it", "rob").
 
 1. If `ctx/TASKS.md` exists, read it. Say in two or three sentences where the project stands and what waits for the owner.
 2. A task for the owner such as "Try R-001": tell the owner what to try. After they answer, hand over to `wrap-up`.
-3. A plan file `ctx/plans/<date>-<slug>.md` (not `*-design.md`) or `SUMMARY.md` exists and this is a new chat: say where
-   the work stopped and what comes next; continue after the owner agrees. Do not ask for the requirements again.
-4. If the requirements are `met`, `partly met` or `ready to try` and a design, plan or run folder is left over, say so
-   and offer to delete them (skill `wrap-up`, step 6).
+3. A plan file `ctx/plans/<date>-<slug>.md` (not `*-design.md`) or `SUMMARY.md` exists, its requirements are not yet
+   `ready to try`, `partly met` or `met`, and this is a new chat: say where the work stopped; continue after the owner agrees.
+4. A plan, design or run folder whose requirements are `ready to try`, `partly met` or `met` is a leftover, not work in
+   progress: never continue or rebuild it. Say so and offer to delete it (skill `wrap-up`, step 6).
 5. Read project documents only as needed; do not read everything.
 
 ## Size
@@ -49,7 +49,7 @@ Consent means the meaning, in any language ("go", "yes, build it", "rob").
 
 - Requirements not approved yet: `brainstorming`.
 - Requirements approved, no plan: `plan`.
-- Plan file `ctx/plans/<date>-<slug>.md` written (a design file `*-design.md` is not a plan): `build`.
+- Plan file `ctx/plans/<date>-<slug>.md` written, requirements still open (not a leftover, Start point 4): `build`.
 - All plan steps OK: `build` hands over to `wrap-up`.
 
 ## First use in a project

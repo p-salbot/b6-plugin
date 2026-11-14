@@ -35,8 +35,13 @@ and waits for your "go".
 
 ## Guide
 
+Start here: `docs/getting-started.html` shows how to use the plugin step by step, with a diagram (for people new to Claude Code).
+
 An illustrated guide to the project documents is in `docs/project-memory.html`.
 Open it in a browser. It has a Slovak and an English version.
+
+A one-page guide to using skills as company knowledge, not only as procedures, is in `docs/skills-as-company-knowledge.html`.
+It also has a Slovak and an English version.
 
 ## License
 

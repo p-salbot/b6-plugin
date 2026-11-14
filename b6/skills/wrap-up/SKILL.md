@@ -30,7 +30,7 @@ Tell the owner what to try and how, in steps a non-programmer can follow (a comm
 
 ## 3. Owner confirms
 
-Ask only this: "Did you try it? Does it work?" Meaning counts, not the exact words. Deleting is a separate question (step 6).
+Ask only this (not when coming from `workflow` - use the answer you already have): "Did you try it? Does it work?" Meaning counts, not the exact words. Deleting is a separate question (step 6).
 
 - Works: set `met`. Works only in part: set `partly met` and write what is missing in the Evidence column.
 - Not yet: leave `ready to try`. Do not push. Go to "Owner cannot try now" below.
@@ -65,4 +65,4 @@ Finish the closing with status `ready to try`. Delete the design, plan and run f
 (an uncommitted project without git keeps them until "delete"). If `ctx/TASKS.md` has no such task yet, add
 "Try R-<n>: <what and how>", with the owner in "Who acts". At the next start, skill `workflow` announces it.
 When the owner answers, skill `workflow` hands over here (see "Where you come from"): apply step 3 with all its
-branches (works, partly met, does not work), delete the task when it is done, update the `Status` line (step 4).
+branches (works, partly met, does not work, not yet), delete the task when it is done, update the `Status` line (step 4).
