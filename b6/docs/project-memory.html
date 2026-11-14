@@ -1,0 +1,618 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Project memory</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column; each of the three documents keeps its own colour everywhere it appears (map, table, trace). */
+:root {
+  --bg: #f5f7f9; --surface: #ffffff; --fg: #17212b; --muted: #586673; --line: #d7dfe5;
+  --req: #3f4fc4; --req-tint: #eceefb;
+  --task: #a35f00; --task-tint: #fbf1df;
+  --arch: #0b756c; --arch-tint: #e1f3f1;
+  --font-display: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Inter", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", Consolas, "Courier New", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #11171c; --surface: #19212a; --fg: #e5ebf0; --muted: #9babb7; --line: #2d3943;
+    --req: #9aa6ff; --req-tint: #232a52;
+    --task: #f0b558; --task-tint: #3b2c10;
+    --arch: #62d2c5; --arch-tint: #123733;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #11171c; --surface: #19212a; --fg: #e5ebf0; --muted: #9babb7; --line: #2d3943;
+  --req: #9aa6ff; --req-tint: #232a52;
+  --task: #f0b558; --task-tint: #3b2c10;
+  --arch: #62d2c5; --arch-tint: #123733;
+  color-scheme: dark;
+}
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 16px; line-height: 1.6; }
+.page {
+  max-width: 1200px; margin: 0 auto; padding-block: 28px 72px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; flex-direction: column; gap: 28px;
+}
+.lang { display: flex; flex-direction: column; gap: 56px; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; line-height: 1.2; }
+h1 { font-size: clamp(1.8rem, 5vw, 2.5rem); font-weight: 600; letter-spacing: -0.01em; }
+h2 { font-size: 1.45rem; font-weight: 600; }
+h3 { font-size: 1.05rem; font-weight: 600; }
+p { margin: 0; max-width: 68ch; }
+code { font-family: var(--font-mono); font-size: 0.86em; background: var(--line); padding: 1px 5px; border-radius: 3px; overflow-wrap: anywhere; }
+.eyebrow { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
+.stack { display: flex; flex-direction: column; gap: 16px; }
+.stack-s { display: flex; flex-direction: column; gap: 8px; }
+.lead { font-size: 1.1rem; color: var(--muted); }
+
+.switch { display: flex; justify-content: flex-end; gap: 4px; }
+.switch button { font: 600 0.8rem var(--font-body); letter-spacing: 0.06em; color: var(--muted); background: transparent; border: 1px solid var(--line); border-radius: 4px; padding: 6px 12px; cursor: pointer; }
+.switch button[aria-pressed="true"] { color: var(--bg); background: var(--fg); border-color: var(--fg); }
+.switch button:focus-visible { outline: 2px solid var(--req); outline-offset: 2px; }
+
+.req { --c: var(--req); --t: var(--req-tint); }
+.task { --c: var(--task); --t: var(--task-tint); }
+.arch { --c: var(--arch); --t: var(--arch-tint); }
+
+.figure { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; }
+.figure svg { display: block; min-width: 960px; width: 100%; height: auto; }
+.figure text { font-family: var(--font-body); fill: var(--fg); }
+.figure .t-file { font-family: var(--font-mono); font-size: 14px; font-weight: 500; }
+.figure .t-q { font-family: var(--font-display); font-size: 17px; font-weight: 600; }
+.figure .t-s { font-size: 12.5px; fill: var(--muted); }
+.figure .t-l { font-size: 12.5px; }
+figcaption, .note { font-size: 0.9rem; color: var(--muted); }
+figure { margin: 0; display: flex; flex-direction: column; gap: 10px; }
+
+.doc-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; }
+.chip { font-family: var(--font-mono); font-size: 0.8rem; font-weight: 500; color: var(--c, var(--fg)); background: var(--t, var(--line)); padding: 3px 9px; border-radius: 3px; overflow-wrap: anywhere; }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px 28px; margin: 0; }
+.facts > div { min-width: 0; }
+.facts dt { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.facts dd { margin: 4px 0 0; font-size: 0.95rem; }
+
+.file { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.file-bar { background: var(--t); color: var(--c); font-family: var(--font-mono); font-size: 0.8rem; font-weight: 500; padding: 8px 14px; overflow-wrap: anywhere; }
+.file-pre { padding: 12px 14px 0; font-size: 0.93rem; }
+.file-pre p { max-width: none; }
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; line-height: 1.5; }
+.file table { min-width: 860px; }
+.file th, .file td { padding: 10px 14px; }
+th { text-align: left; font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 600; padding: 8px 12px 8px 0; border-bottom: 1px solid var(--line); white-space: nowrap; }
+td { padding: 10px 12px 10px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+.file tr:last-child td { border-bottom: 0; }
+td.id { font-family: var(--font-mono); font-weight: 500; color: var(--c); white-space: nowrap; }
+td.nw, td .chip { white-space: nowrap; }
+.routing { min-width: 520px; max-width: 900px; font-size: 0.93rem; }
+h1 { max-width: 22ch; }
+.facts { max-width: 1000px; }
+ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 6px; max-width: 68ch; }
+
+.trace { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.trace li { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 14px; padding-bottom: 22px; position: relative; }
+.trace li::before { content: ""; position: absolute; left: 16px; top: 34px; bottom: 0; width: 2px; background: var(--line); }
+.trace li:last-child { padding-bottom: 0; }
+.trace li:last-child::before { display: none; }
+.num { width: 34px; height: 34px; border-radius: 50%; background: var(--t, var(--line)); color: var(--c, var(--fg)); font-family: var(--font-display); font-weight: 600; display: grid; place-items: center; font-variant-numeric: tabular-nums; }
+.trace .body { display: flex; flex-direction: column; gap: 4px; padding-top: 4px; }
+.trace .where { font-family: var(--font-mono); font-size: 0.78rem; color: var(--c, var(--muted)); overflow-wrap: anywhere; }
+.trace p { font-size: 0.95rem; }
+
+.prompt { max-width: 780px; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; }
+.prompt .when { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.prompt .say { font-family: var(--font-mono); font-size: 0.86rem; line-height: 1.55; }
+</style>
+
+<div class="page">
+
+<div class="switch" role="group" aria-label="Jazyk / Language">
+  <button type="button" id="btn-sk" data-lang="sk" aria-pressed="false">SK</button>
+  <button type="button" id="btn-en" data-lang="en" aria-pressed="true">EN</button>
+</div>
+
+<!-- ============================== SLOVENSKY ============================== -->
+<div class="lang" id="lang-sk" lang="sk" hidden>
+
+  <header class="stack">
+    <div class="eyebrow">Ukážka na vymyslenom projekte Zasadačky</div>
+    <h1>Dokumenty, podľa ktorých Claude Code vie, čo robiť</h1>
+    <p class="lead">Claude si medzi dvoma chatmi nič nepamätá. Čo má vedieť, musí byť zapísané v súboroch projektu. Stačia na to štyri dokumenty a každý odpovedá na inú otázku.</p>
+    <p>Dokumenty netreba písať ručne, vedie ich Claude. Stačí mu v chate vlastnými slovami povedať, čo treba, a on to zapíše. Počas práce ich potom sám priebežne dopĺňa.</p>
+    <p>Príklad: firma so 120 ľuďmi a 8 zasadačkami si robí internú webovú aplikáciu na rezerváciu zasadačiek. Projekt je vymyslený, zápisy sú napísané tak, ako by v ňom naozaj vyzerali.</p>
+  </header>
+
+  <section class="stack">
+    <h2>Mapa</h2>
+    <figure>
+      <div class="figure">
+        <svg viewBox="0 0 1200 372" role="img" aria-label="Dokumenty a chat v Claude Code, ktorý z nich číta a do nich zapisuje">
+          <rect x="20" y="20" width="260" height="100" rx="5" fill="var(--req-tint)" stroke="var(--req)" stroke-width="1.5"/>
+          <text x="38" y="50" class="t-file" style="fill:var(--req)">ctx/requirements.md</text>
+          <text x="38" y="78" class="t-q">Čo má byť hotové?</text>
+          <text x="38" y="101" class="t-s">požiadavky s kritériom a dôkazom</text>
+
+          <rect x="320" y="20" width="260" height="100" rx="5" fill="var(--task-tint)" stroke="var(--task)" stroke-width="1.5"/>
+          <text x="338" y="50" class="t-file" style="fill:var(--task)">ctx/TASKS.md</text>
+          <text x="338" y="78" class="t-q">Čo je ešte otvorené?</text>
+          <text x="338" y="101" class="t-s">úlohy, rozhodnutia, otázky</text>
+
+          <rect x="620" y="20" width="260" height="100" rx="5" fill="var(--arch-tint)" stroke="var(--arch)" stroke-width="1.5"/>
+          <text x="638" y="50" class="t-file" style="fill:var(--arch)">docs/architecture.md</text>
+          <text x="638" y="78" class="t-q">Ako je to postavené?</text>
+          <text x="638" y="101" class="t-s">systém, ako dnes naozaj funguje</text>
+          <rect x="920" y="20" width="260" height="100" rx="5" fill="var(--arch-tint)" stroke="var(--arch)" stroke-width="1.5"/>
+          <text x="938" y="50" class="t-file" style="fill:var(--arch)">docs/decisions/</text>
+          <text x="938" y="78" class="t-q">Prečo je to tak?</text>
+          <text x="938" y="101" class="t-s">očíslované záznamy rozhodnutí</text>
+
+          <line x1="150" y1="120" x2="150" y2="262" stroke="var(--req)" stroke-width="1.5"/>
+          <line x1="450" y1="120" x2="450" y2="262" stroke="var(--task)" stroke-width="1.5"/>
+          <line x1="750" y1="120" x2="750" y2="262" stroke="var(--arch)" stroke-width="1.5"/>
+          <line x1="1050" y1="120" x2="1050" y2="262" stroke="var(--arch)" stroke-width="1.5"/>
+
+          <rect x="30" y="160" width="240" height="60" rx="4" fill="var(--surface)" stroke="var(--line)"/>
+          <text x="44" y="185" class="t-l">▼ číta: požiadavku a kritérium</text>
+          <text x="44" y="207" class="t-l">▲ zapíše: stav a dôkaz</text>
+
+          <rect x="330" y="160" width="240" height="60" rx="4" fill="var(--surface)" stroke="var(--line)"/>
+          <text x="344" y="185" class="t-l">▼ číta: ďalší krok a čo blokuje</text>
+          <text x="344" y="207" class="t-l">▲ zapíše: čo ostalo, hotové zmaže</text>
+
+          <rect x="630" y="160" width="240" height="60" rx="4" fill="var(--surface)" stroke="var(--line)"/>
+          <text x="644" y="185" class="t-l">▼ číta: pravidlá a hranice systému</text>
+          <text x="644" y="207" class="t-l">▲ zapíše: zmenu, keď je v kóde</text>
+
+          <rect x="930" y="160" width="240" height="60" rx="4" fill="var(--surface)" stroke="var(--line)"/>
+          <text x="944" y="185" class="t-l">▼ číta: dôvody a odmietnuté cesty</text>
+          <text x="944" y="207" class="t-l">▲ zapíše: nové rozhodnutie</text>
+
+          <rect x="20" y="262" width="1160" height="90" rx="5" fill="var(--surface)" stroke="var(--fg)" stroke-width="1.5"/>
+          <text x="600" y="298" text-anchor="middle" class="t-q">Chat v Claude Code</text>
+          <text x="600" y="324" text-anchor="middle" class="t-s">prečíta dokumenty → naplánuje → spraví prácu → overí → zapíše výsledok späť</text>
+        </svg>
+      </div>
+      <figcaption>Priečinok <code>ctx/</code> je o práci: čo je objednané a čo je otvorené. Priečinok <code>docs/</code> je o systéme a ostáva pri kóde, lebo ho potrebuje každý, kto kód číta. Architektúra hovorí, ako je systém postavený, rozhodnutia v <code>docs/decisions/</code> sú jej príloha a hovoria prečo.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stack req">
+    <div class="doc-head"><h2>Požiadavky</h2><span class="chip">ctx/requirements.md</span></div>
+    <p>Zoznam toho, čo si vlastník objednal. Každá požiadavka má číslo, prioritu a hlavne kritérium, podľa ktorého sa dá bez diskusie povedať, či je splnená.</p>
+    <dl class="facts">
+      <div><dt>Kto zapisuje</dt><dd>Požiadavku diktuje vlastník. Claude ju sformuluje a navrhne kritérium.</dd></div>
+      <div><dt>Kedy sa mení</dt><dd>Keď pribudne požiadavka a keď sa práca uzavrie (stav a dôkaz).</dd></div>
+      <div><dt>Pravidlo</dt><dd>Súbor sa len dopĺňa. Čísla sa nemenia, zrušená požiadavka ostáva s dôvodom.</dd></div>
+    </dl>
+    <div class="file">
+      <div class="file-bar">ctx/requirements.md</div>
+      <div class="file-pre"><p><code>## Zámer</code> – 2–3 vety: čo, pre koho, prečo. <code>## Mimo rozsahu</code> – čo sa nebude robiť, každá položka s dátumom, napr. „2026-03-04: schvaľovanie rezervácií office manažérkou“.</p><p>Hlavičku zapisuje brainstorming: Zámer raz, Mimo rozsahu sa iba dopĺňa.</p></div>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>ID</th><th>Priorita</th><th>Požiadavka</th><th>Zdroj</th><th>Kritérium splnenia</th><th>Stav</th><th>Dôkaz</th></tr></thead>
+          <tbody>
+            <tr><td class="id">R-001</td><td>MUST</td><td>Zamestnanec si rezervuje voľnú zasadačku na konkrétny čas</td><td>vlastník 2026-03-02</td><td>test: rezervácia voľného termínu sa uloží a je viditeľná v rozvrhu zasadačky; rezervácia, ktorá sa prekrýva s inou, je odmietnutá s hláškou</td><td class="nw">splnená</td><td>14 testov rezervácie prešlo; ručná skúška vlastníka 2026-03-09</td></tr>
+            <tr><td class="id">R-002</td><td>MUST</td><td>Rezervácia, na ktorú do 10 minút nikto neprišiel, sa uvoľní</td><td>office manažérka 2026-03-04</td><td>test: rezervácia bez potvrdenia príchodu je 10 minút po začiatku zrušená a zasadačka je voľná; potvrdená rezervácia ostáva</td><td class="nw">schválená</td><td>—</td></tr>
+            <tr><td class="id">R-003</td><td>SHOULD</td><td>Rezervácia sa objaví v kalendári Outlook organizátora</td><td>vlastník 2026-03-04</td><td>udalosť je v kalendári do 1 minúty po vytvorení rezervácie; po zrušení rezervácie z kalendára zmizne</td><td>čiastočne splnená</td><td>vytvorenie funguje (6 testov synchronizácie); zrušenie udalosť nemaže, pozri <code>TASKS.md</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="stack-s">
+      <h3>Čo si všimnúť</h3>
+      <ul class="plain">
+        <li>Kritérium sa dá overiť testom. „Rezervácia má fungovať dobre“ by sa overiť nedalo.</li>
+        <li>Stavy: návrh → schválená → na vyskúšanie → splnená / čiastočne splnená; zrušená.</li>
+        <li>Priorita hovorí, čo sa smie vynechať. MUST: bez nej sa práca neuzavrie. SHOULD: odchýlka sa zdôvodní. NICE: ak ostane čas.</li>
+        <li>Stav bez dôkazu neplatí. R-003 je len čiastočne splnená a dôkaz hovorí presne, čo chýba a kde sa to rieši.</li>
+        <li>„Splnená“ sa zapíše až vtedy, keď si to vlastník sám vyskúšal. Testy od Clauda nestačia, preto je pri R-001 aj ručná skúška vlastníka.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="stack task">
+    <div class="doc-head"><h2>Otvorená práca</h2><span class="chip">ctx/TASKS.md</span></div>
+    <p>Čo treba ešte spraviť a na kom to stojí. Tento súbor číta Claude na začiatku chatu ako prvý, aby vedel, kde sa skončilo.</p>
+    <dl class="facts">
+      <div><dt>Kto zapisuje</dt><dd>Claude na konci každej práce, vlastník kedykoľvek.</dd></div>
+      <div><dt>Kedy sa mení</dt><dd>Stále. Hotová úloha sa vymaže, nie odškrtne.</dd></div>
+      <div><dt>Pravidlo</dt><dd>Nie je to denník. História je v gite.</dd></div>
+    </dl>
+    <div class="file">
+      <div class="file-bar">ctx/TASKS.md</div>
+      <div class="file-pre"><p><code>**Stav &lt;dátum&gt;:**</code> – jeden riadok nad tabuľkou:</p><p><strong>Stav 2026-03-10:</strong> rezervovanie funguje a je nasadené na skúšku pre 20 ľudí. Synchronizácia s Outlookom udalosti vytvára, ale nemaže. Čaká sa na IT a na jedno rozhodnutie vlastníka.</p></div>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Úloha</th><th>Kto koná</th><th>Čo ju blokuje</th><th>Vstupy</th><th>Ďalší krok</th></tr></thead>
+          <tbody>
+            <tr><td>Automatické uvoľnenie nepotvrdenej rezervácie (R-002)</td><td>Claude</td><td>nič</td><td>R-002; <code>architecture.md</code>, časť „Stavy rezervácie“</td><td>napísať test podľa kritéria, potom doplniť stav „nepotvrdená“ a úlohu, ktorá beží každú minútu</td></tr>
+            <tr><td>Zrušenie rezervácie nemaže udalosť v Outlooku (R-003)</td><td>IT oddelenie</td><td>aplikácia nemá právo mazať udalosti v kalendároch zamestnancov</td><td>výsledok testu synchronizácie z 2026-03-09</td><td>po pridelení práva doplniť mazanie a test; potom R-003 prepnúť na splnenú</td></tr>
+            <tr><td>Smie asistentka rezervovať v mene niekoho iného?</td><td>vlastník</td><td>rozhodnutie vlastníka</td><td>otázka office manažérky z 2026-03-06</td><td>ak áno, zapísať ako novú požiadavku R-004 s kritériom</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="stack-s">
+      <h3>Čo si všimnúť</h3>
+      <ul class="plain">
+        <li>Prvý odsek je stav jednou vetou a dátum. Kto súbor otvorí po týždni, vie, kde projekt je.</li>
+        <li>Pri každej úlohe je, kto koná a čo ju blokuje. Claude tak nezačne robiť niečo, čo čaká na iného.</li>
+        <li>Úloha sa odvoláva na číslo požiadavky. Otázka, z ktorej môže vzniknúť nová požiadavka, je tu, kým ju vlastník nerozhodne.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="stack arch">
+    <div class="doc-head"><h2>Architektúra</h2><span class="chip">docs/architecture.md</span></div>
+    <p>Opis systému tak, ako je dnes postavený. Claude ho číta pred každou zmenou v kóde, aby neporušil pravidlá, ktoré už platia.</p>
+    <dl class="facts">
+      <div><dt>Kto zapisuje</dt><dd>Claude v tej istej zmene, ktorá mení kód. Vlastník zmenu schvaľuje.</dd></div>
+      <div><dt>Kedy sa mení</dt><dd>Až keď je zmena naozaj v kóde. Plány sem nepatria.</dd></div>
+      <div><dt>Pravidlo</dt><dd>Hovorí „ako“. „Prečo“ je v očíslovaných záznamoch v <code>docs/decisions/</code>.</dd></div>
+    </dl>
+    <div class="file">
+      <div class="file-bar">docs/architecture.md</div>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Kapitola</th><th>Čo dnes platí</th><th>Čo z toho vyplýva pre zmeny</th><th>Prečo</th></tr></thead>
+          <tbody>
+            <tr><td>Súčasti</td><td>Webová stránka v prehliadači volá jeden server. Server ukladá všetko do jednej databázy PostgreSQL. Rezervácie nie sú uložené nikde inde.</td><td>Nová funkcia nesmie držať rezervácie vo vlastnom súbore ani v pamäti servera.</td><td class="nw"><code>decisions/0001</code></td></tr>
+            <tr><td>Prekrývanie rezervácií</td><td>Dve rezervácie tej istej zasadačky sa nesmú časovo prekrývať. Stráži to pravidlo priamo v databáze, nie kód obrazovky.</td><td>Kontrola na obrazovke je len pohodlie pre používateľa. Pravidlo v databáze sa nevypína ani pri hromadnom importe.</td><td class="nw"><code>decisions/0002</code></td></tr>
+            <tr><td>Kalendár Outlook</td><td>Aplikácia do Outlooku len zapisuje, nikdy z neho nečíta. Zmena udalosti v Outlooku rezerváciu nezmení.</td><td>Presun rezervácie sa robí v aplikácii. Kto navrhne čítať zmeny z Outlooku, mení rozhodnutie, nie len kód.</td><td class="nw"><code>decisions/0003</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="stack-s">
+      <h3>Čo si všimnúť</h3>
+      <ul class="plain">
+        <li>Každý riadok opisuje stav, ktorý sa dá v kóde nájsť. O tom, čo sa plánuje, tu nie je nič.</li>
+        <li>Dôvody sú v samostatných súboroch, napr. <code>0002-prekryvanie-strazi-databaza.md</code>. Zrušené rozhodnutie sa nemaže, presunie sa do archívu.</li>
+        <li>Stĺpec „čo z toho vyplýva“ je to, čo Claude potrebuje najviac: čo pri ďalšej zmene nesmie pokaziť.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="stack arch">
+    <div class="doc-head"><h2>Rozhodnutia</h2><span class="chip">docs/decisions/</span></div>
+    <p>Krátke očíslované záznamy o tom, prečo je systém postavený práve takto. Claude ich číta, keď sa navrhovaná zmena dotýka pravidla z architektúry. Nenavrhne tak znova to, čo už bolo raz zvážené a odmietnuté.</p>
+    <dl class="facts">
+      <div><dt>Kto zapisuje</dt><dd>Rozhoduje vlastník. Claude pripraví záznam aj s alternatívami.</dd></div>
+      <div><dt>Kedy vzniká</dt><dd>Keď sa voľba ťažko vracia: databáza, hranica medzi systémami, pravidlo nad dátami. Bežný technický detail záznam nepotrebuje.</dd></div>
+      <div><dt>Pravidlo</dt><dd>Jeden súbor na rozhodnutie. Čísla sa nemenia. Zrušený záznam ide do archívu s odkazom na ten, ktorý ho nahradil.</dd></div>
+    </dl>
+    <div class="file">
+      <div class="file-bar">docs/decisions/ · 0001 až 0003</div>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Č.</th><th>Rozhodnutie</th><th>Dôvod</th><th>Zvažovaná alternatíva</th><th>Čo by ho zmenilo</th></tr></thead>
+          <tbody>
+            <tr><td class="id">0001</td><td>Rezervácie sú uložené len v jednej databáze</td><td>Dve miesta sa časom rozídu a nik nevie, ktoré platí.</td><td>Viesť rezervácie priamo v kalendároch Outlook. Odmietnuté: zasadačky bez kalendára by ostali mimo.</td><td>Prechod firmy na systém, ktorý zasadačky spravuje sám.</td></tr>
+            <tr><td class="id">0002</td><td>Prekrývanie rezervácií stráži databáza</td><td>Dvaja ľudia môžu kliknúť v tej istej sekunde. Kontrola v kóde to nezachytí.</td><td>Kontrola na serveri tesne pred uložením. Odmietnuté: medzi kontrolou a uložením vkĺzne druhá rezervácia.</td><td>Nič predvídateľné. Pravidlo je lacné a chráni dáta.</td></tr>
+            <tr><td class="id">0003</td><td>Do Outlooku sa len zapisuje</td><td>Obojsmerná synchronizácia vytvára spory, ktorá zmena platí, a vyžaduje širšie práva do kalendárov.</td><td>Čítať presuny a zrušenia z Outlooku. Odložené, nie odmietnuté.</td><td>Ľudia budú rezervácie bežne presúvať v Outlooku a sťažovať sa, že sa to neprejaví.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <p class="note">V projekte je každý riadok samostatný krátky súbor, napr. <code>0002-prekryvanie-strazi-databaza.md</code>.</p>
+    <div class="stack-s">
+      <h3>Čo si všimnúť</h3>
+      <ul class="plain">
+        <li>Záznam obsahuje aj odmietnutú alternatívu. Bez nej ju Claude o mesiac navrhne znova.</li>
+        <li>„Čo by ho zmenilo“ hovorí, kedy sa oplatí rozhodnutie otvoriť. Rozhodnutie 0003 je odložené, nie zakázané.</li>
+        <li>Architektúra sa mení s kódom, záznam o rozhodnutí sa nemení. Keď rozhodnutie prestane platiť, vznikne nový záznam a starý naň odkáže.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="stack">
+    <h2>Jedna požiadavka naprieč dokumentmi</h2>
+    <p>Požiadavka R-003 (rezervácia v kalendári Outlook) prešla všetkými dokumentmi v tomto poradí.</p>
+    <ol class="trace">
+      <li class="req"><span class="num">1</span><div class="body"><span class="where">ctx/requirements.md</span><h3>Vlastník povie, čo chce</h3><p>Vznikne riadok R-003, SHOULD, s kritériom: udalosť v kalendári do 1 minúty, po zrušení zmizne.</p></div></li>
+      <li class="arch"><span class="num">2</span><div class="body"><span class="where">docs/decisions/</span><h3>Claude navrhne postup a vlastník ho schváli</h3><p>Claude povie, čo spraví a čo nie: zmeny z Outlooku sa čítať nebudú. Vlastník súhlasí a rozhodnutie sa zapíše ako 0003.</p></div></li>
+      <li><span class="num">3</span><div class="body"><span class="where">kód a testy</span><h3>Vznikne výstup</h3><p>Zápis udalosti do kalendára a 6 testov synchronizácie. Test zrušenia zlyhá, lebo aplikácia nemá právo mazať udalosti.</p></div></li>
+      <li class="req"><span class="num">4</span><div class="body"><span class="where">ctx/requirements.md</span><h3>Do požiadavky sa zapíše stav a dôkaz</h3><p>Stav: čiastočne splnená. Dôkaz: vytvorenie funguje, zrušenie udalosť nemaže.</p></div></li>
+      <li class="task"><span class="num">5</span><div class="body"><span class="where">ctx/TASKS.md</span><h3>Čo ostalo, ide do otvorenej práce</h3><p>Pribudne úloha „Zrušenie rezervácie nemaže udalosť v Outlooku“. Koná IT oddelenie, ďalší krok je jasný.</p></div></li>
+      <li class="arch"><span class="num">6</span><div class="body"><span class="where">docs/architecture.md</span><h3>Architektúra sa doplní o to, čo je v kóde</h3><p>Pribudne kapitola „Kalendár Outlook“: aplikácia do Outlooku len zapisuje. Pri nej je odkaz na rozhodnutie 0003.</p></div></li>
+    </ol>
+  </section>
+
+  <section class="stack">
+    <h2>Ako to použiť v Claude Code</h2>
+    <p>Stačí povedať, ktoré súbory má Claude prečítať a kam má zapísať výsledok. Odkaz na ne sa oplatí dať aj do <code>CLAUDE.md</code> projektu, potom ich číta sám.</p>
+    <div class="prompt"><span class="when">Na začiatku chatu</span><span class="say">Prečítaj ctx/TASKS.md a ctx/requirements.md. Povedz mi, čo je otvorené a čo navrhuješ ako ďalší krok.</span></div>
+    <div class="prompt"><span class="when">Keď príde nová požiadavka</span><span class="say">Vlastník rozhodol, že asistentka môže rezervovať v mene iného. Pridaj to do ctx/requirements.md ako R-004 a navrhni kritérium splnenia, ktoré sa dá overiť testom. Otázku z ctx/TASKS.md vymaž.</span></div>
+    <div class="prompt"><span class="when">Pred zmenou v kóde</span><span class="say">Prečítaj docs/architecture.md a rozhodnutia v docs/decisions/, ktorých sa zmena týka. Povedz, či ich návrh neporušuje.</span></div>
+    <div class="prompt"><span class="when">Keď padne ťažko vratné rozhodnutie</span><span class="say">Zapíš do docs/decisions/ rozhodnutie 0004: prihlasuje sa firemným účtom Microsoft, aplikácia nemá vlastné heslá. Uveď dôvod, zvažované alternatívy a čo by ho zmenilo.</span></div>
+    <div class="prompt"><span class="when">Na konci práce</span><span class="say">Zapíš k R-002 stav a dôkaz. Hotové úlohy z ctx/TASKS.md vymaž, nové otvorené body dopíš. Ak sa zmenilo, ako systém funguje, uprav docs/architecture.md.</span></div>
+
+    <h3>Kam čo patrí</h3>
+    <div class="scroll">
+      <table class="routing">
+        <thead><tr><th>Mám v ruke</th><th>Patrí do</th><th>Nie do</th></tr></thead>
+        <tbody>
+          <tr><td>Nové želanie vlastníka</td><td><span class="chip req">requirements.md</span></td><td>TASKS.md. Úloha bez kritéria sa nedá uzavrieť.</td></tr>
+          <tr><td>Nedokončenú prácu, otázku, čakanie na niekoho</td><td><span class="chip task">TASKS.md</span></td><td>requirements.md. Tam sú len objednané výsledky.</td></tr>
+          <tr><td>Opis toho, ako systém funguje</td><td><span class="chip arch">architecture.md</span></td><td>TASKS.md. Úloha po dokončení zmizne, opis systému má ostať.</td></tr>
+          <tr><td>Dôvod ťažko vratného rozhodnutia</td><td><span class="chip arch">docs/decisions/</span></td><td>architecture.md. Tá hovorí „ako“, nie „prečo“.</td></tr>        </tbody>
+      </table>
+    </div>
+
+    <h3>Tri chyby začiatočníka</h3>
+    <ul class="plain">
+      <li>TASKS.md ako zoznam odškrtnutých úloh. Po mesiaci v ňom otvorenú prácu nik nenájde.</li>
+      <li>Požiadavka bez kritéria splnenia. Claude potom vyhlási „hotovo“ podľa vlastného úsudku.</li>
+      <li>Architektúra, ktorá opisuje plány. Claude ju berie ako fakt a píše kód proti niečomu, čo neexistuje.</li>
+    </ul>
+  </section>
+</div>
+
+<!-- ============================== ENGLISH ============================== -->
+<div class="lang" id="lang-en" lang="en">
+
+  <header class="stack">
+    <div class="eyebrow">Shown on a made-up project, Meeting Rooms</div>
+    <h1>The documents that tell Claude Code what to do</h1>
+    <p class="lead">Claude remembers nothing between two sessions. Whatever it should know has to be written in the project's files. Four documents are enough, and each answers a different question.</p>
+    <p>You do not write the documents by hand; Claude keeps them. Tell it in the chat, in your own words, what you want, and it writes that down. As the work goes on, it keeps them up to date itself.</p>
+    <p>The example: a company of 120 people and 8 meeting rooms is building an internal web app for booking rooms. The project is invented; the entries are written the way they would really look in it.</p>
+  </header>
+
+  <section class="stack">
+    <h2>Map</h2>
+    <figure>
+      <div class="figure">
+        <svg viewBox="0 0 1200 372" role="img" aria-label="The documents and the Claude Code session that reads from them and writes back">
+          <rect x="20" y="20" width="260" height="100" rx="5" fill="var(--req-tint)" stroke="var(--req)" stroke-width="1.5"/>
+          <text x="38" y="50" class="t-file" style="fill:var(--req)">ctx/requirements.md</text>
+          <text x="38" y="78" class="t-q">What must be done?</text>
+          <text x="38" y="101" class="t-s">requirements with criterion and evidence</text>
+
+          <rect x="320" y="20" width="260" height="100" rx="5" fill="var(--task-tint)" stroke="var(--task)" stroke-width="1.5"/>
+          <text x="338" y="50" class="t-file" style="fill:var(--task)">ctx/TASKS.md</text>
+          <text x="338" y="78" class="t-q">What is still open?</text>
+          <text x="338" y="101" class="t-s">tasks, decisions, questions</text>
+
+          <rect x="620" y="20" width="260" height="100" rx="5" fill="var(--arch-tint)" stroke="var(--arch)" stroke-width="1.5"/>
+          <text x="638" y="50" class="t-file" style="fill:var(--arch)">docs/architecture.md</text>
+          <text x="638" y="78" class="t-q">How is it built?</text>
+          <text x="638" y="101" class="t-s">the system as it works today</text>
+          <rect x="920" y="20" width="260" height="100" rx="5" fill="var(--arch-tint)" stroke="var(--arch)" stroke-width="1.5"/>
+          <text x="938" y="50" class="t-file" style="fill:var(--arch)">docs/decisions/</text>
+          <text x="938" y="78" class="t-q">Why is it so?</text>
+          <text x="938" y="101" class="t-s">numbered decision records</text>
+
+          <line x1="150" y1="120" x2="150" y2="262" stroke="var(--req)" stroke-width="1.5"/>
+          <line x1="450" y1="120" x2="450" y2="262" stroke="var(--task)" stroke-width="1.5"/>
+          <line x1="750" y1="120" x2="750" y2="262" stroke="var(--arch)" stroke-width="1.5"/>
+          <line x1="1050" y1="120" x2="1050" y2="262" stroke="var(--arch)" stroke-width="1.5"/>
+
+          <rect x="30" y="160" width="240" height="60" rx="4" fill="var(--surface)" stroke="var(--line)"/>
+          <text x="44" y="185" class="t-l">▼ reads: requirement and criterion</text>
+          <text x="44" y="207" class="t-l">▲ writes: status and evidence</text>
+
+          <rect x="330" y="160" width="240" height="60" rx="4" fill="var(--surface)" stroke="var(--line)"/>
+          <text x="344" y="185" class="t-l">▼ reads: next step and blockers</text>
+          <text x="344" y="207" class="t-l">▲ writes: what is left, deletes done</text>
+
+          <rect x="630" y="160" width="240" height="60" rx="4" fill="var(--surface)" stroke="var(--line)"/>
+          <text x="644" y="185" class="t-l">▼ reads: rules and boundaries</text>
+          <text x="644" y="207" class="t-l">▲ writes: a change once it is in code</text>
+
+          <rect x="930" y="160" width="240" height="60" rx="4" fill="var(--surface)" stroke="var(--line)"/>
+          <text x="944" y="185" class="t-l">▼ reads: reasons, rejected options</text>
+          <text x="944" y="207" class="t-l">▲ writes: a new decision</text>
+
+          <rect x="20" y="262" width="1160" height="90" rx="5" fill="var(--surface)" stroke="var(--fg)" stroke-width="1.5"/>
+          <text x="600" y="298" text-anchor="middle" class="t-q">A Claude Code session</text>
+          <text x="600" y="324" text-anchor="middle" class="t-s">reads the documents → plans → does the work → verifies → writes the result back</text>
+        </svg>
+      </div>
+      <figcaption>The <code>ctx/</code> folder is about the work: what was ordered and what is open. The <code>docs/</code> folder is about the system and stays with the code, because everyone who reads the code needs it. The architecture says how the system is built; the decisions in <code>docs/decisions/</code> are its appendix and say why.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stack req">
+    <div class="doc-head"><h2>Requirements</h2><span class="chip">ctx/requirements.md</span></div>
+    <p>The list of what the owner ordered. Each requirement has a number, a priority and, above all, a criterion that settles without discussion whether it is met.</p>
+    <dl class="facts">
+      <div><dt>Who writes it</dt><dd>The owner states the requirement. Claude words it and proposes the criterion.</dd></div>
+      <div><dt>When it changes</dt><dd>When a requirement is added and when work is closed (status and evidence).</dd></div>
+      <div><dt>Rule</dt><dd>The file only grows. Numbers never change; a cancelled requirement stays, with the reason.</dd></div>
+    </dl>
+    <div class="file">
+      <div class="file-bar">ctx/requirements.md</div>
+      <div class="file-pre"><p><code>## Intent</code> – 2-3 sentences: what, for whom, why. <code>## Out of scope</code> – what will not be done, each item with a date, e.g. "2026-03-04: approval of bookings by the office manager".</p><p>The header is written by brainstorming: the Intent once, the Out of scope only ever added to.</p></div>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>ID</th><th>Priority</th><th>Requirement</th><th>Source</th><th>Acceptance criterion</th><th>Status</th><th>Evidence</th></tr></thead>
+          <tbody>
+            <tr><td class="id">R-001</td><td>MUST</td><td>An employee books a free meeting room for a specific time</td><td>owner 2026-03-02</td><td>test: a booking of a free slot is saved and visible in the room's schedule; a booking that overlaps another is refused with a message</td><td class="nw">met</td><td>14 booking tests passed; owner's manual check 2026-03-09</td></tr>
+            <tr><td class="id">R-002</td><td>MUST</td><td>A booking nobody showed up for within 10 minutes is released</td><td>office manager 2026-03-04</td><td>test: a booking with no check-in is cancelled 10 minutes after its start and the room is free; a checked-in booking stays</td><td class="nw">approved</td><td>—</td></tr>
+            <tr><td class="id">R-003</td><td>SHOULD</td><td>The booking appears in the organiser's Outlook calendar</td><td>owner 2026-03-04</td><td>the event is in the calendar within 1 minute of the booking; it disappears when the booking is cancelled</td><td>partly met</td><td>creation works (6 sync tests); cancelling does not delete the event, see <code>TASKS.md</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="stack-s">
+      <h3>What to notice</h3>
+      <ul class="plain">
+        <li>A test can check the criterion. "Booking should work well" could not be checked.</li>
+        <li>Statuses: proposed → approved → ready to try → met / partly met; cancelled.</li>
+        <li>The priority says what may be left out. MUST: work does not close without it. SHOULD: a deviation needs a reason. NICE: if time remains.</li>
+        <li>A status without evidence does not count. R-003 is only partly met, and the evidence says exactly what is missing and where it is handled.</li>
+        <li>"Met" is written only once the owner has tried it themselves. Claude's tests are not enough, which is why R-001 also has the owner's manual check.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="stack task">
+    <div class="doc-head"><h2>Open work</h2><span class="chip">ctx/TASKS.md</span></div>
+    <p>What is still to be done and who it is waiting for. Claude reads this file first at the start of a session to learn where things stopped.</p>
+    <dl class="facts">
+      <div><dt>Who writes it</dt><dd>Claude at the end of each piece of work, the owner at any time.</dd></div>
+      <div><dt>When it changes</dt><dd>All the time. A finished task is deleted, not ticked off.</dd></div>
+      <div><dt>Rule</dt><dd>It is not a log. History lives in git.</dd></div>
+    </dl>
+    <div class="file">
+      <div class="file-bar">ctx/TASKS.md</div>
+      <div class="file-pre"><p><code>**Status &lt;date&gt;:**</code> – one line above the table:</p><p><strong>Status 2026-03-10:</strong> booking works and is deployed as a trial for 20 people. The Outlook sync creates events but does not delete them. Waiting for IT and for one decision by the owner.</p></div>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Task</th><th>Who acts</th><th>What blocks it</th><th>Inputs</th><th>Next step</th></tr></thead>
+          <tbody>
+            <tr><td>Automatic release of a booking with no check-in (R-002)</td><td>Claude</td><td>nothing</td><td>R-002; <code>architecture.md</code>, section "Booking states"</td><td>write the test from the criterion, then add the "unconfirmed" state and a job that runs every minute</td></tr>
+            <tr><td>Cancelling a booking does not delete the Outlook event (R-003)</td><td>IT department</td><td>the app has no permission to delete events in employees' calendars</td><td>sync test result of 2026-03-09</td><td>once the permission is granted, add the deletion and its test; then switch R-003 to met</td></tr>
+            <tr><td>May an assistant book on someone else's behalf?</td><td>owner</td><td>the owner's decision</td><td>the office manager's question of 2026-03-06</td><td>if yes, record it as a new requirement R-004 with a criterion</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="stack-s">
+      <h3>What to notice</h3>
+      <ul class="plain">
+        <li>The first paragraph is the status in one sentence, with a date. Whoever opens the file a week later knows where the project stands.</li>
+        <li>Every task says who acts and what blocks it. Claude will not start on something that is waiting for someone else.</li>
+        <li>A task refers to the requirement's number. A question that may turn into a new requirement stays here until the owner decides.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="stack arch">
+    <div class="doc-head"><h2>Architecture</h2><span class="chip">docs/architecture.md</span></div>
+    <p>A description of the system as it is built today. Claude reads it before every code change, so that it does not break rules already in force.</p>
+    <dl class="facts">
+      <div><dt>Who writes it</dt><dd>Claude, in the same change that alters the code. The owner approves the change.</dd></div>
+      <div><dt>When it changes</dt><dd>Only once the change really is in the code. Plans do not belong here.</dd></div>
+      <div><dt>Rule</dt><dd>It says "how". "Why" lives in numbered records in <code>docs/decisions/</code>.</dd></div>
+    </dl>
+    <div class="file">
+      <div class="file-bar">docs/architecture.md</div>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Section</th><th>What holds today</th><th>What it means for changes</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td>Components</td><td>A web page in the browser calls one server. The server stores everything in one PostgreSQL database. Bookings are stored nowhere else.</td><td>A new feature must not keep bookings in a file of its own or in the server's memory.</td><td class="nw"><code>decisions/0001</code></td></tr>
+            <tr><td>Overlapping bookings</td><td>Two bookings of the same room must not overlap in time. A rule in the database itself enforces this, not the screen's code.</td><td>The check on the screen is only a convenience for the user. The database rule is never switched off, not even for a bulk import.</td><td class="nw"><code>decisions/0002</code></td></tr>
+            <tr><td>Outlook calendar</td><td>The app only writes to Outlook and never reads from it. Changing the event in Outlook does not change the booking.</td><td>A booking is moved in the app. Proposing to read changes from Outlook changes a decision, not just code.</td><td class="nw"><code>decisions/0003</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="stack-s">
+      <h3>What to notice</h3>
+      <ul class="plain">
+        <li>Every row describes a state you can find in the code. Nothing here is about what is planned.</li>
+        <li>Reasons sit in separate files, e.g. <code>0002-the-database-guards-overlaps.md</code>. A reversed decision is not deleted; it moves to the archive.</li>
+        <li>The "what it means" column is what Claude needs most: what the next change must not break.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="stack arch">
+    <div class="doc-head"><h2>Decisions</h2><span class="chip">docs/decisions/</span></div>
+    <p>Short numbered records of why the system is built this way. Claude reads them when a proposed change touches a rule from the architecture. That keeps it from proposing again what was already considered and rejected.</p>
+    <dl class="facts">
+      <div><dt>Who writes it</dt><dd>The owner decides. Claude prepares the record, alternatives included.</dd></div>
+      <div><dt>When one is written</dt><dd>When the choice is hard to reverse: the database, a boundary between systems, a rule over the data. An ordinary technical detail needs no record.</dd></div>
+      <div><dt>Rule</dt><dd>One file per decision. Numbers never change. A reversed record moves to the archive and points to the one that replaced it.</dd></div>
+    </dl>
+    <div class="file">
+      <div class="file-bar">docs/decisions/ · 0001 to 0003</div>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>No.</th><th>Decision</th><th>Reason</th><th>Alternative considered</th><th>What would change it</th></tr></thead>
+          <tbody>
+            <tr><td class="id">0001</td><td>Bookings are stored in one database only</td><td>Two places drift apart over time and nobody knows which one holds.</td><td>Keep bookings directly in Outlook calendars. Rejected: rooms without a calendar would be left out.</td><td>The company moving to a system that manages rooms itself.</td></tr>
+            <tr><td class="id">0002</td><td>The database guards against overlapping bookings</td><td>Two people can click in the same second. A check in code does not catch that.</td><td>A check on the server just before saving. Rejected: a second booking slips in between the check and the save.</td><td>Nothing foreseeable. The rule is cheap and protects the data.</td></tr>
+            <tr><td class="id">0003</td><td>The app only writes to Outlook</td><td>Two-way sync creates disputes over which change holds, and needs wider permissions in calendars.</td><td>Read moves and cancellations from Outlook. Postponed, not rejected.</td><td>People routinely moving bookings in Outlook and complaining that nothing happens.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <p class="note">In the project each row is a short file of its own, e.g. <code>0002-the-database-guards-overlaps.md</code>.</p>
+    <div class="stack-s">
+      <h3>What to notice</h3>
+      <ul class="plain">
+        <li>The record includes the rejected alternative. Without it, Claude proposes it again a month later.</li>
+        <li>"What would change it" says when reopening the decision is worth it. Decision 0003 is postponed, not forbidden.</li>
+        <li>The architecture changes with the code; a decision record does not change. When a decision stops holding, a new record is written and the old one points to it.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="stack">
+    <h2>One requirement across the documents</h2>
+    <p>Requirement R-003 (the booking in the Outlook calendar) passed through all the documents in this order.</p>
+    <ol class="trace">
+      <li class="req"><span class="num">1</span><div class="body"><span class="where">ctx/requirements.md</span><h3>The owner says what they want</h3><p>Row R-003 is added, SHOULD, with the criterion: event in the calendar within 1 minute, gone after cancelling.</p></div></li>
+      <li class="arch"><span class="num">2</span><div class="body"><span class="where">docs/decisions/</span><h3>Claude proposes the approach and the owner approves it</h3><p>Claude says what it will do and what it will not: changes will not be read from Outlook. The owner agrees and the decision is recorded as 0003.</p></div></li>
+      <li><span class="num">3</span><div class="body"><span class="where">code and tests</span><h3>The output is produced</h3><p>Writing the event to the calendar, and 6 sync tests. The cancellation test fails because the app has no permission to delete events.</p></div></li>
+      <li class="req"><span class="num">4</span><div class="body"><span class="where">ctx/requirements.md</span><h3>Status and evidence go into the requirement</h3><p>Status: partly met. Evidence: creation works, cancelling does not delete the event.</p></div></li>
+      <li class="task"><span class="num">5</span><div class="body"><span class="where">ctx/TASKS.md</span><h3>What is left goes to open work</h3><p>The task "Cancelling a booking does not delete the Outlook event" is added. IT acts, and the next step is clear.</p></div></li>
+      <li class="arch"><span class="num">6</span><div class="body"><span class="where">docs/architecture.md</span><h3>The architecture gains what is in the code</h3><p>The section "Outlook calendar" is added: the app only writes to Outlook. It points to decision 0003.</p></div></li>
+    </ol>
+  </section>
+
+  <section class="stack">
+    <h2>How to use it in Claude Code</h2>
+    <p>It is enough to say which files Claude should read and where to write the result. Put a pointer to them into the project's <code>CLAUDE.md</code> as well, and Claude reads them on its own.</p>
+    <div class="prompt"><span class="when">At the start of a session</span><span class="say">Read ctx/TASKS.md and ctx/requirements.md. Tell me what is open and what you propose as the next step.</span></div>
+    <div class="prompt"><span class="when">When a new requirement arrives</span><span class="say">The owner decided that an assistant can book on someone else's behalf. Add it to ctx/requirements.md as R-004 and propose an acceptance criterion a test can check. Delete the question from ctx/TASKS.md.</span></div>
+    <div class="prompt"><span class="when">Before a code change</span><span class="say">Read docs/architecture.md and the decisions in docs/decisions/ that the change touches. Tell me whether the proposal breaks any of them.</span></div>
+    <div class="prompt"><span class="when">When a hard-to-reverse decision is made</span><span class="say">Record decision 0004 in docs/decisions/: people sign in with their company Microsoft account, the app has no passwords of its own. Give the reason, the alternatives considered and what would change it.</span></div>
+    <div class="prompt"><span class="when">At the end of the work</span><span class="say">Write the status and evidence for R-002. Delete finished tasks from ctx/TASKS.md and add the new open points. If the way the system works has changed, update docs/architecture.md.</span></div>
+
+    <h3>What goes where</h3>
+    <div class="scroll">
+      <table class="routing">
+        <thead><tr><th>I have</th><th>It goes to</th><th>Not to</th></tr></thead>
+        <tbody>
+          <tr><td>A new wish from the owner</td><td><span class="chip req">requirements.md</span></td><td>TASKS.md. A task without a criterion cannot be closed.</td></tr>
+          <tr><td>Unfinished work, a question, waiting for someone</td><td><span class="chip task">TASKS.md</span></td><td>requirements.md. It holds only ordered results.</td></tr>
+          <tr><td>A description of how the system works</td><td><span class="chip arch">architecture.md</span></td><td>TASKS.md. A task disappears when done; the description of the system has to stay.</td></tr>
+          <tr><td>The reason for a hard-to-reverse decision</td><td><span class="chip arch">docs/decisions/</span></td><td>architecture.md. It says "how", not "why".</td></tr>        </tbody>
+      </table>
+    </div>
+
+    <h3>Three beginner mistakes</h3>
+    <ul class="plain">
+      <li>TASKS.md as a list of ticked-off tasks. After a month nobody can find the open work in it.</li>
+      <li>A requirement without an acceptance criterion. Claude then declares "done" by its own judgement.</li>
+      <li>An architecture that describes plans. Claude takes it as fact and writes code against something that does not exist.</li>
+    </ul>
+  </section>
+</div>
+
+</div>
+
+<script>
+(function () {
+  var blocks = { sk: document.getElementById('lang-sk'), en: document.getElementById('lang-en') };
+  var buttons = { sk: document.getElementById('btn-sk'), en: document.getElementById('btn-en') };
+  function show(lang) {
+    if (!blocks[lang]) lang = 'en';
+    for (var k in blocks) {
+      blocks[k].hidden = k !== lang;
+      buttons[k].setAttribute('aria-pressed', String(k === lang));
+    }
+    document.documentElement.lang = lang;
+  }
+  function fromHash() { show(location.hash.replace('#', '') || 'en'); }
+  for (var k in buttons) {
+    buttons[k].addEventListener('click', function () {
+      var lang = this.getAttribute('data-lang');
+      show(lang);
+      try { location.hash = lang; } catch (e) {}
+    });
+  }
+  window.addEventListener('hashchange', fromHash);
+  fromHash();
+})();
+</script>
+
+</body></html>
