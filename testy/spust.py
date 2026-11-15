@@ -35,10 +35,16 @@ IZOLACIA = ["--strict-mcp-config", "--setting-sources", "project,local"]
 # The runner must run outside a sandbox (claude saves sessions under ~/.claude for --resume), so the
 # test chat's own Bash commands are kept in a sandbox without network access.
 # Automatic memory is off, so a run cannot store state outside the project or carry it over to the next run.
-SANDBOX = ["--settings", json.dumps({"autoMemoryEnabled": False, "sandbox": {
-    "enabled": True, "failIfUnavailable": True, "allowUnsandboxedCommands": False,
-    "network": {"strictAllowlist": True}}})]
+# Claude Code on Windows has no sandbox, so there the test chat runs without it (owner's decision 2026-11-15):
+# it still has only the allowed tools below, a temporary folder, a made-up project, no MCP and no memory.
+SANDBOX_SETTINGS = {"autoMemoryEnabled": False}
+if sys.platform != "win32":
+    SANDBOX_SETTINGS["sandbox"] = {"enabled": True, "failIfUnavailable": True, "allowUnsandboxedCommands": False,
+                                   "network": {"strictAllowlist": True}}
+SANDBOX = ["--settings", json.dumps(SANDBOX_SETTINGS)]
 ALLOWED_TOOLS = "Read,Write,Edit,Glob,Grep,Task,Agent,Skill,Bash(python3:*),Bash(ls:*),Bash(rm:*),Bash(git:*)"
+if sys.platform == "win32":  # on Windows Python is usually started as `python` or `py`
+    ALLOWED_TOOLS += ",Bash(python:*),Bash(py:*)"
 SHOWN_DIRS = ("ctx", "docs")
 SHOWN_FILES = ("CLAUDE.md",)
 IGNORED_NAMES = {"__pycache__"}
@@ -244,7 +250,8 @@ def run_phase(number, phase, args, claude, project, sim_dir, prepis):
         info = data if isinstance(data, dict) else {}
         session_id = info.get("session_id", session_id)
         cost = info.get("total_cost_usd")
-        total_cost += cost or 0.0
+        # With --resume, total_cost_usd is the running total of the whole session, so keep the latest value.
+        total_cost = max(total_cost, cost or 0.0)
         transcript.append(("assistant", answer))
         append(prepis, "\n### Round {} - assistant{}\n\n{}\n\n{}\n".format(
             round_number, " (cost ${:.2f})".format(cost) if cost else "", answer, snapshot_line(project)))

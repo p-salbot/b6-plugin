@@ -1,12 +1,14 @@
 # Úlohy
 
-**Stav 2026-11-15:** Plugin 0.1.0 je postavený a `testy/kontrola.py` K1–K11 je OK; čaká sa na opakovaný beh
-scenárov po opravách, potvrdenie licencie a postup inštalácie u klienta, potom odovzdanie.
+**Stav 2026-11-15:** Plugin 0.1.0 je postavený, `testy/kontrola.py` K1–K11 OK; opakovaný beh S2, S3, S4, S6, S9 (Windows,
+bez sandboxu): 4 splnené, S4 čiastočne (`testy/vysledky/suhrn-0.1.0-beh2.md`). Zostávajú tri chyby pluginu, licencia,
+postup inštalácie u klienta, potom odovzdanie.
 
 | Úloha | Kto koná | Čo ju blokuje | Vstupy | Ďalší krok |
 |---|---|---|---|---|
-| Znova spustiť scenáre S2, S3, S4, S6, S9 po opravách (R-002, R-003, R-008, R-009, R-012, R-018) | Peter | nič | `testy/scenare.md`, `testy/vysledky/suhrn-0.1.0.md` | Vo vlastnom termináli z koreňa repozitára `py -3 -I testy/spust.py S2` (potom S3, S4, S6, S9) |
-| Zapísať výsledky opakovaného behu do súhrnu a stavy do `ctx/requirements.md` | Claude | opakovaný beh scenárov | `testy/vysledky/` | Po behu vyhodnotiť prepisy podľa `### Očakávané` v `testy/scenare.md` a navrhnúť stavy |
+| Opraviť chyby z behu 2 (R-007, R-012): záznam rozhodnutia pri bežnom detaile (`b6/skills/brainstorming/SKILL.md:35`), `reviewer` bez pravidla pre pomocné súbory mimo projektu (`b6/agents/reviewer.md`), postup pri zablokovanom príkaze v `build` (nemeniť si povolenia, nevyberať za vlastníka) | Peter rozhodne, `worker` upraví | rozhodnutie Petra | `testy/vysledky/suhrn-0.1.0-beh2.md` | Po oprave spustiť S3, S4, S6 a S9 so stavbou, potom znova zabaliť zip iba z `b6/` |
+| Overiť R-012 scenárom so stavbou: persona S9 zakazuje stavbu, `worker` sa nespustil | Claude | nič | `testy/scenare.md` (S9) | Navrhnúť Petrovi úpravu persony S9 alebo iný scenár |
+| `spust.py` nechá v `%TEMP%` priečinky `b6-test-*` s kópiou projektu | Claude | nič (nie je blokujúce) | `testy/spust.py` | Po skopírovaní výsledku priečinok zmazať |
 | Overiť dve kolá opráv a stop (R-005): S5 sa do fázy opráv nedostal | Peter rozhodne, Claude upraví | rozhodnutie Petra | `testy/scenare.md` (S5), `testy/vysledky/suhrn-0.1.0.md` | Peter rozhodne: upraviť personu S5 tak, aby prešla k plánu a stavbe, alebo overiť inak |
 | Overiť riziká `wrap-up`/`workflow` (R-006, R-018): dvojitá ponuka zmazania pri úlohe „Try R-…“ a zvyškoch, plán s požiadavkami v rôznych stavoch, pri „not yet“ z `build` kroky 4–6 | Peter | nič | `stav-stavby.md` „Otvorené“ (git a0364be) | Pri opakovanom behu S4 a S6 sledovať tieto body; S8 pustiť znova `py -3 -I testy/spust.py S8` |
 | Overiť riziká testovacieho behu: `END` v simulátore bez ohľadu na veľkosť písmen, persony S7/S9/S11 schvaľujú aj plán, či `--setting-sources` skryje používateľské skilly, pri prerušení sa projekt neskopíruje do `vysledky/` | Claude | nič (nie je blokujúce) | `testy/spust.py`, `testy/scenare.md` | Navrhnúť Petrovi opravy `spust.py` a person; meniť až po súhlase |
