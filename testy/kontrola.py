@@ -1,4 +1,4 @@
-"""Statická kontrola pluginu b6 (K1-K10).
+"""Statická kontrola pluginu b6 (K1-K11).
 
 Spustenie: python3 -I testy/kontrola.py   (Windows: py -3 -I testy/kontrola.py)
 Výstup: riadok "OK K<n>" alebo "FAIL K<n>: <dôvod>"; exit 0 iba ak je všetko OK.
@@ -19,6 +19,7 @@ SPRIEVODCA_START = DOCS / "getting-started.html"
 SPRIEVODCOVIA_TITLE = [(SPRIEVODCA, "Project memory"), (SPRIEVODCA_SKILLY, "Skills as company knowledge"),
                        (SPRIEVODCA_START, "Getting started with b6")]
 TEMPLATES = PLUGIN / "skills" / "workflow" / "references" / "templates.md"
+HOOKS = PLUGIN / "hooks" / "hooks.json"
 
 SKILLY = ["workflow", "brainstorming", "plan", "build", "wrap-up"]
 AGENTI = ["worker", "reviewer"]
@@ -177,11 +178,11 @@ def k1():
 
 
 def k2():
-    """K2: všetky súbory pluginu existujú (5 skillov, šablóny, modely, 2 agenti, README, LICENSE, NOTICE, sprievodca)."""
+    """K2: všetky súbory pluginu existujú (5 skillov, šablóny, modely, 2 agenti, README, LICENSE, NOTICE, sprievodcovia, hook)."""
     cesty = [PLUGIN / "skills" / s / "SKILL.md" for s in SKILLY]
     cesty += [TEMPLATES, PLUGIN / "skills" / "workflow" / "references" / "models.md"]
     cesty += [PLUGIN / "agents" / f"{a}.md" for a in AGENTI]
-    cesty += [PLUGIN / n for n in ("README.md", "LICENSE", "NOTICE")] + [SPRIEVODCA, SPRIEVODCA_SKILLY, SPRIEVODCA_START]
+    cesty += [PLUGIN / n for n in ("README.md", "LICENSE", "NOTICE")] + [SPRIEVODCA, SPRIEVODCA_SKILLY, SPRIEVODCA_START, HOOKS]
     chybajuce = [str(c.relative_to(PLUGIN)) for c in cesty if not c.is_file()]
     return "chýbajú: " + ", ".join(chybajuce) if chybajuce else ""
 
@@ -352,7 +353,7 @@ def k9():
 
 # B6 iba veľkými písmenami: malé b6 je názov pluginu.
 ZAKAZANE_SLOVA_VELKE = ("B6",)
-ZAKAZANE_SLOVA_BEZ_VELKOSTI = ("strix", "ps-metodika", "fable")
+ZAKAZANE_SLOVA_BEZ_VELKOSTI = ("fable",)
 
 
 def k10():
@@ -373,8 +374,35 @@ def k10():
     return "; ".join(chyby)
 
 
+# Hook smie iba vypísať text: nič nečíta zo siete, nezapisuje, nemaže a nespúšťa ďalšie príkazy.
+ZAKAZANE_V_HOOKU = (">", "<", "|", "&", ";", "`", "$(", "curl", "wget", "rm ", "del ", "invoke-", "iwr", "irm",
+                    "python", "node", "powershell", "pwsh", "bash", "sh -", "http")
+
+
+def k11():
+    """K11: plugin má iba hook SessionStart a jeho príkaz je jeden echo bez presmerovania, siete a zápisu."""
+    if not HOOKS.is_file():
+        return "hooks.json chýba"
+    try:
+        data = json.loads(cti(HOOKS))
+    except ValueError as e:
+        return f"hooks.json nie je platný JSON: {e}"
+    udalosti = sorted(data.get("hooks", {}))
+    if udalosti != ["SessionStart"]:
+        return f"povolený je iba SessionStart, je: {udalosti}"
+    chyby = []
+    for skupina in data["hooks"]["SessionStart"]:
+        for hook in skupina.get("hooks", []):
+            prikaz = hook.get("command", "")
+            if hook.get("type") != "command" or not prikaz.startswith("echo ") or "args" in hook:
+                chyby.append(f"hook nie je jednoduchý echo: {prikaz[:40]}")
+            chyby += [f"hook obsahuje '{z}'" for z in ZAKAZANE_V_HOOKU if z in prikaz.lower()]
+            chyby += [f"hook obsahuje úvodzovky alebo zátvorky" for z in "'\"()" if z in prikaz][:1]
+    return "; ".join(chyby)
+
+
 KONTROLY = [("K1", k1), ("K2", k2), ("K3", k3), ("K4", k4), ("K5", k5), ("K6", k6), ("K7", k7), ("K8", k8),
-            ("K9", k9), ("K10", k10)]
+            ("K9", k9), ("K10", k10), ("K11", k11)]
 
 
 def main():

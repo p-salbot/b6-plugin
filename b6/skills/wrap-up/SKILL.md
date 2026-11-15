@@ -54,7 +54,7 @@ Working files are the design file `ctx/plans/<YYYY-MM-DD>-<slug>-design.md`, the
 and the run folder `ctx/plans/<YYYY-MM-DD>-<slug>/`. Requirements, decisions and architecture stay.
 
 - Project with git: ask for the owner's agreement to commit; delete after the commit, so the files stay in history.
-  Never commit without agreement.
+  Never commit without agreement. If the owner declines or postpones the commit, keep the files as for "Not yet" below.
 - Project without git: ask separately "Delete the plan, design and working folder?" Delete only after an explicit
   "delete" (or the same meaning). "Not yet": keep them and say that the owner can ask to delete them at any time; skill
   `workflow` then hands over to this step.

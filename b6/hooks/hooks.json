@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo The b6 plugin is active. Before you create or change or delete any project file load the skill b6:workflow and follow it. This holds also for a small change. Questions that change no file do not need it."
+          }
+        ]
+      }
+    ]
+  }
+}

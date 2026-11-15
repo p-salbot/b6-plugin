@@ -20,7 +20,7 @@ If something similar already exists, or the idea is not worth the effort, say so
 ## 2. First message
 
 Write the request in your own words and what you found. Or, if you cannot even do that, ask one open question and say
-why you ask it.
+why you ask it. On first use this is the same message as the consent from skill `workflow`: still at most one question.
 
 ## 3. Ask well
 

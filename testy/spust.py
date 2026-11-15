@@ -32,6 +32,12 @@ DEFAULT_TIMEOUT_MINUTES = 45
 DEFAULT_MAX_ROUNDS = 10
 # Isolation: no MCP servers and no user-level plugins or settings, so the test sees only the b6 plugin.
 IZOLACIA = ["--strict-mcp-config", "--setting-sources", "project,local"]
+# The runner must run outside a sandbox (claude saves sessions under ~/.claude for --resume), so the
+# test chat's own Bash commands are kept in a sandbox without network access.
+# Automatic memory is off, so a run cannot store state outside the project or carry it over to the next run.
+SANDBOX = ["--settings", json.dumps({"autoMemoryEnabled": False, "sandbox": {
+    "enabled": True, "failIfUnavailable": True, "allowUnsandboxedCommands": False,
+    "network": {"strictAllowlist": True}}})]
 ALLOWED_TOOLS = "Read,Write,Edit,Glob,Grep,Task,Agent,Skill,Bash(python3:*),Bash(ls:*),Bash(rm:*),Bash(git:*)"
 SHOWN_DIRS = ("ctx", "docs")
 SHOWN_FILES = ("CLAUDE.md",)
@@ -100,7 +106,7 @@ def main_chat_command(claude, model, session_id):
     """The message goes in through stdin, so the command carries no message."""
     command = [claude, "-p", "--plugin-dir", str(PLUGIN_DIR), "--model", model,
                "--output-format", "json", "--permission-mode", "acceptEdits",
-               *IZOLACIA,
+               *IZOLACIA, *SANDBOX,
                "--allowedTools", ALLOWED_TOOLS]
     if session_id:
         command += ["--resume", session_id]
@@ -109,7 +115,7 @@ def main_chat_command(claude, model, session_id):
 
 def simulator_command(claude):
     """The prompt goes in through stdin; `--tools ""` switches all built-in tools off."""
-    return [claude, "-p", "--model", SIMULATOR_MODEL, "--output-format", "json", "--tools", "", *IZOLACIA]
+    return [claude, "-p", "--model", SIMULATOR_MODEL, "--output-format", "json", "--tools", "", *IZOLACIA, *SANDBOX]
 
 
 def build_simulator_prompt(persona, transcript):

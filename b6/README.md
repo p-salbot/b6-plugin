@@ -19,6 +19,19 @@ Pick one way:
   approved steps here.
 - For a quick test, start Claude Code with `claude --plugin-dir <path to the b6 folder>`.
 
+## What it can reach
+
+The plugin is text only: skills, agents and guides. It has no connectors, no network access and no access to any
+system. Its only hook prints one line of text at the start of a chat, so that Claude uses the `workflow` skill
+before it changes files. Claude works with the access you give your own Claude Code; the plugin adds none.
+
+## Turn it off or remove it
+
+- Turn it off: run `/plugin`, open the installed plugins, pick `b6` and choose disable. Enable it the same way.
+- Remove it: in the same menu choose uninstall. If you started it with `--plugin-dir`, just start Claude Code without
+  that option and delete the folder.
+- Files the plugin wrote into a project (`ctx/`, `docs/`, lines in `CLAUDE.md`) stay; they are ordinary project files.
+
 ## First use
 
 Start Claude Code in your project and write what you want to build, in your own words.
@@ -31,7 +44,10 @@ The plugin then leads you through four stages:
 
 Nothing is built before you approve the requirements and say "go" on the plan.
 Small changes skip brainstorming and the plan: Claude tells you how it will check the result
-and waits for your "go".
+and waits for your "go". A new feature or command is never a small change.
+
+Work only in your company Claude account. Do not put personal data, whole exports, passwords or keys into the chat or
+the project; made-up data is enough for trying things out.
 
 ## Guide
 

@@ -188,8 +188,9 @@ projekt
 Si nepoprogramátor, ktorý vlastní projekt Tiny Tasks. Píš po slovensky, stručne a nenútene. Chceš, aby sa úlohy
 ukladali aj medzi viacerými počítačmi (zdieľanie). Nevieš, kam ukladať dáta, a chceš poradiť. Ak asistent ukáže
 2 až 3 cesty s odporúčaním, vyber tú odporúčanú. Na otázky odpovedaj jednou-dvoma vetami. Jazyk dokumentov
-projektu zvoľ slovenčinu. Schválenie ("rob") napíš, iba keď sa ťa asistent výslovne pýta na schválenie. Keď asistent
-ohlási, že je hotový so zápisom dokumentov a plánu, napíš END.
+projektu zvoľ slovenčinu. Schválenie ("rob") napíš, iba keď sa ťa asistent výslovne pýta na schválenie dokumentov. Keď
+asistent ukáže plán a pýta sa na súhlas so stavbou, odpovedz "plán je v poriadku, zapíš ho, ale ešte nestavaj". Keď
+asistent potvrdí, že plán je zapísaný, napíš END. Nedovoľ, aby sa v tomto chate začalo stavať.
 
 ### Prvá správa
 Chcem, aby sa úlohy dali zdieľať medzi viacerými počítačmi. Ešte neviem, kam by sa mali ukladať.
@@ -249,7 +250,9 @@ Si nepoprogramátor, ktorý vlastní projekt Tiny Tasks. Píš po slovensky, str
 ktorú chceš mať zapísanú ako požiadavku v požiadavkách projektu: príkaz `list` nech úlohy zoradí podľa názvu, keď
 pridáš prepínač `--sort`. Ak sa ťa asistent opýta, povedz, že je to nová funkcia a chceš ju mať v požiadavkách. Na otázky odpovedaj jednou-dvoma vetami.
 Keď sa ťa asistent opýta na jazyk dokumentov, povedz, že anglicky je v poriadku. Schválenie ("rob") napíš, iba keď sa ťa
-asistent výslovne pýta na schválenie. Keď asistent ohlási, že zapísal požiadavky alebo hotovú prácu, napíš END.
+asistent výslovne pýta na schválenie požiadaviek. Keď asistent ukáže plán a pýta sa na súhlas so stavbou, odpovedz
+"plán je v poriadku, zapíš ho, ale ešte nestavaj". Keď asistent potvrdí, že plán je zapísaný, napíš END. Nedovoľ, aby
+sa v tomto chate začalo stavať.
 
 ### Prvá správa
 Chcel by som, aby `list --sort` zoradil úlohy podľa názvu.
@@ -291,8 +294,9 @@ projekt-ready
 ### Persona
 You are a non-programmer who owns the Tiny Tasks project. Write in English, short and casual. You want a new
 feature: `list --count` prints only the number of tasks. Answer questions in one or two sentences; pick the recommended
-option. Choose English for documents. Approve with "go" only when explicitly asked for approval. When the assistant
-shows the requirements or the plan and you approved it, or after 8 rounds, reply END.
+option. Choose English for documents. Approve the requirements with "go" only when explicitly asked for approval. When
+the assistant shows the plan and asks for approval to build, reply "the plan is fine, write it down, but don't build
+yet". After the assistant confirms the plan is written, or after 8 rounds, reply END. Do not allow building to start.
 
 ### Prvá správa
 I want to add a new feature: `list --count` should print only the number of tasks.

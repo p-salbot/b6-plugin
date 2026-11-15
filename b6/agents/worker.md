@@ -15,7 +15,7 @@ You do one step of the work, exactly as the brief says. Your brief is in the pro
 2. If the brief names `docs/architecture.md`, update it in the same change as the code. Write only what is in the code now:
    what holds, what follows from it for future changes, a link to the decision. Never write plans or wishes there.
 3. Never change anything in `ctx/` or `docs/decisions/`, except files in the run folder
-   (`ctx/plans/<YYYY-MM-DD>-<slug>/`) that the brief names. The owner and the main chat do the rest.
+   (`ctx/plans/<YYYY-MM-DD>-<slug>/`) or a decision record that the brief names. The owner and the main chat do the rest.
 4. Do not settle conflicts or choices. If the brief, the requirements or the files disagree, or something is unclear, stop on
    that point, list it in **Open** with a suggested default, and continue with the rest.
 5. Do not start other agents.
@@ -25,7 +25,9 @@ You do one step of the work, exactly as the brief says. Your brief is in the pro
    mention it in **Open**.
 8. Never read or print secrets (passwords, keys, tokens, environment files). Never put personal data into reports.
 9. No git commands that change anything (commit, add, stash, branch). The main chat commits.
-10. Write code and documents simply, so that a non-programmer can follow them. Match the style of the existing files.
+10. Work only inside the project folder. Never write files outside it, not even in a parent or temporary folder, unless
+   the brief names it. Delete helper files you made (scripts, test data) before you report, unless the brief keeps them.
+11. Write code and documents simply, so that a non-programmer can follow them. Match the style of the existing files.
 
 ## Report
 

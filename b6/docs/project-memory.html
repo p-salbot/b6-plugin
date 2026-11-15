@@ -229,7 +229,7 @@ ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column
           <thead><tr><th>Úloha</th><th>Kto koná</th><th>Čo ju blokuje</th><th>Vstupy</th><th>Ďalší krok</th></tr></thead>
           <tbody>
             <tr><td>Automatické uvoľnenie nepotvrdenej rezervácie (R-002)</td><td>Claude</td><td>nič</td><td>R-002; <code>architecture.md</code>, časť „Stavy rezervácie“</td><td>napísať test podľa kritéria, potom doplniť stav „nepotvrdená“ a úlohu, ktorá beží každú minútu</td></tr>
-            <tr><td>Zrušenie rezervácie nemaže udalosť v Outlooku (R-003)</td><td>IT oddelenie</td><td>aplikácia nemá právo mazať udalosti v kalendároch zamestnancov</td><td>výsledok testu synchronizácie z 2026-03-09</td><td>po pridelení práva doplniť mazanie a test; potom R-003 prepnúť na splnenú</td></tr>
+            <tr><td>Zrušenie rezervácie nemaže udalosť v Outlooku (R-003)</td><td>IT oddelenie</td><td>aplikácia nemá právo mazať udalosti v kalendároch zamestnancov</td><td>výsledok testu synchronizácie z 2026-03-09</td><td>po pridelení práva doplniť mazanie a test; potom dať vlastníkovi vyskúšať; po skúške R-003 splnená</td></tr>
             <tr><td>Smie asistentka rezervovať v mene niekoho iného?</td><td>vlastník</td><td>rozhodnutie vlastníka</td><td>otázka office manažérky z 2026-03-06</td><td>ak áno, zapísať ako novú požiadavku R-004 s kritériom</td></tr>
           </tbody>
         </table>
@@ -247,9 +247,9 @@ ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column
 
   <section class="stack arch">
     <div class="doc-head"><h2>Architektúra</h2><span class="chip">docs/architecture.md</span></div>
-    <p>Opis systému tak, ako je dnes postavený. Claude ho číta pred každou zmenou v kóde, aby neporušil pravidlá, ktoré už platia.</p>
+    <p>Opis systému tak, ako je dnes postavený. Claude ho číta pred zmenou, ktorej sa týka, aby neporušil pravidlá, ktoré už platia.</p>
     <dl class="facts">
-      <div><dt>Kto zapisuje</dt><dd>Claude v tej istej zmene, ktorá mení kód. Vlastník zmenu schvaľuje.</dd></div>
+      <div><dt>Kto zapisuje</dt><dd>Agent worker v tej istej zmene, ktorá mení kód. Kontroluje ju reviewer; vlastník zmenu vidí v zhrnutí pri uzavretí.</dd></div>
       <div><dt>Kedy sa mení</dt><dd>Až keď je zmena naozaj v kóde. Plány sem nepatria.</dd></div>
       <div><dt>Pravidlo</dt><dd>Hovorí „ako“. „Prečo“ je v očíslovaných záznamoch v <code>docs/decisions/</code>.</dd></div>
     </dl>
@@ -270,7 +270,7 @@ ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column
       <h3>Čo si všimnúť</h3>
       <ul class="plain">
         <li>Každý riadok opisuje stav, ktorý sa dá v kóde nájsť. O tom, čo sa plánuje, tu nie je nič.</li>
-        <li>Dôvody sú v samostatných súboroch, napr. <code>0002-prekryvanie-strazi-databaza.md</code>. Zrušené rozhodnutie sa nemaže, presunie sa do archívu.</li>
+        <li>Dôvody sú v samostatných súboroch, napr. <code>0002-prekryvanie-strazi-databaza.md</code>. Zrušené rozhodnutie sa nemaže, presunie sa do <code>docs/decisions/archive/</code>.</li>
         <li>Stĺpec „čo z toho vyplýva“ je to, čo Claude potrebuje najviac: čo pri ďalšej zmene nesmie pokaziť.</li>
       </ul>
     </div>
@@ -282,7 +282,7 @@ ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column
     <dl class="facts">
       <div><dt>Kto zapisuje</dt><dd>Rozhoduje vlastník. Claude pripraví záznam aj s alternatívami.</dd></div>
       <div><dt>Kedy vzniká</dt><dd>Keď sa voľba ťažko vracia: databáza, hranica medzi systémami, pravidlo nad dátami. Bežný technický detail záznam nepotrebuje.</dd></div>
-      <div><dt>Pravidlo</dt><dd>Jeden súbor na rozhodnutie. Čísla sa nemenia. Zrušený záznam ide do archívu s odkazom na ten, ktorý ho nahradil.</dd></div>
+      <div><dt>Pravidlo</dt><dd>Jeden súbor na rozhodnutie. Čísla sa nemenia a záznam sa neprepisuje. Keď ho nové rozhodnutie nahradí, do starého pribudne iba odkaz na nový a starý sa presunie do <code>docs/decisions/archive/</code>.</dd></div>
     </dl>
     <div class="file">
       <div class="file-bar">docs/decisions/ · 0001 až 0003</div>
@@ -303,7 +303,7 @@ ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column
       <ul class="plain">
         <li>Záznam obsahuje aj odmietnutú alternatívu. Bez nej ju Claude o mesiac navrhne znova.</li>
         <li>„Čo by ho zmenilo“ hovorí, kedy sa oplatí rozhodnutie otvoriť. Rozhodnutie 0003 je odložené, nie zakázané.</li>
-        <li>Architektúra sa mení s kódom, záznam o rozhodnutí sa nemení. Keď rozhodnutie prestane platiť, vznikne nový záznam a starý naň odkáže.</li>
+        <li>Architektúra sa mení s kódom, záznam o rozhodnutí sa nemení. Keď rozhodnutie prestane platiť, vznikne nový záznam; do starého pribudne iba odkaz naň a starý ide do archívu.</li>
       </ul>
     </div>
   </section>
@@ -314,21 +314,20 @@ ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column
     <ol class="trace">
       <li class="req"><span class="num">1</span><div class="body"><span class="where">ctx/requirements.md</span><h3>Vlastník povie, čo chce</h3><p>Vznikne riadok R-003, SHOULD, s kritériom: udalosť v kalendári do 1 minúty, po zrušení zmizne.</p></div></li>
       <li class="arch"><span class="num">2</span><div class="body"><span class="where">docs/decisions/</span><h3>Claude navrhne postup a vlastník ho schváli</h3><p>Claude povie, čo spraví a čo nie: zmeny z Outlooku sa čítať nebudú. Vlastník súhlasí a rozhodnutie sa zapíše ako 0003.</p></div></li>
-      <li><span class="num">3</span><div class="body"><span class="where">kód a testy</span><h3>Vznikne výstup</h3><p>Zápis udalosti do kalendára a 6 testov synchronizácie. Test zrušenia zlyhá, lebo aplikácia nemá právo mazať udalosti.</p></div></li>
-      <li class="req"><span class="num">4</span><div class="body"><span class="where">ctx/requirements.md</span><h3>Do požiadavky sa zapíše stav a dôkaz</h3><p>Stav: čiastočne splnená. Dôkaz: vytvorenie funguje, zrušenie udalosť nemaže.</p></div></li>
-      <li class="task"><span class="num">5</span><div class="body"><span class="where">ctx/TASKS.md</span><h3>Čo ostalo, ide do otvorenej práce</h3><p>Pribudne úloha „Zrušenie rezervácie nemaže udalosť v Outlooku“. Koná IT oddelenie, ďalší krok je jasný.</p></div></li>
-      <li class="arch"><span class="num">6</span><div class="body"><span class="where">docs/architecture.md</span><h3>Architektúra sa doplní o to, čo je v kóde</h3><p>Pribudne kapitola „Kalendár Outlook“: aplikácia do Outlooku len zapisuje. Pri nej je odkaz na rozhodnutie 0003.</p></div></li>
+      <li><span class="num">3</span><div class="body"><span class="where">kód, testy, docs/architecture.md</span><h3>Vznikne výstup a s ním architektúra</h3><p>Worker napíše zápis udalosti do kalendára a 6 testov synchronizácie. V tej istej zmene doplní do architektúry kapitolu „Kalendár Outlook“ (aplikácia do Outlooku len zapisuje) s odkazom na rozhodnutie 0003. Test zrušenia zlyhá, lebo aplikácia nemá právo mazať udalosti; kódom sa to opraviť nedá, preto to Claude prinesie vlastníkovi.</p></div></li>
+      <li class="req"><span class="num">4</span><div class="body"><span class="where">ctx/requirements.md</span><h3>Požiadavka je na vyskúšanie</h3><p>Stav: na vyskúšanie. Dôkaz: 6 testov synchronizácie, zrušenie udalosť nemaže. Claude povie vlastníkovi, čo vyskúšať.</p></div></li>
+      <li class="req"><span class="num">5</span><div class="body"><span class="where">ctx/requirements.md</span><h3>Vlastník vyskúša a zapíše sa výsledok</h3><p>Vytvorenie funguje, zrušenie nie. Stav: čiastočne splnená; do dôkazu sa zapíše, čo chýba.</p></div></li>
+      <li class="task"><span class="num">6</span><div class="body"><span class="where">ctx/TASKS.md</span><h3>Čo ostalo, ide do otvorenej práce</h3><p>Pribudne úloha „Zrušenie rezervácie nemaže udalosť v Outlooku“. Koná IT oddelenie, ďalší krok je jasný.</p></div></li>
     </ol>
   </section>
 
   <section class="stack">
     <h2>Ako to použiť v Claude Code</h2>
-    <p>Stačí povedať, ktoré súbory má Claude prečítať a kam má zapísať výsledok. Odkaz na ne sa oplatí dať aj do <code>CLAUDE.md</code> projektu, potom ich číta sám.</p>
-    <div class="prompt"><span class="when">Na začiatku chatu</span><span class="say">Prečítaj ctx/TASKS.md a ctx/requirements.md. Povedz mi, čo je otvorené a čo navrhuješ ako ďalší krok.</span></div>
-    <div class="prompt"><span class="when">Keď príde nová požiadavka</span><span class="say">Vlastník rozhodol, že asistentka môže rezervovať v mene iného. Pridaj to do ctx/requirements.md ako R-004 a navrhni kritérium splnenia, ktoré sa dá overiť testom. Otázku z ctx/TASKS.md vymaž.</span></div>
-    <div class="prompt"><span class="when">Pred zmenou v kóde</span><span class="say">Prečítaj docs/architecture.md a rozhodnutia v docs/decisions/, ktorých sa zmena týka. Povedz, či ich návrh neporušuje.</span></div>
-    <div class="prompt"><span class="when">Keď padne ťažko vratné rozhodnutie</span><span class="say">Zapíš do docs/decisions/ rozhodnutie 0004: prihlasuje sa firemným účtom Microsoft, aplikácia nemá vlastné heslá. Uveď dôvod, zvažované alternatívy a čo by ho zmenilo.</span></div>
-    <div class="prompt"><span class="when">Na konci práce</span><span class="say">Zapíš k R-002 stav a dôkaz. Hotové úlohy z ctx/TASKS.md vymaž, nové otvorené body dopíš. Ak sa zmenilo, ako systém funguje, uprav docs/architecture.md.</span></div>
+    <p>S pluginom b6 stačí povedať, čo chceš. Claude si sám prečíta, čo treba, a dokumenty zapisuje až po tvojom súhlase: požiadavky po brainstormingu, stav a dôkaz pri uzavretí, „splnená“ až po tvojej skúške. Ručné pokyny typu „pridaj R-004“ netreba; obišli by schválenie aj skúšku.</p>
+    <div class="prompt"><span class="when">Na začiatku chatu</span><span class="say">Kde sme?</span></div>
+    <div class="prompt"><span class="when">Keď príde nová požiadavka</span><span class="say">Vlastník rozhodol, že asistentka môže rezervovať v mene iného. Poďme to pridať.</span></div>
+    <div class="prompt"><span class="when">Keď treba ťažko vratné rozhodnutie</span><span class="say">Chcem, aby sa prihlasovalo firemným účtom Microsoft. Aké sú možnosti?</span></div>
+    <div class="prompt"><span class="when">Po skúške</span><span class="say">Vyskúšal som to, funguje.</span></div>
 
     <h3>Kam čo patrí</h3>
     <div class="scroll">
@@ -466,7 +465,7 @@ ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column
           <thead><tr><th>Task</th><th>Who acts</th><th>What blocks it</th><th>Inputs</th><th>Next step</th></tr></thead>
           <tbody>
             <tr><td>Automatic release of a booking with no check-in (R-002)</td><td>Claude</td><td>nothing</td><td>R-002; <code>architecture.md</code>, section "Booking states"</td><td>write the test from the criterion, then add the "unconfirmed" state and a job that runs every minute</td></tr>
-            <tr><td>Cancelling a booking does not delete the Outlook event (R-003)</td><td>IT department</td><td>the app has no permission to delete events in employees' calendars</td><td>sync test result of 2026-03-09</td><td>once the permission is granted, add the deletion and its test; then switch R-003 to met</td></tr>
+            <tr><td>Cancelling a booking does not delete the Outlook event (R-003)</td><td>IT department</td><td>the app has no permission to delete events in employees' calendars</td><td>sync test result of 2026-03-09</td><td>once the permission is granted, add the deletion and its test; then let the owner try it; after the trial R-003 is met</td></tr>
             <tr><td>May an assistant book on someone else's behalf?</td><td>owner</td><td>the owner's decision</td><td>the office manager's question of 2026-03-06</td><td>if yes, record it as a new requirement R-004 with a criterion</td></tr>
           </tbody>
         </table>
@@ -484,9 +483,9 @@ ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column
 
   <section class="stack arch">
     <div class="doc-head"><h2>Architecture</h2><span class="chip">docs/architecture.md</span></div>
-    <p>A description of the system as it is built today. Claude reads it before every code change, so that it does not break rules already in force.</p>
+    <p>A description of the system as it is built today. Claude reads it before a change it concerns, so that it does not break rules already in force.</p>
     <dl class="facts">
-      <div><dt>Who writes it</dt><dd>Claude, in the same change that alters the code. The owner approves the change.</dd></div>
+      <div><dt>Who writes it</dt><dd>The worker agent, in the same change that alters the code. The reviewer checks it; the owner sees the change in the summary at wrap-up.</dd></div>
       <div><dt>When it changes</dt><dd>Only once the change really is in the code. Plans do not belong here.</dd></div>
       <div><dt>Rule</dt><dd>It says "how". "Why" lives in numbered records in <code>docs/decisions/</code>.</dd></div>
     </dl>
@@ -507,7 +506,7 @@ ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column
       <h3>What to notice</h3>
       <ul class="plain">
         <li>Every row describes a state you can find in the code. Nothing here is about what is planned.</li>
-        <li>Reasons sit in separate files, e.g. <code>0002-the-database-guards-overlaps.md</code>. A reversed decision is not deleted; it moves to the archive.</li>
+        <li>Reasons sit in separate files, e.g. <code>0002-the-database-guards-overlaps.md</code>. A reversed decision is not deleted; it moves to <code>docs/decisions/archive/</code>.</li>
         <li>The "what it means" column is what Claude needs most: what the next change must not break.</li>
       </ul>
     </div>
@@ -519,7 +518,7 @@ ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column
     <dl class="facts">
       <div><dt>Who writes it</dt><dd>The owner decides. Claude prepares the record, alternatives included.</dd></div>
       <div><dt>When one is written</dt><dd>When the choice is hard to reverse: the database, a boundary between systems, a rule over the data. An ordinary technical detail needs no record.</dd></div>
-      <div><dt>Rule</dt><dd>One file per decision. Numbers never change. A reversed record moves to the archive and points to the one that replaced it.</dd></div>
+      <div><dt>Rule</dt><dd>One file per decision. Numbers never change and a record is not rewritten. When a new decision replaces it, the old one only gets a pointer to the new one and moves to <code>docs/decisions/archive/</code>.</dd></div>
     </dl>
     <div class="file">
       <div class="file-bar">docs/decisions/ · 0001 to 0003</div>
@@ -540,7 +539,7 @@ ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column
       <ul class="plain">
         <li>The record includes the rejected alternative. Without it, Claude proposes it again a month later.</li>
         <li>"What would change it" says when reopening the decision is worth it. Decision 0003 is postponed, not forbidden.</li>
-        <li>The architecture changes with the code; a decision record does not change. When a decision stops holding, a new record is written and the old one points to it.</li>
+        <li>The architecture changes with the code; a decision record does not change. When a decision stops holding, a new record is written; the old one only gets a pointer to it and moves to the archive.</li>
       </ul>
     </div>
   </section>
@@ -551,21 +550,20 @@ ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column
     <ol class="trace">
       <li class="req"><span class="num">1</span><div class="body"><span class="where">ctx/requirements.md</span><h3>The owner says what they want</h3><p>Row R-003 is added, SHOULD, with the criterion: event in the calendar within 1 minute, gone after cancelling.</p></div></li>
       <li class="arch"><span class="num">2</span><div class="body"><span class="where">docs/decisions/</span><h3>Claude proposes the approach and the owner approves it</h3><p>Claude says what it will do and what it will not: changes will not be read from Outlook. The owner agrees and the decision is recorded as 0003.</p></div></li>
-      <li><span class="num">3</span><div class="body"><span class="where">code and tests</span><h3>The output is produced</h3><p>Writing the event to the calendar, and 6 sync tests. The cancellation test fails because the app has no permission to delete events.</p></div></li>
-      <li class="req"><span class="num">4</span><div class="body"><span class="where">ctx/requirements.md</span><h3>Status and evidence go into the requirement</h3><p>Status: partly met. Evidence: creation works, cancelling does not delete the event.</p></div></li>
-      <li class="task"><span class="num">5</span><div class="body"><span class="where">ctx/TASKS.md</span><h3>What is left goes to open work</h3><p>The task "Cancelling a booking does not delete the Outlook event" is added. IT acts, and the next step is clear.</p></div></li>
-      <li class="arch"><span class="num">6</span><div class="body"><span class="where">docs/architecture.md</span><h3>The architecture gains what is in the code</h3><p>The section "Outlook calendar" is added: the app only writes to Outlook. It points to decision 0003.</p></div></li>
+      <li><span class="num">3</span><div class="body"><span class="where">code, tests, docs/architecture.md</span><h3>The output is produced, and the architecture with it</h3><p>The worker writes the event to the calendar and 6 sync tests. In the same change it adds the section "Outlook calendar" to the architecture (the app only writes to Outlook), pointing to decision 0003. The cancellation test fails because the app has no permission to delete events; code cannot fix that, so Claude brings it to the owner.</p></div></li>
+      <li class="req"><span class="num">4</span><div class="body"><span class="where">ctx/requirements.md</span><h3>The requirement is ready to try</h3><p>Status: ready to try. Evidence: 6 sync tests, cancelling does not delete the event. Claude tells the owner what to try.</p></div></li>
+      <li class="req"><span class="num">5</span><div class="body"><span class="where">ctx/requirements.md</span><h3>The owner tries it and the result is written</h3><p>Creating works, cancelling does not. Status: partly met; the evidence says what is missing.</p></div></li>
+      <li class="task"><span class="num">6</span><div class="body"><span class="where">ctx/TASKS.md</span><h3>What is left goes to open work</h3><p>The task "Cancelling a booking does not delete the Outlook event" is added. IT acts, and the next step is clear.</p></div></li>
     </ol>
   </section>
 
   <section class="stack">
     <h2>How to use it in Claude Code</h2>
-    <p>It is enough to say which files Claude should read and where to write the result. Put a pointer to them into the project's <code>CLAUDE.md</code> as well, and Claude reads them on its own.</p>
-    <div class="prompt"><span class="when">At the start of a session</span><span class="say">Read ctx/TASKS.md and ctx/requirements.md. Tell me what is open and what you propose as the next step.</span></div>
-    <div class="prompt"><span class="when">When a new requirement arrives</span><span class="say">The owner decided that an assistant can book on someone else's behalf. Add it to ctx/requirements.md as R-004 and propose an acceptance criterion a test can check. Delete the question from ctx/TASKS.md.</span></div>
-    <div class="prompt"><span class="when">Before a code change</span><span class="say">Read docs/architecture.md and the decisions in docs/decisions/ that the change touches. Tell me whether the proposal breaks any of them.</span></div>
-    <div class="prompt"><span class="when">When a hard-to-reverse decision is made</span><span class="say">Record decision 0004 in docs/decisions/: people sign in with their company Microsoft account, the app has no passwords of its own. Give the reason, the alternatives considered and what would change it.</span></div>
-    <div class="prompt"><span class="when">At the end of the work</span><span class="say">Write the status and evidence for R-002. Delete finished tasks from ctx/TASKS.md and add the new open points. If the way the system works has changed, update docs/architecture.md.</span></div>
+    <p>With the b6 plugin it is enough to say what you want. Claude reads what it needs on its own and writes the documents only after you agree: requirements after brainstorming, status and evidence at wrap-up, "met" only after your trial. Manual commands such as "add R-004" are not needed; they would skip the approval and the trial.</p>
+    <div class="prompt"><span class="when">At the start of a session</span><span class="say">Where are we?</span></div>
+    <div class="prompt"><span class="when">When a new requirement arrives</span><span class="say">The owner decided that an assistant can book on someone else's behalf. Let's add it.</span></div>
+    <div class="prompt"><span class="when">When a hard-to-reverse choice is needed</span><span class="say">I want people to sign in with their company Microsoft account. What are the options?</span></div>
+    <div class="prompt"><span class="when">After a trial</span><span class="say">I tried it, it works.</span></div>
 
     <h3>What goes where</h3>
     <div class="scroll">

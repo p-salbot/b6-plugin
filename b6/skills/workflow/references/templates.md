@@ -50,7 +50,7 @@ Statuses: proposed -> approved -> ready to try -> met or partly met; cancelled.
 
 ## architecture.md
 
-- Writer: `worker`, in the same change as the code. The owner approves the change. Checked by `reviewer`. When: only once
+- Writer: `worker`, in the same change as the code. Checked by `reviewer`; the owner sees the change in the summary. When: only once
   the change is in the code.
 - Path: `docs/architecture.md`
 - Rules: only what is true in the code today; plans do not belong here. It says "how"; "why" is a link to a decision
@@ -66,10 +66,12 @@ Statuses: proposed -> approved -> ready to try -> met or partly met; cancelled.
 
 ## decision record
 
-- Writer: main chat prepares it, the owner decides. When: the choice is hard to reverse (database, boundary between
+- Writer: main chat prepares it, the owner decides; written at the end of brainstorming, or by the `worker` when a brief
+  names it (choice made during a run). When: the choice is hard to reverse (database, boundary between
   systems, rule over the data). An ordinary technical detail needs no record.
 - Path: `docs/decisions/NNNN-<slug>.md`
-- Rules: one file per decision; numbers never change. A reversed record moves to an archive and points to its replacement.
+- Rules: one file per decision; numbers never change. A record is not edited, with one exception: when a new decision
+  replaces it, add a line pointing to the new record and move it to `docs/decisions/archive/`.
 
 ```markdown
 # <NNNN> <Decision in one sentence>
@@ -227,7 +229,7 @@ About <number> tokens (estimate <range>).
 ## What not to do
 
 - Do not change `ctx/` or `docs/decisions/`, except files in the run folder that this brief names.
-- Do not change files that are not listed.
+- Do not change files that are not listed. Do not write outside the project folder; delete your helper files.
 - Do not decide contradictions; list them in the report.
 
 ## How to verify

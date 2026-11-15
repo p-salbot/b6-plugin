@@ -35,9 +35,12 @@ If the main chat itself is not on a strong model, say so before the plan as well
 
 Rough guide only; real use depends on the project.
 
-| Size | Typical use |
-|---|---|
-| S | about 50-150k tokens |
-| M | about 300-700k tokens |
+Estimate from the size of the work, not from the size label: count the plan steps and the files they touch.
 
-Put an estimate in every plan and mark it as approximate. After the work, write the real use into `SUMMARY.md`.
+| Part of the work | Typical use |
+|---|---|
+| one small step (1-2 files, worker and reviewer) | about 30-80k tokens |
+| one larger step (several files or a new module) | about 100-200k tokens |
+| each fix round | about half of the step |
+
+Put an estimate in every plan (sum of the steps) and mark it as approximate. After the work, write the real use into `SUMMARY.md`.

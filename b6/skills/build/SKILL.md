@@ -40,6 +40,8 @@ Templates (`brief`, `review`, `SUMMARY.md`) are read from the `workflow` skill f
 
 - Agents report in at most 20 lines. Details live in files.
 - A conflict or choice that an agent lists in "Open" goes to the owner with your recommendation. You do not decide it.
+- A hard-to-undo choice made during the run (section `decision record`): after the owner decides, the next brief names
+  `docs/decisions/NNNN-<slug>.md` and the worker writes it.
 - Do not change the plan. A change of scope needs the owner and a new plan.
 - Context: follow the section "Context" of skill `workflow`.
 

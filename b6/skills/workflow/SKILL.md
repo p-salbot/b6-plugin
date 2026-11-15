@@ -1,12 +1,12 @@
 ---
 name: workflow
-description: Entry point of the b6 method. Use for every request to build something, change something, add a feature, fix behaviour, continue earlier work, "what is in progress", "where are we", or at the start of a new chat in a project that has ctx/TASKS.md. In a project that uses b6, this skill is used INSTEAD of any other brainstorming or planning skill. Not for questions about content, typos or formatting. Slovak triggers - postaviť, vytvoriť, pridať funkciu, zmeniť, opraviť, pokračuj, čo je rozrobené, kde sme, nový chat, ako to funguje, rob, go.
+description: Entry point of the b6 method. Use it BEFORE creating, changing or deleting any file in the project, even for a one-line change and even when the message already says "go". Also use it for every request to build something, change something, add a feature or command, fix behaviour, continue earlier work, "what is in progress", "where are we", "how does this work", and at the start of a new chat in a project that has ctx/TASKS.md. In a project that uses b6, this skill is used INSTEAD of any other brainstorming or planning skill. Not for plain questions that change no file. Slovak triggers - postaviť, vytvoriť, pridať funkciu, pridať príkaz, zmeniť, upraviť, opraviť, pokračuj, čo je rozrobené, kde sme, nový chat, ako to funguje, rob, go.
 ---
 
 # workflow
 
-You lead the work in a project that uses the b6 method. In such a project use b6 skills, not other brainstorming or
-planning skills. Talk to the owner in the language they write in. Keep it plain; the owner is not a programmer.
+You lead the work in a project that uses the b6 method. Load this skill before the first change to any project file,
+however small, and use b6 skills, not other brainstorming or planning skills. Talk to the owner in the language they write in. Keep it plain; the owner is not a programmer.
 Consent means the meaning, in any language ("go", "yes, build it", "rob").
 
 ## Hard rules (they apply to every b6 skill)
@@ -20,6 +20,7 @@ Consent means the meaning, in any language ("go", "yes, build it", "rob").
 4. A MUST requirement without evidence is not done. "met" is written only after the owner tried it.
 5. The main chat does not decide for the owner. Conflicts and choices are listed with a recommendation.
 6. Models only by level (see `references/models.md`). If the main chat is not on a strong model, say so before the plan.
+7. The state of the work lives only in project files (`ctx/`, `docs/`), never in Claude's memory.
 
 ## Start
 
@@ -35,14 +36,14 @@ Consent means the meaning, in any language ("go", "yes, build it", "rob").
 
 | Size | When | Way |
 |---|---|---|
-| S | small change in 1-2 existing files, no new requirements | no brainstorming, no plan file, no `ctx/`: criterion in chat, owner says "go", worker, reviewer, then write down |
-| M | new feature, several files, unclear request | full way below |
+| S | small change to existing behaviour in 1-2 files, no new requirement, done in this chat | no brainstorming, no plan file, no `ctx/`: criterion in chat, owner says "go", worker, reviewer, then write down |
+| M | new feature or command, several files, unclear request, work that continues later | full way below |
 
-- When in doubt, it is M. The owner may change the size.
-- S that changes the criterion of an existing requirement, or needs a new one, is M.
+- A new feature or a new command is always M, however small. When in doubt, it is M. The owner may change the size.
+- S that changes the criterion of an existing requirement, or needs a new one, is M. S cannot be paused: if the owner
+  wants to continue later, switch to M, so that the agreement is written to `ctx/`.
 - S write-down: the worker updates `docs/architecture.md` in the same brief if behaviour changed (if `docs/` does not
-  exist, skip it and tell the owner); evidence on the requirement it touches. Nothing in `ctx/TASKS.md`.
-  Tell the owner what to try. Do not create `ctx/` for S.
+  exist, skip it and tell the owner); evidence on the requirement it touches. Nothing in `ctx/TASKS.md`. Tell the owner what to try.
 - Questions, typos and formatting are not work for this method: just do them.
 
 ## Which skill is next (size M)
@@ -55,14 +56,14 @@ Consent means the meaning, in any language ("go", "yes, build it", "rob").
 ## First use in a project
 
 Templates are read from the folder of this skill in the plugin (`references/templates.md`), not from the project.
-Only say what will be created (`ctx/` and `docs/` from the templates, lines in the project `CLAUDE.md`) and ask for
-consent. Do not create the files now: skill `brainstorming` creates them at the end, in the language the owner chooses.
+Only say in a few lines what will be created (`ctx/` and `docs/` from the templates, lines in the project `CLAUDE.md`)
+and ask for consent. The same message has at most one question about the request; more come one per message. Do not create the files now: skill `brainstorming` creates them at the end, in the language the owner chooses.
 For size S `ctx/` is not created; `docs/architecture.md` is touched only if it exists or the owner wants it.
 
 ## Old or incomplete `ctx/`
 
-Signs: a summary file with a Slovak name, `- [x]` ticks for done work, decisions inside `requirements.md`, Slovak column names from an older package, or
-a missing file. Do not convert and do not overwrite. Say what you found, propose changes according to the templates,
+Signs: a summary file with a Slovak name, `- [x]` ticks for done work, decisions inside `requirements.md`, column
+names that are in neither list of the templates (both the English and the Slovak names there are fine), or a missing file. Do not convert and do not overwrite. Say what you found, propose changes according to the templates,
 and change nothing without consent.
 
 ## Language of documents
@@ -72,9 +73,8 @@ question. Do not mix languages in the documents.
 
 ## Context
 
-When the context is more than half full, or after a large step, write the state to `ctx/TASKS.md` (and `SUMMARY.md`
-of the run) and suggest a new chat.
+When the context is more than half full, or after a large step, write the state to `ctx/TASKS.md` (and `SUMMARY.md` of the run) and suggest a new chat.
 
 ## How does this work
 
-For "how does this work", point to the guide `../../docs/project-memory.html` (path from this skill's folder, in the plugin).
+For "how does this work", point first to `../../docs/getting-started.html`; for the project documents to `../../docs/project-memory.html` (paths from this skill's folder).
