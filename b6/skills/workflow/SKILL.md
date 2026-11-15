@@ -43,8 +43,8 @@ Consent means the meaning, in any language ("go", "yes, build it", "rob").
 - S that changes the criterion of an existing requirement, or needs a new one, is M. S cannot be paused: if the owner
   wants to continue later, switch to M, so that the agreement is written to `ctx/`.
 - S write-down: the worker updates `docs/architecture.md` in the same brief if behaviour changed (if `docs/` does not
-  exist, skip it and tell the owner); evidence on the requirement it touches. Nothing in `ctx/TASKS.md`. Tell the owner what to try.
-- Questions, typos and formatting are not work for this method: just do them.
+  exist, skip it and tell the owner); evidence only if `ctx/requirements.md` has a requirement it touches. Nothing in `ctx/TASKS.md`. Tell the owner what to try.
+- Questions that change no file: just answer. A typo or formatting fix in a project file is size S (hard rule 2).
 
 ## Which skill is next (size M)
 

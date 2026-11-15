@@ -13,7 +13,7 @@ Keep the owner's language.
 ## Where you come from
 
 - From `build` (all steps OK): do steps 1-6 in order.
-- From `workflow` after the owner answered about a trial (works, partly, does not work, not yet): use that answer,
+- From `workflow` after the owner answered about a trial (works, works in part, does not work, not yet): use that answer,
   do not ask again. Do only steps 3-4 (and step 6 if working files are still there).
 - From `workflow` to delete leftovers: do only step 6.
 
@@ -65,4 +65,4 @@ Finish the closing with status `ready to try`. Delete the design, plan and run f
 (an uncommitted project without git keeps them until "delete"). If `ctx/TASKS.md` has no such task yet, add
 "Try R-<n>: <what and how>", with the owner in "Who acts". At the next start, skill `workflow` announces it.
 When the owner answers, skill `workflow` hands over here (see "Where you come from"): apply step 3 with all its
-branches (works, partly met, does not work, not yet), delete the task when it is done, update the `Status` line (step 4).
+branches (works, works in part, does not work, not yet), delete the task when it is done, update the `Status` line (step 4).

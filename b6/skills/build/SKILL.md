@@ -21,7 +21,8 @@ Templates (`brief`, `review`, `SUMMARY.md`) are read from the `workflow` skill f
 1. **Brief.** Write the brief (template `brief`) from the plan, the requirements and the design. It lists the files the
    worker may change, what it must not touch, the acceptance criteria and how to verify. Put the whole brief in the
    prompt, or save it to `briefs/<n>-<slug>.md` and give the path.
-2. **Worker.** Start agent `b6:worker` with the level from the plan (medium: default; strong: pass `model: opus`).
+2. **Worker.** Start agent `b6:worker` with the level from the plan (medium: default; strong: pass the model that
+   `models.md` gives for strong).
    One step, one worker.
 3. **Look yourself.** Read the report, then see the result: run the test or command from the plan. Do not trust
    "works" without running it.
@@ -32,7 +33,7 @@ Templates (`brief`, `review`, `SUMMARY.md`) are read from the `workflow` skill f
 ## Fix rounds
 
 - Round 1: a fresh `worker` at medium level gets a brief with the findings. Then a fresh `reviewer`.
-- Round 2: a fresh `worker` at strong level (`model: opus`). Then a fresh `reviewer`.
+- Round 2: a fresh `worker` at strong level (model from `models.md`). Then a fresh `reviewer`.
 - Still `FIX` after round 2: stop and report to the owner in plain words (hard rule 3). Do not start a third round.
 - You never fix anything yourself, not even a typo (hard rule 2).
 

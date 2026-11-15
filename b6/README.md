@@ -13,11 +13,16 @@ plugins that do the same job, with the same agent names, will confuse Claude.
 
 ## Install
 
-Pick one way:
+Install the plugin only the way your company approved for Claude Code plugins. If you do not know it, ask your IT
+or the person who gave you the plugin before you install it.
 
-- In Claude Code, run `/plugin` and add this plugin. TODO: Panthea will add the exact
-  approved steps here.
-- For a quick test, start Claude Code with `claude --plugin-dir <path to the b6 folder>`.
+- Approved company way: in Claude Code run `/plugin`, find `b6` in the plugin source your company set up and choose
+  install. Then restart Claude Code.
+- From the zip file, for trying it out: unpack the zip into a folder of your own (for example `Documents\b6`) and
+  start Claude Code with `claude --plugin-dir <path to the unpacked b6 folder>`. The plugin is active only in that
+  session; start it the same way each time.
+
+Check that it works: in a new chat write "how does this work?". Claude should point you to `docs/getting-started.html`.
 
 ## What it can reach
 
@@ -52,6 +57,8 @@ the project; made-up data is enough for trying things out.
 ## Guide
 
 Start here: `docs/getting-started.html` shows how to use the plugin step by step, with a diagram (for people new to Claude Code).
+The same guide is also in `docs/getting-started.en.md` / `.sk.md` (Markdown) and `docs/getting-started.en.pdf` / `.sk.pdf`
+(for printing).
 
 An illustrated guide to the project documents is in `docs/project-memory.html`.
 Open it in a browser. It has a Slovak and an English version.
