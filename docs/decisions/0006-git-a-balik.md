@@ -18,6 +18,12 @@ klient dostane plugin bez pracovných dokumentov a testov.
 - Git celého priečinka klienta: zamietnuté, lebo by do histórie a na vzdialený repozitár išli dôverné dokumenty klienta.
 - Iba lokálny git bez vzdialeného repozitára: zamietnuté, lebo plugin by nemal zálohu ani prístup z druhého počítača.
 
+## Doplnenie 2026-11-16
+
+Do zipu ide okrem `b6/` aj `.claude-plugin/marketplace.json` (zdroj pluginov `panthea`), oba v koreni zipu. Bez neho
+klient plugin v `/plugin` nevidí a môže ho spustiť iba cez `--plugin-dir`. Súbor obsahuje iba názov, autora a cestu
+`./b6`, žiadne informácie klienta.
+
 ## Čo by ho zmenilo
 
 Presun pluginu do repozitára Panthea pre viac klientov (potom aj premenovanie z `b6`), alebo požiadavka klienta

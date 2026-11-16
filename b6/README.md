@@ -6,10 +6,17 @@ agents, and wraps up with a short summary.
 
 ## Before you install
 
-If you have the old `orchestracia` package installed, remove it first: run `/plugin`, open
-the installed plugins, pick `orchestracia` and choose uninstall. If it was copied into your
-project as files, delete its skills and agents from the project's `.claude/` folder. Two
-plugins that do the same job, with the same agent names, will confuse Claude.
+If you have the old `orchestracia` package installed, remove it first. It is not a plugin: it was copied into your
+user folder `%USERPROFILE%\.claude\` (on macOS `~/.claude/`). Ask Claude: "Uninstall the orchestracia package according
+to its README.md", or delete by hand the skill and the two agents its README lists, and the block between the
+`orchestracia` markers in that folder's `CLAUDE.md`. Keep the `ctx/` folders in your projects. Then restart Claude Code
+and check in `/skills` and `/agents` that the old skill and agents are gone. Two methods that do the same job will
+confuse Claude.
+
+The same goes for the English version of that package, `orchestration`. It is copied the same way into
+`%USERPROFILE%\.claude\` and has one skill, two agents (`worker.md` and `reviewer.md`, the same file names as the b6
+agents) and a block between its own `orchestration` markers in that folder's `CLAUDE.md`. Ask Claude: "Uninstall the
+orchestration package according to its README.md", or delete those by hand. Remove it before you install b6.
 
 ## Install
 
@@ -18,9 +25,15 @@ or the person who gave you the plugin before you install it.
 
 - Approved company way: in Claude Code run `/plugin`, find `b6` in the plugin source your company set up and choose
   install. Then restart Claude Code.
-- From the zip file, for trying it out: unpack the zip into a folder of your own (for example `Documents\b6`) and
-  start Claude Code with `claude --plugin-dir <path to the unpacked b6 folder>`. The plugin is active only in that
-  session; start it the same way each time.
+- From the zip file: unpack the zip into a folder of your own (for example `Documents\b6-0.1.0`). It holds the
+  folder `.claude-plugin` (the plugin source `panthea`) and the folder `b6` (the plugin). In Claude Code run:
+  1. `/plugin marketplace add <path to the unpacked folder>` (the folder that holds `.claude-plugin`, not `b6`)
+  2. `/plugin install b6@panthea`
+  3. Restart Claude Code.
+- For trying it out without installing: start Claude Code with `claude --plugin-dir <path to the unpacked b6 folder>`.
+  The plugin is active only in that session; start it the same way each time.
+- New version: unpack the new zip into the same folder, run `/plugin marketplace update panthea`, then `/plugin`,
+  pick `b6` and update it.
 
 Check that it works: in a new chat write "how does this work?". Claude should point you to `docs/getting-started.html`.
 
@@ -34,7 +47,7 @@ before it changes files. Claude works with the access you give your own Claude C
 
 - Turn it off: run `/plugin`, open the installed plugins, pick `b6` and choose disable. Enable it the same way.
 - Remove it: in the same menu choose uninstall. If you started it with `--plugin-dir`, just start Claude Code without
-  that option and delete the folder.
+  that option and delete the folder. To remove the plugin source too, run `/plugin marketplace remove panthea`.
 - Files the plugin wrote into a project (`ctx/`, `docs/`, lines in `CLAUDE.md`) stay; they are ordinary project files.
 
 ## First use
@@ -57,15 +70,18 @@ the project; made-up data is enough for trying things out.
 ## Guide
 
 Start here: `docs/getting-started.html` shows how to use the plugin step by step, with a diagram (for people new to Claude Code).
-The same guide is also in `docs/getting-started.en.md` / `.sk.md` (Markdown) and `docs/getting-started.en.pdf` / `.sk.pdf`
-(for printing).
+Every guide in `docs/` is also there as Markdown (`<name>.en.md`, `<name>.sk.md`) and as PDF for printing
+(`<name>.en.pdf`, `<name>.sk.pdf`).
 
 An illustrated guide to the project documents is in `docs/project-memory.html`.
 Open it in a browser. It has a Slovak and an English version.
 
-A one-page guide to using skills as company knowledge, not only as procedures, is in `docs/skills-as-company-knowledge.html`.
+A guide to using skills as personal and company knowledge, not only as procedures, is in `docs/skills-as-personal-and-company-knowledge.html`.
+It also has a Slovak and an English version.
+
+A short guide to what Claude loads and when (context, skills, references, agents, the start hook, project files) is in `docs/what-loads-when.html`.
 It also has a Slovak and an English version.
 
 ## License
 
-See `LICENSE` (draft terms, to be confirmed) and `NOTICE`.
+See `LICENSE` and `NOTICE`.

@@ -26,7 +26,7 @@ flowchart TD
     S2 --> S3["Worker builds"]:::bld
     S3 --> S4["Reviewer checks"]:::bld
     S4 --> S5["Claude writes it down"]
-    S5 --> S6["You try it"]:::you
+    S5 --> S6["What you can try"]
     SIZE -- M --> M1["<b>Brainstorming</b><br/>questions, one at a time"]
     M1 --> M2["You approve the requirements and the language of the documents"]:::you
     M2 --> M3["<b>Plan</b><br/>shown in chat first"]
@@ -39,7 +39,7 @@ flowchart TD
         STILL["Still FIX: you decide"]:::younote
     end
     BUILD --> M5["<b>Wrap-up</b><br/>summary and evidence"]
-    M5 --> M6["You try it: works / partly / does not / not yet"]:::you
+    M5 --> M6["Tells you what you can try.<br/>Not working? A new change"]
     M6 --> M7["You agree to delete the working files"]:::you
     subgraph LEGEND["Legend"]
         L1["You decide"]:::you
@@ -75,9 +75,9 @@ Write it in your own words. If the project already has `ctx/TASKS.md`, Claude fi
 
 Claude first looks at what the project already has. Then it asks one question per message. At first the questions are open; later it offers options with a recommendation. For a hard-to-undo choice it shows two or three ways and recommends one. From time to time it asks "What is wrong or missing?".
 
-Then it shows everything at once: intent, what is out of scope, the requirements (each with a priority, a source and a criterion someone can check), decisions, open questions and a short design. It also asks which language the documents use. You approve, or say what to change. A "go" here means "write the documents", not "build".
+Then it shows everything at once: intent, what is out of scope, the requirements (each with a priority, a source and a criterion someone can check), decisions, open questions and a short design. It always asks which language the documents use, even when some already exist; it recommends the language of the existing ones, so languages do not mix. You approve, or say what to change. A "go" here means "write the documents", not "build".
 
-After approval Claude writes `ctx/requirements.md`, `ctx/TASKS.md`, `docs/architecture.md`, decision records if there are any, a design file in `ctx/plans/` and lines in `CLAUDE.md`.
+After approval Claude writes `ctx/requirements.md`, `ctx/TASKS.md`, `docs/architecture.md`, decision records if there are any, a design file in `ctx/plans/` and lines in `CLAUDE.md`, including the document language.
 
 > **You can answer**
 >
@@ -87,7 +87,7 @@ After approval Claude writes `ctx/requirements.md`, `ctx/TASKS.md`, `docs/archit
 
 `ctx/plans/`
 
-Claude shows the plan in the chat: a table of steps with how each one is checked, choices for you with a recommendation, and a rough token estimate (a token is a small piece of text; work and cost are measured in tokens). Then it asks you to agree. It writes no file and starts no work before you agree.
+Claude shows the plan in the chat: a table of steps with how each one is checked, choices for you with a recommendation, and a rough token estimate (a token is a small piece of text; work and cost are measured in tokens). Then it asks you to agree. It takes the document language from `CLAUDE.md` and confirms it in one sentence. It writes no file and starts no work before you agree.
 
 After "go" the plan is saved to `ctx/plans/` and a task is added to `ctx/TASKS.md`. A saved plan is never changed; a change means a new plan.
 
@@ -105,23 +105,17 @@ After "go" the plan is saved to `ctx/plans/` and a task is added to `ctx/TASKS.m
 
 The run folder is named after the date and a short name of the task, like this. For each step Claude writes a brief and starts a `worker` agent. Claude then looks at the result itself, and a fresh `reviewer` agent checks it. The main chat does no work itself. If the reviewer finds problems, a new worker fixes them. There are at most two rounds of fixes. Progress is kept in `SUMMARY.md` in the run folder. If an agent finds a conflict or a choice, Claude brings it to you with a recommendation and does not decide for you.
 
-### 5. Wrap-up: you try it
+### 5. Wrap-up: what you can try
 
 `ctx/requirements.md`
 
-Claude tells you what was made, what was checked (command and result) and what is still open. Each requirement gets the status `ready to try` with evidence. (If you choose Slovak documents, the statuses are `na vyskúšanie`, `splnená` and `čiastočne splnená`.) Claude tells you what to try, in steps. Then it asks one thing: "Did you try it? Does it work?"
+Claude tells you what was made, what was checked (command and result) and what is still open. A requirement gets the status `met` with evidence only when a fresh reviewer approved it with evidence for every criterion; you do not have to try it. (If you choose Slovak documents, the statuses are `splnená` and `čiastočne splnená`.) Then Claude tells you what you can try, in steps. This is information only; Claude does not ask whether you tried it.
 
-Only after you tried it can a requirement become `met`. If it works only in part, it becomes `partly met` and Claude writes what is missing. If it does not work, the next step is a new change.
+If you accept the result with a gap after two fix rounds, the requirement is `partly met` and Claude writes what is missing. If you find later that something does not work, tell Claude: the requirement goes back to `approved` and the next step is a new change.
 
-> **If it works**
+> **If something does not work**
 >
-> Yes, it works.
-
-> **If you cannot try it now**
->
-> Not yet.
-
-"Not yet" is fine. Claude does not push. The task "Try R-..." waits in `ctx/TASKS.md` and Claude reminds you in the next chat.
+> This does not work: after cancelling a booking the event stays in the calendar.
 
 ### 6. Clean up: you decide what is deleted
 
@@ -143,7 +137,7 @@ Claude treats a small change in one or two existing files, with no new requireme
 
 - No brainstorming, no plan file and no `ctx/` folder.
 - Claude says in the chat how it will check the result. You say "go". A worker does it and a fresh reviewer checks it.
-- Then it is written down: if behaviour changed, the worker updates `docs/architecture.md` (when the folder `docs/` exists), and evidence goes on the requirement the change touches. Claude tells you what to try.
+- Then it is written down: if behaviour changed, the worker updates `docs/architecture.md` (when the folder `docs/` exists), and evidence goes on the requirement the change touches. Claude tells you what you can try.
 - If the change would alter the criterion of an existing requirement or needs a new requirement, it is M. A new feature or a new command is always M, however small.
 - S is finished in one chat. If you want to continue later, Claude switches it to M, so that the agreement is written to `ctx/`.
 - You may always change the size. Questions, typos and formatting are not work for this method; Claude just does them.
@@ -153,7 +147,7 @@ Claude treats a small change in one or two existing files, with no new requireme
 You can close the window at any time. The state is in the files, not in the chat. In a new chat Claude reads `ctx/TASKS.md` and says in two or three sentences where the project stands and what waits for you.
 
 - If a plan or a `SUMMARY.md` exists, Claude says where the work stopped and what comes next. It continues after you agree. It does not ask for the requirements again.
-- If a task waits for you, such as "Try R-001", Claude tells you what to try and closes the work after your answer.
+- If a task waits for you, such as a decision or an approval, Claude tells you what it needs from you and continues after your answer.
 - If old working files are left over, Claude offers to delete them.
 - When the chat gets long (more than half full), Claude writes the state to `ctx/TASKS.md` and `SUMMARY.md` and suggests a new chat.
 
@@ -175,4 +169,7 @@ What to do: read what Claude reports, ask "why" if something is unclear, and tel
 - Say "why" when you do not understand. Ask for plain words.
 - Do not worry about the exact words. "go", "yes, build it" and "rob" all mean the same.
 - Cost: the plan shows a rough token estimate. The estimate follows the number of steps: a small step uses about 30-80k tokens, a larger one about 100-200k. After the work the real number is written to `SUMMARY.md`.
-- A second guide explains how skills can hold company knowledge: [skills-as-company-knowledge.html](skills-as-company-knowledge.html).
+- A second guide explains how skills can hold personal and company knowledge: [skills-as-personal-and-company-knowledge.html](skills-as-personal-and-company-knowledge.html).
+- What loads when and why the context fills up: [what-loads-when.html](what-loads-when.html).
+
+@panthea.sk

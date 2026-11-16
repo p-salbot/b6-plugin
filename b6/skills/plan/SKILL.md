@@ -14,8 +14,8 @@ Templates are read from the `workflow` skill folder in the plugin (`../workflow/
 1. Read `ctx/requirements.md` and the design file `ctx/plans/<YYYY-MM-DD>-<slug>-design.md`.
 2. Stop if the requirements are not `approved` or the design file is missing (size M). Go back to skill `brainstorming`.
    Do not plan from memory.
-3. Confirm the language of the project documents in one sentence, for example "I will write the plan in English,
-   like the other documents." The language is in `CLAUDE.md` or in the existing documents. Do not ask again if it is clear.
+3. Take the document language written in `CLAUDE.md` and confirm it in one sentence, for example "I will write the plan in
+   English, like the other documents." Do not ask again.
 4. If this chat does not run on the strong level (see `models.md`), say so in one sentence before the plan.
    If agent models cannot be set, say that agents will run on the model of this chat.
 

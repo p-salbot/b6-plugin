@@ -1,0 +1,17 @@
+{
+  "name": "panthea",
+  "owner": {
+    "name": "Panthea s.r.o."
+  },
+  "metadata": {
+    "description": "Panthea plugins for Claude Code."
+  },
+  "plugins": [
+    {
+      "name": "b6",
+      "source": "./b6",
+      "description": "Guides Claude Code from an idea through requirements, plan and build to a documented wrap-up.",
+      "version": "0.1.0"
+    }
+  ]
+}

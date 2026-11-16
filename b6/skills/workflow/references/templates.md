@@ -10,8 +10,9 @@ priorities (`MUST`, `SHOULD`, `NICE`) are never translated.
 - Path: `ctx/requirements.md`
 - Rules: the file only grows. Numbers never change; a cancelled requirement stays with the reason. `Intent` is written
   once at the first brainstorming; if the purpose grows, add a dated line. `Out of scope` only gets dated items.
-  A MUST without a checkable criterion is not approved. `met` is written only after the owner tried it.
-  A status without evidence does not count.
+  A MUST without a checkable criterion is not approved. `met` is written after a fresh
+  reviewer's `OK` with evidence for every criterion; the owner does not have to try it. `partly met`: the owner accepts
+  a result although a criterion is not met; what is missing goes to `Evidence`. A status without evidence does not count.
 
 ```markdown
 # Requirements
@@ -24,7 +25,7 @@ priorities (`MUST`, `SHOULD`, `NICE`) are never translated.
 
 - <date>: <item>
 
-Statuses: proposed -> approved -> ready to try -> met or partly met; cancelled.
+Statuses: proposed -> approved -> met or partly met; cancelled.
 
 | ID | Priority | Requirement | Source | Acceptance criterion | Status | Evidence |
 |---|---|---|---|---|---|---|
@@ -68,7 +69,8 @@ Statuses: proposed -> approved -> ready to try -> met or partly met; cancelled.
 
 - Writer: main chat prepares it, the owner decides; written at the end of brainstorming, or by the `worker` when a brief
   names it (choice made during a run). When: the choice is hard to reverse (database, boundary between
-  systems, rule over the data). An ordinary technical detail needs no record.
+  systems, a rule that existing data must follow). Test: undoing it would mean changing or moving existing data, or
+  another system. An ordinary detail (optional field, option, output format) needs no record.
 - Path: `docs/decisions/NNNN-<slug>.md`
 - Rules: one file per decision; numbers never change. A record is not edited, with one exception: when a new decision
   replaces it, add a line pointing to the new record and move it to `docs/decisions/archive/`.
@@ -170,10 +172,11 @@ About <range> tokens (rough guide).
 
 ## SUMMARY.md
 
-- Writer: main chat, updated after every step. When: during the run, final version at wrap-up.
+- Writer: main chat, updated after every step. When: during the run; the final version is written at the end of `build` (End), before `wrap-up`.
 - Path: `ctx/plans/<YYYY-MM-DD>-<slug>/SUMMARY.md`
 - Rules: the first lines say where we stopped, so a new chat can continue from them. Evidence is a command and its
-  result, not "it works".
+  result, not "it works". The final version has a line that the run ended and how (all steps OK, owner accepted gaps, or
+  owner stopped), and the section `## Steps not done` (R-IDs; "none" if all done); `wrap-up` step 4 makes tasks from it.
 
 ```markdown
 # Summary: <title>
@@ -196,9 +199,15 @@ About <range> tokens (rough guide).
 
 - Step <n>: round <1 or 2>, <what was wrong>, <result>.
 
+## Steps not done
+
+- Step <n>: <name>, R-IDs <R-001>. Final version only; write "none" if all steps are done.
+
 ## Token use
 
 About <number> tokens (estimate <range>).
+
+Run ended: <yes, how: all steps OK / owner accepted gaps / owner stopped>. Final version only.
 ```
 
 ## brief
@@ -221,6 +230,10 @@ About <number> tokens (estimate <range>).
 |---|---|
 | R-001 | <criterion copied from requirements.md> |
 
+## Earlier review
+
+<Only for a fix round: the path of the earlier `review-<n>.md` and the list of its findings to fix. Leave out otherwise.>
+
 ## Files to change
 
 - <path>: <why>
@@ -229,8 +242,9 @@ About <number> tokens (estimate <range>).
 ## What not to do
 
 - Do not change `ctx/` or `docs/decisions/`, except files in the run folder that this brief names.
-- Do not change files that are not listed. Do not write outside the project folder; delete your helper files.
+- Do not change files that are not listed. Do not write outside the project folder. Trial copies and helper files go only to `<run folder>/scratch/` and are deleted before the report.
 - Do not decide contradictions; list them in the report.
+- Refused commands: a form refusal may be rewritten once into simple single commands; a second refusal counts as denied. A refused shell edit of a project file may be done with Read, Edit or Write. Anything else denied: stop; a script or another interpreter (`python -c`, PowerShell) is a variant. List every refused command in Open with how it ended (rewritten once, done with Edit/Write, skipped). Delete only the helper files you made.
 
 ## How to verify
 
@@ -246,14 +260,24 @@ At most 20 lines: Done / Changed files / What I did / How I verified / Open.
 - Writer: `reviewer` (a fresh one for every result and every fix). When: after each step or fix round.
 - Path: `ctx/plans/<YYYY-MM-DD>-<slug>/review-<n>.md`
 - Rules: the reviewer changes nothing except this file. Every criterion has a status and evidence. Check that
-  `docs/architecture.md` matches the changed files and describes no plans. Verdict is `OK` or `FIX`.
+  `docs/architecture.md` matches the changed files and describes no plans. Verdict is `OK` or `FIX`. A status can be
+  `cannot verify` (with the reason and what is needed); on a MUST it means `FIX`. The section `Earlier findings` is used
+  only when checking a fix.
 
 ```markdown
 # Review <n>: <step name>
 
 | Criterion | Status | Evidence |
 |---|---|---|
-| <criterion from the brief> | met / not met | <what was checked and what came out> |
+| <criterion from the brief> | met / not met / cannot verify | <what was checked and what came out; for `cannot verify`: the reason and what would be needed> |
+
+## Earlier findings
+
+<Only when checking a fix. One row for each finding of the earlier review. Leave the section out otherwise.>
+
+| Finding | Resolved? | Evidence |
+|---|---|---|
+| <finding from the earlier review> | resolved / not resolved | <what was checked and what came out> |
 
 ## Architecture check
 
@@ -270,7 +294,8 @@ OK / FIX
 
 ## CLAUDE.md lines
 
-- Writer: main chat, with the owner's consent, when the project is first set up. Path: `CLAUDE.md` in the project root.
+- Writer: main chat, with the owner's consent, when the project is first set up, and again after every brainstorming:
+  then it sets the language line to the chosen language and adds missing lines, never duplicating a line. Path: `CLAUDE.md` in the project root.
 - Rules: exactly these three lines. The second keeps other brainstorming and planning skills from taking over.
   Replace `<language>` with the chosen project language.
 
@@ -283,8 +308,9 @@ Project documents are written in <language>.
 ## Language
 
 - Default language of the templates is English. At the end of brainstorming, ask which language the project
-  documents use and suggest the language the user writes in. In a project that already has documents, keep their language
-  and only ask for confirmation. Record the choice in the third `CLAUDE.md` line.
+  documents use and recommend the language of the existing documents, or the language the user writes in if there are none. Ask also when
+  the project already has documents. Record the choice in the third `CLAUDE.md` line.
+  If the owner picks a language different from the existing documents, those stay as they are unless the owner asks to translate them.
 - The plan and the working files of a run use the same language as the documents.
 - File names, numbers (`R-001`, `0001`) and priorities (`MUST`, `SHOULD`, `NICE`) are never translated. Verdicts stay `OK` / `FIX`.
 - Other language than English or Slovak: translate headers, column names and statuses in the same way, and write the
@@ -315,9 +341,12 @@ Project documents are written in <language>.
 | Alternative considered | Zvažovaná alternatíva |
 | What would change it | Čo by ho zmenilo |
 | **Status <date>:** | **Stav <dátum>:** |
+| ## Earlier review | ## Predchádzajúca kontrola |
+| ## Earlier findings | ## Predchádzajúce nálezy |
+| Resolved? | Vyriešené? |
+| cannot verify | nedá sa overiť |
 | proposed | návrh |
 | approved | schválená |
-| ready to try | na vyskúšanie |
 | met | splnená |
 | partly met | čiastočne splnená |
 | cancelled | zrušená |

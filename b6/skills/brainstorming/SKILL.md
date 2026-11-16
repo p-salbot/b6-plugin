@@ -32,9 +32,11 @@ why you ask it. On first use this is the same message as the consent from skill 
 
 ## 4. Hard-to-undo choices
 
-Where to keep data, a border between systems, a rule over data: show two or three ways with a recommendation. After the
-owner chooses, note the decision and record it at the end (step 7) as `docs/decisions/NNNN-<slug>.md` with the reason,
-the alternative and what would change it (section `decision record`). An ordinary technical detail gets no record.
+Where to keep data, a border between systems, a rule that existing data must follow (moving, deleting, who may see it):
+show two or three ways with a recommendation. After the owner chooses, record it at the end (step 7) as
+`docs/decisions/NNNN-<slug>.md` with the reason, the alternative and what would change it (section `decision record`).
+Test: would undoing it later mean changing or moving existing data, or another system? If not, it is an ordinary detail
+(a new optional field, an option, an output format) and gets no record; it goes into the requirements or the design.
 
 ## 5. Requirements
 
@@ -46,8 +48,10 @@ the alternative and what would change it (section `decision record`). An ordinar
 
 When the picture is clear, show in the chat in one message: intent, out of scope, the requirements (priority, source,
 criterion), decisions, open questions, and a short design (goals, constraints, approaches considered and why one was
-chosen). Then ask which language the project documents use. Suggest the language the owner writes in. In a project
-that already has documents, only confirm their language (section `Language`).
+chosen). Then always ask which language the project documents use, also when the project already has documents. Recommend
+the language of the existing documents (so languages do not mix); if there are none, the language the owner writes in.
+Before writing `approved`, ask the owner one explicit question, "Do you approve these requirements?" (in the owner's
+language), in its own message with no other question. Accepting single proposals is not approval of the list.
 
 ## 7. After approval
 

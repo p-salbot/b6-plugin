@@ -97,6 +97,7 @@ ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column
 .figure .tloop { fill: var(--arch); font-size: 12px; font-weight: 600; }
 .legend-you { color: var(--task); font-weight: 600; }
 .say-list { display: flex; flex-direction: column; gap: 8px; }
+.sitefoot { margin: 24px 0 0; font-size: 0.8rem; color: var(--muted); }
 </style>
 
 <div class="page">
@@ -161,8 +162,8 @@ ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column
 <rect x="8" y="332" width="136" height="30" rx="5" class="n"/>
 <text x="76.0" y="351.0" text-anchor="middle" class="tx">Claude to zapíše</text>
 <line x1="76.0" y1="362" x2="76.0" y2="374" class="ln" marker-end="url(#arr-sk)"/>
-<rect x="8" y="374" width="136" height="30" rx="5" class="you"/>
-<text x="76.0" y="393.0" text-anchor="middle" class="tyou">Vyskúšaš to ty</text>
+<rect x="8" y="374" width="136" height="30" rx="5" class="n"/>
+<text x="76.0" y="393.0" text-anchor="middle" class="tx">Čo môžeš skúsiť</text>
 <rect x="8" y="426" width="14" height="14" rx="3" class="you"/>
 <text x="28" y="438" class="tx">Rozhoduješ ty</text>
 <rect x="8" y="450" width="14" height="14" rx="3" class="bld"/>
@@ -202,10 +203,10 @@ ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column
 <text x="254.0" y="539.0" text-anchor="middle" class="tb">Uzavretie</text>
 <text x="254.0" y="554.0" text-anchor="middle" class="tx">zhrnutie a dôkazy</text>
 <line x1="254.0" y1="565" x2="254.0" y2="577" class="ln" marker-end="url(#arr-sk)"/>
-<rect x="156" y="577" width="196" height="60" rx="5" class="you"/>
-<text x="254.0" y="596.0" text-anchor="middle" class="tyou">Vyskúšaš: funguje /</text>
-<text x="254.0" y="611.0" text-anchor="middle" class="tyou">čiastočne / nie / ešte</text>
-<text x="254.0" y="626.0" text-anchor="middle" class="tyou">nie</text>
+<rect x="156" y="577" width="196" height="60" rx="5" class="n"/>
+<text x="254.0" y="596.0" text-anchor="middle" class="tx">Povie, čo môžeš skúsiť.</text>
+<text x="254.0" y="611.0" text-anchor="middle" class="tx">Nefunguje? Nová</text>
+<text x="254.0" y="626.0" text-anchor="middle" class="tx">zmena</text>
 <line x1="254.0" y1="637" x2="254.0" y2="649" class="ln" marker-end="url(#arr-sk)"/>
 <rect x="156" y="649" width="196" height="45" rx="5" class="you"/>
 <text x="254.0" y="668.0" text-anchor="middle" class="tyou">Súhlasíš so zmazaním</text>
@@ -221,10 +222,10 @@ ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column
     <p>M je nová funkcia, viac súborov alebo nejasná požiadavka. Ak si Claude nie je istý, berie to ako M. Dokumenty spomenuté nižšie vysvetľuje sprievodca <a href="project-memory.html">project-memory.html</a>.</p>
     <ol class="trace">
       <li class="req"><div class="num">1</div><div class="body"><h3>Povieš, čo chceš</h3><div class="where">chat</div><p>Napíš to vlastnými slovami. Ak projekt už má <code>ctx/TASKS.md</code>, Claude ti najprv v dvoch-troch vetách povie, kde projekt stojí a čo čaká na teba. Pri prvom použití ti Claude iba povie, čo vytvorí (<code>ctx/</code>, <code>docs/</code>, riadky v <code>CLAUDE.md</code>), a spýta sa na súhlas, v tej istej správe najviac jednu otázku k tvojej žiadosti. Zatiaľ nič nevytvorí.</p><div class="prompt"><div class="when">Môžeš napísať</div><div class="say">Chcem pridať stránku na rezervovanie zasadačiek.</div></div></div></li>
-      <li class="task"><div class="num">2</div><div class="body"><h3>Brainstorming: Claude sa pýta, ty odpovedáš</h3><div class="where">ctx/requirements.md</div><p>Claude sa najprv pozrie, čo projekt už má. Potom sa pýta jednu otázku v jednej správe. Spočiatku sú otázky otvorené, neskôr ponúkne možnosti s odporúčaním. Pri ťažko vratnej voľbe ukáže dve-tri cesty a jednu odporučí. Občas sa spýta: „Čo je nesprávne alebo chýba?“</p><p>Potom ukáže všetko naraz: zámer, čo je mimo rozsahu, požiadavky (každá s prioritou, zdrojom a kritériom, ktoré sa dá skontrolovať), rozhodnutia, otvorené otázky a krátky návrh. Spýta sa aj, v akom jazyku budú dokumenty. Ty schváliš, alebo povieš, čo zmeniť. „rob“ tu znamená „zapíš dokumenty“, nie „stavaj“.</p><p>Po schválení Claude zapíše <code>ctx/requirements.md</code>, <code>ctx/TASKS.md</code>, <code>docs/architecture.md</code>, záznamy rozhodnutí (ak nejaké sú), súbor s návrhom v <code>ctx/plans/</code> a riadky v <code>CLAUDE.md</code>.</p><div class="prompt"><div class="when">Môžeš odpovedať</div><div class="say">Áno, sedí to. Dokumenty zapíš po slovensky.</div></div></div></li>
-      <li class="task"><div class="num">3</div><div class="body"><h3>Plán: prečítaš ho a povieš rob</h3><div class="where">ctx/plans/</div><p>Claude ukáže plán v chate: tabuľku krokov s tým, ako sa každý overí, voľby pre teba s odporúčaním a hrubý odhad tokenov (token je malý kúsok textu; podľa tokenov sa meria práca aj náklady). Potom sa spýta na súhlas. Kým nesúhlasíš, nezapíše žiadny súbor a nezačne žiadnu prácu.</p><p>Po „rob“ sa plán uloží do <code>ctx/plans/</code> a do <code>ctx/TASKS.md</code> pribudne úloha. Uložený plán sa nikdy nemení; zmena znamená nový plán.</p><div class="say-list"><div class="prompt"><div class="when">Na spustenie</div><div class="say">rob</div></div><div class="prompt"><div class="when">Iba uložiť plán</div><div class="say">Zapíš plán, ale ešte nestavaj.</div></div></div></div></li>
+      <li class="task"><div class="num">2</div><div class="body"><h3>Brainstorming: Claude sa pýta, ty odpovedáš</h3><div class="where">ctx/requirements.md</div><p>Claude sa najprv pozrie, čo projekt už má. Potom sa pýta jednu otázku v jednej správe. Spočiatku sú otázky otvorené, neskôr ponúkne možnosti s odporúčaním. Pri ťažko vratnej voľbe ukáže dve-tri cesty a jednu odporučí. Občas sa spýta: „Čo je nesprávne alebo chýba?“</p><p>Potom ukáže všetko naraz: zámer, čo je mimo rozsahu, požiadavky (každá s prioritou, zdrojom a kritériom, ktoré sa dá skontrolovať), rozhodnutia, otvorené otázky a krátky návrh. Vždy sa spýta aj na jazyk dokumentov, aj keď už nejaké sú; odporučí jazyk existujúcich dokumentov, aby sa jazyky nemiešali. Ty schváliš, alebo povieš, čo zmeniť. „rob“ tu znamená „zapíš dokumenty“, nie „stavaj“.</p><p>Po schválení Claude zapíše <code>ctx/requirements.md</code>, <code>ctx/TASKS.md</code>, <code>docs/architecture.md</code>, záznamy rozhodnutí (ak nejaké sú), súbor s návrhom v <code>ctx/plans/</code> a riadky v <code>CLAUDE.md</code>, vrátane jazyka dokumentov.</p><div class="prompt"><div class="when">Môžeš odpovedať</div><div class="say">Áno, sedí to. Dokumenty zapíš po slovensky.</div></div></div></li>
+      <li class="task"><div class="num">3</div><div class="body"><h3>Plán: prečítaš ho a povieš rob</h3><div class="where">ctx/plans/</div><p>Claude ukáže plán v chate: tabuľku krokov s tým, ako sa každý overí, voľby pre teba s odporúčaním a hrubý odhad tokenov (token je malý kúsok textu; podľa tokenov sa meria práca aj náklady). Potom sa spýta na súhlas. Jazyk dokumentov si prevezme z <code>CLAUDE.md</code> a potvrdí ho jednou vetou. Kým nesúhlasíš, nezapíše žiadny súbor a nezačne žiadnu prácu.</p><p>Po „rob“ sa plán uloží do <code>ctx/plans/</code> a do <code>ctx/TASKS.md</code> pribudne úloha. Uložený plán sa nikdy nemení; zmena znamená nový plán.</p><div class="say-list"><div class="prompt"><div class="when">Na spustenie</div><div class="say">rob</div></div><div class="prompt"><div class="when">Iba uložiť plán</div><div class="say">Zapíš plán, ale ešte nestavaj.</div></div></div></div></li>
       <li class="arch"><div class="num">4</div><div class="body"><h3>Stavba: pracujú agenti, ty čakáš</h3><div class="where">ctx/plans/2026-11-20-due-dates/</div><p>Priečinok behu sa volá podľa dátumu a krátkeho názvu úlohy, napríklad takto. Pre každý krok Claude napíše zadanie a spustí agenta <code>worker</code>. Claude potom výsledok sám pozrie a skontroluje ho nový agent <code>reviewer</code>. Hlavný chat sám nerobí žiadnu prácu. Ak reviewer nájde problémy, opraví ich nový worker. Opravy prebehnú najviac v dvoch kolách. Priebeh sa vedie v <code>SUMMARY.md</code> v priečinku behu. Ak agent nájde konflikt alebo voľbu, Claude ti ju prinesie s odporúčaním a nerozhodne za teba.</p></div></li>
-      <li class="task"><div class="num">5</div><div class="body"><h3>Uzavretie: vyskúšaš to</h3><div class="where">ctx/requirements.md</div><p>Claude ti povie, čo vzniklo, čo sa overilo (príkaz a výsledok) a čo je ešte otvorené. Každá požiadavka dostane stav <code>na vyskúšanie</code> s dôkazom. (V dokumentoch v angličtine sú stavy <code>ready to try</code>, <code>met</code> a <code>partly met</code>; jazyk dokumentov si volíš ty.) Claude ti po krokoch povie, čo vyskúšať. Potom sa spýta jedno: „Skúšal si to? Funguje to?“</p><p>Až keď si to vyskúšal, môže sa požiadavka stať <code>splnená</code>. Ak to funguje len sčasti, stane sa <code>čiastočne splnená</code> a Claude zapíše, čo chýba. Ak to nefunguje, ďalším krokom je nová zmena.</p><div class="say-list"><div class="prompt"><div class="when">Ak to funguje</div><div class="say">Áno, funguje.</div></div><div class="prompt"><div class="when">Ak to teraz nemôžeš skúsiť</div><div class="say">Ešte nie.</div></div></div><p>„Ešte nie“ je v poriadku. Claude netlačí. Úloha „Try R-...“ čaká v <code>ctx/TASKS.md</code> a Claude ti ju pripomenie v ďalšom chate.</p></div></li>
+      <li class="task"><div class="num">5</div><div class="body"><h3>Uzavretie: čo môžeš vyskúšať</h3><div class="where">ctx/requirements.md</div><p>Claude ti povie, čo vzniklo, čo sa overilo (príkaz a výsledok) a čo je ešte otvorené. Požiadavka dostane stav <code>splnená</code> s dôkazom až vtedy, keď ju čerstvý reviewer schválil s dôkazom pre každé kritérium; ty ju skúšať nemusíš. (V dokumentoch v angličtine sú stavy <code>met</code> a <code>partly met</code>; jazyk dokumentov si volíš ty.) Potom ti po krokoch povie, čo si môžeš vyskúšať. Je to len informácia; Claude sa nepýta, či si to skúšal.</p><p>Ak po dvoch kolách opráv prijmeš výsledok s medzerou, požiadavka je <code>čiastočne splnená</code> a Claude zapíše, čo chýba. Ak neskôr zistíš, že niečo nefunguje, povedz to Claudovi: požiadavka sa vráti na <code>schválená</code> a ďalším krokom je nová zmena.</p><div class="say-list"><div class="prompt"><div class="when">Ak niečo nefunguje</div><div class="say">Toto nefunguje: pri zrušení rezervácie ostane udalosť v kalendári.</div></div></div></div></li>
       <li class="task"><div class="num">6</div><div class="body"><h3>Upratanie: rozhodneš, čo sa zmaže</h3><div class="where">ctx/plans/</div><p>Súbor s návrhom, plán a priečinok behu sú pracovné súbory. Požiadavky, rozhodnutia a architektúra ostávajú. S gitom sa Claude spýta, či môže spraviť commit, a potom zmaže. Bez gitu sa spýta „Zmazať plán, návrh a pracovný priečinok?“ a zmaže až po tvojom jasnom „zmaž“. Ak commit teraz nechceš, súbory ostanú ako pri „Ešte nie“.</p><div class="say-list"><div class="prompt"><div class="when">Na zmazanie</div><div class="say">zmaž</div></div><div class="prompt"><div class="when">Zatiaľ nechať</div><div class="say">Ešte nie.</div></div></div></div></li>
     </ol>
   </section>
@@ -235,7 +236,7 @@ ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column
     <ul class="plain">
       <li>Žiadny brainstorming, žiadny súbor s plánom a žiadny priečinok <code>ctx/</code>.</li>
       <li>Claude v chate povie, ako výsledok overí. Ty povieš „rob“. Urobí to worker a skontroluje nový reviewer.</li>
-      <li>Potom sa to zapíše: ak sa zmenilo správanie, worker upraví <code>docs/architecture.md</code> (ak priečinok <code>docs/</code> existuje) a dôkaz sa zapíše k požiadavke, ktorej sa zmena týka. Claude ti povie, čo vyskúšať.</li>
+      <li>Potom sa to zapíše: ak sa zmenilo správanie, worker upraví <code>docs/architecture.md</code> (ak priečinok <code>docs/</code> existuje) a dôkaz sa zapíše k požiadavke, ktorej sa zmena týka. Claude ti povie, čo si môžeš vyskúšať.</li>
       <li>Ak by zmena menila kritérium existujúcej požiadavky alebo potrebuje novú požiadavku, je to M. Nová funkcia alebo nový príkaz je vždy M, aj keď je malá.</li>
       <li>S sa dokončí v jednom chate. Ak chceš pokračovať neskôr, Claude ju prepne na M, aby sa dohoda zapísala do <code>ctx/</code>.</li>
       <li>Veľkosť môžeš vždy zmeniť. Otázky, preklepy a formátovanie nie sú práca pre túto metódu; Claude ich jednoducho spraví.</li>
@@ -247,7 +248,7 @@ ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column
     <p>Okno môžeš kedykoľvek zatvoriť. Stav je v súboroch, nie v chate. V novom chate Claude prečíta <code>ctx/TASKS.md</code> a v dvoch-troch vetách povie, kde projekt stojí a čo čaká na teba.</p>
     <ul class="plain">
       <li>Ak existuje plán alebo <code>SUMMARY.md</code>, Claude povie, kde sa práca zastavila a čo nasleduje. Pokračuje po tvojom súhlase. Požiadavky sa znova nepýta.</li>
-      <li>Ak na teba čaká úloha, napríklad „Try R-001“, Claude ti povie, čo vyskúšať, a po tvojej odpovedi prácu uzavrie.</li>
+      <li>Ak na teba čaká úloha, napríklad rozhodnutie alebo schválenie, Claude ti povie, čo od teba potrebuje, a po tvojej odpovedi pokračuje.</li>
       <li>Ak ostali staré pracovné súbory, Claude ponúkne ich zmazanie.</li>
       <li>Keď je chat dlhý (viac ako do polovice plný), Claude zapíše stav do <code>ctx/TASKS.md</code> a <code>SUMMARY.md</code> a navrhne nový chat.</li>
     </ul>
@@ -271,10 +272,12 @@ ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column
       <li>Povedz „prečo“, keď niečomu nerozumieš. Popros o jednoduché slová.</li>
       <li>Na presných slovách nezáleží. „go“, „yes, build it“ aj „rob“ znamenajú to isté.</li>
       <li>Náklady: plán ukáže hrubý odhad tokenov. Odhad vychádza z počtu krokov: malý krok spotrebuje orientačne 30-80 tisíc tokenov, väčší 100-200 tisíc. Po práci sa skutočné číslo zapíše do <code>SUMMARY.md</code>.</li>
-      <li>Druhý sprievodca vysvetľuje, ako môžu skilly niesť firemné znalosti: <a href="skills-as-company-knowledge.html">skills-as-company-knowledge.html</a>.</li>
+      <li>Druhý sprievodca vysvetľuje, ako môžu skilly niesť osobné a firemné znalosti: <a href="skills-as-personal-and-company-knowledge.html">skills-as-personal-and-company-knowledge.html</a>.</li>
+      <li>Čo sa načíta kedy a prečo sa kontext zapĺňa: <a href="what-loads-when.html">what-loads-when.html</a>.</li>
     </ul>
   </section>
 
+<p class="sitefoot">@panthea.sk</p>
 </div>
 
 <!-- ============================== ENGLISH ============================== -->
@@ -332,8 +335,8 @@ ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column
 <text x="76.0" y="336.0" text-anchor="middle" class="tx">Claude writes it</text>
 <text x="76.0" y="351.0" text-anchor="middle" class="tx">down</text>
 <line x1="76.0" y1="362" x2="76.0" y2="374" class="ln" marker-end="url(#arr-en)"/>
-<rect x="8" y="374" width="136" height="30" rx="5" class="you"/>
-<text x="76.0" y="393.0" text-anchor="middle" class="tyou">You try it</text>
+<rect x="8" y="374" width="136" height="30" rx="5" class="n"/>
+<text x="76.0" y="393.0" text-anchor="middle" class="tx">What you can try</text>
 <rect x="8" y="426" width="14" height="14" rx="3" class="you"/>
 <text x="28" y="438" class="tx">You decide</text>
 <rect x="8" y="450" width="14" height="14" rx="3" class="bld"/>
@@ -375,10 +378,10 @@ ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column
 <text x="254.0" y="569.0" text-anchor="middle" class="tb">Wrap-up</text>
 <text x="254.0" y="584.0" text-anchor="middle" class="tx">summary and evidence</text>
 <line x1="254.0" y1="595" x2="254.0" y2="607" class="ln" marker-end="url(#arr-en)"/>
-<rect x="156" y="607" width="196" height="60" rx="5" class="you"/>
-<text x="254.0" y="626.0" text-anchor="middle" class="tyou">You try it: works /</text>
-<text x="254.0" y="641.0" text-anchor="middle" class="tyou">partly / does not /</text>
-<text x="254.0" y="656.0" text-anchor="middle" class="tyou">not yet</text>
+<rect x="156" y="607" width="196" height="60" rx="5" class="n"/>
+<text x="254.0" y="626.0" text-anchor="middle" class="tx">Tells you what you</text>
+<text x="254.0" y="641.0" text-anchor="middle" class="tx">can try. Not working?</text>
+<text x="254.0" y="656.0" text-anchor="middle" class="tx">A new change</text>
 <line x1="254.0" y1="667" x2="254.0" y2="679" class="ln" marker-end="url(#arr-en)"/>
 <rect x="156" y="679" width="196" height="45" rx="5" class="you"/>
 <text x="254.0" y="698.0" text-anchor="middle" class="tyou">You agree to delete</text>
@@ -394,10 +397,10 @@ ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column
     <p>M is a new feature, several files, or an unclear request. When in doubt, Claude treats it as M. Documents mentioned below are explained in the guide <a href="project-memory.html">project-memory.html</a>.</p>
     <ol class="trace">
       <li class="req"><div class="num">1</div><div class="body"><h3>You say what you want</h3><div class="where">chat</div><p>Write it in your own words. If the project already has <code>ctx/TASKS.md</code>, Claude first says in two or three sentences where the project stands and what waits for you. On first use Claude only tells you what it will create (<code>ctx/</code>, <code>docs/</code>, lines in <code>CLAUDE.md</code>) and asks for consent, with at most one question about your request in the same message. It creates nothing yet.</p><div class="prompt"><div class="when">You can write</div><div class="say">I want to add a booking page for the meeting rooms.</div></div></div></li>
-      <li class="task"><div class="num">2</div><div class="body"><h3>Brainstorming: Claude asks, you answer</h3><div class="where">ctx/requirements.md</div><p>Claude first looks at what the project already has. Then it asks one question per message. At first the questions are open; later it offers options with a recommendation. For a hard-to-undo choice it shows two or three ways and recommends one. From time to time it asks "What is wrong or missing?".</p><p>Then it shows everything at once: intent, what is out of scope, the requirements (each with a priority, a source and a criterion someone can check), decisions, open questions and a short design. It also asks which language the documents use. You approve, or say what to change. A "go" here means "write the documents", not "build".</p><p>After approval Claude writes <code>ctx/requirements.md</code>, <code>ctx/TASKS.md</code>, <code>docs/architecture.md</code>, decision records if there are any, a design file in <code>ctx/plans/</code> and lines in <code>CLAUDE.md</code>.</p><div class="prompt"><div class="when">You can answer</div><div class="say">Yes, that is right. Write the documents in English.</div></div></div></li>
-      <li class="task"><div class="num">3</div><div class="body"><h3>Plan: you read it and say go</h3><div class="where">ctx/plans/</div><p>Claude shows the plan in the chat: a table of steps with how each one is checked, choices for you with a recommendation, and a rough token estimate (a token is a small piece of text; work and cost are measured in tokens). Then it asks you to agree. It writes no file and starts no work before you agree.</p><p>After "go" the plan is saved to <code>ctx/plans/</code> and a task is added to <code>ctx/TASKS.md</code>. A saved plan is never changed; a change means a new plan.</p><div class="say-list"><div class="prompt"><div class="when">To start</div><div class="say">go</div></div><div class="prompt"><div class="when">To save the plan only</div><div class="say">Write the plan, but don't build yet.</div></div></div></div></li>
+      <li class="task"><div class="num">2</div><div class="body"><h3>Brainstorming: Claude asks, you answer</h3><div class="where">ctx/requirements.md</div><p>Claude first looks at what the project already has. Then it asks one question per message. At first the questions are open; later it offers options with a recommendation. For a hard-to-undo choice it shows two or three ways and recommends one. From time to time it asks "What is wrong or missing?".</p><p>Then it shows everything at once: intent, what is out of scope, the requirements (each with a priority, a source and a criterion someone can check), decisions, open questions and a short design. It always asks which language the documents use, even when some already exist; it recommends the language of the existing ones, so languages do not mix. You approve, or say what to change. A "go" here means "write the documents", not "build".</p><p>After approval Claude writes <code>ctx/requirements.md</code>, <code>ctx/TASKS.md</code>, <code>docs/architecture.md</code>, decision records if there are any, a design file in <code>ctx/plans/</code> and lines in <code>CLAUDE.md</code>, including the document language.</p><div class="prompt"><div class="when">You can answer</div><div class="say">Yes, that is right. Write the documents in English.</div></div></div></li>
+      <li class="task"><div class="num">3</div><div class="body"><h3>Plan: you read it and say go</h3><div class="where">ctx/plans/</div><p>Claude shows the plan in the chat: a table of steps with how each one is checked, choices for you with a recommendation, and a rough token estimate (a token is a small piece of text; work and cost are measured in tokens). Then it asks you to agree. It takes the document language from <code>CLAUDE.md</code> and confirms it in one sentence. It writes no file and starts no work before you agree.</p><p>After "go" the plan is saved to <code>ctx/plans/</code> and a task is added to <code>ctx/TASKS.md</code>. A saved plan is never changed; a change means a new plan.</p><div class="say-list"><div class="prompt"><div class="when">To start</div><div class="say">go</div></div><div class="prompt"><div class="when">To save the plan only</div><div class="say">Write the plan, but don't build yet.</div></div></div></div></li>
       <li class="arch"><div class="num">4</div><div class="body"><h3>Build: agents work, you wait</h3><div class="where">ctx/plans/2026-11-20-due-dates/</div><p>The run folder is named after the date and a short name of the task, like this. For each step Claude writes a brief and starts a <code>worker</code> agent. Claude then looks at the result itself, and a fresh <code>reviewer</code> agent checks it. The main chat does no work itself. If the reviewer finds problems, a new worker fixes them. There are at most two rounds of fixes. Progress is kept in <code>SUMMARY.md</code> in the run folder. If an agent finds a conflict or a choice, Claude brings it to you with a recommendation and does not decide for you.</p></div></li>
-      <li class="task"><div class="num">5</div><div class="body"><h3>Wrap-up: you try it</h3><div class="where">ctx/requirements.md</div><p>Claude tells you what was made, what was checked (command and result) and what is still open. Each requirement gets the status <code>ready to try</code> with evidence. (If you choose Slovak documents, the statuses are <code>na vyskúšanie</code>, <code>splnená</code> and <code>čiastočne splnená</code>.) Claude tells you what to try, in steps. Then it asks one thing: "Did you try it? Does it work?"</p><p>Only after you tried it can a requirement become <code>met</code>. If it works only in part, it becomes <code>partly met</code> and Claude writes what is missing. If it does not work, the next step is a new change.</p><div class="say-list"><div class="prompt"><div class="when">If it works</div><div class="say">Yes, it works.</div></div><div class="prompt"><div class="when">If you cannot try it now</div><div class="say">Not yet.</div></div></div><p>"Not yet" is fine. Claude does not push. The task "Try R-..." waits in <code>ctx/TASKS.md</code> and Claude reminds you in the next chat.</p></div></li>
+      <li class="task"><div class="num">5</div><div class="body"><h3>Wrap-up: what you can try</h3><div class="where">ctx/requirements.md</div><p>Claude tells you what was made, what was checked (command and result) and what is still open. A requirement gets the status <code>met</code> with evidence only when a fresh reviewer approved it with evidence for every criterion; you do not have to try it. (If you choose Slovak documents, the statuses are <code>splnená</code> and <code>čiastočne splnená</code>.) Then Claude tells you what you can try, in steps. This is information only; Claude does not ask whether you tried it.</p><p>If you accept the result with a gap after two fix rounds, the requirement is <code>partly met</code> and Claude writes what is missing. If you find later that something does not work, tell Claude: the requirement goes back to <code>approved</code> and the next step is a new change.</p><div class="say-list"><div class="prompt"><div class="when">If something does not work</div><div class="say">This does not work: after cancelling a booking the event stays in the calendar.</div></div></div></div></li>
       <li class="task"><div class="num">6</div><div class="body"><h3>Clean up: you decide what is deleted</h3><div class="where">ctx/plans/</div><p>The design, the plan and the run folder are working files. Requirements, decisions and architecture stay. With git, Claude asks if it may commit, then deletes. Without git, Claude asks "Delete the plan, design and working folder?" and deletes only after your clear "delete". If you do not want the commit now, the files stay, as with "Not yet".</p><div class="say-list"><div class="prompt"><div class="when">To delete</div><div class="say">delete</div></div><div class="prompt"><div class="when">To keep them for now</div><div class="say">Not yet.</div></div></div></div></li>
     </ol>
   </section>
@@ -408,7 +411,7 @@ ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column
     <ul class="plain">
       <li>No brainstorming, no plan file and no <code>ctx/</code> folder.</li>
       <li>Claude says in the chat how it will check the result. You say "go". A worker does it and a fresh reviewer checks it.</li>
-      <li>Then it is written down: if behaviour changed, the worker updates <code>docs/architecture.md</code> (when the folder <code>docs/</code> exists), and evidence goes on the requirement the change touches. Claude tells you what to try.</li>
+      <li>Then it is written down: if behaviour changed, the worker updates <code>docs/architecture.md</code> (when the folder <code>docs/</code> exists), and evidence goes on the requirement the change touches. Claude tells you what you can try.</li>
       <li>If the change would alter the criterion of an existing requirement or needs a new requirement, it is M. A new feature or a new command is always M, however small.</li>
       <li>S is finished in one chat. If you want to continue later, Claude switches it to M, so that the agreement is written to <code>ctx/</code>.</li>
       <li>You may always change the size. Questions, typos and formatting are not work for this method; Claude just does them.</li>
@@ -420,7 +423,7 @@ ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column
     <p>You can close the window at any time. The state is in the files, not in the chat. In a new chat Claude reads <code>ctx/TASKS.md</code> and says in two or three sentences where the project stands and what waits for you.</p>
     <ul class="plain">
       <li>If a plan or a <code>SUMMARY.md</code> exists, Claude says where the work stopped and what comes next. It continues after you agree. It does not ask for the requirements again.</li>
-      <li>If a task waits for you, such as "Try R-001", Claude tells you what to try and closes the work after your answer.</li>
+      <li>If a task waits for you, such as a decision or an approval, Claude tells you what it needs from you and continues after your answer.</li>
       <li>If old working files are left over, Claude offers to delete them.</li>
       <li>When the chat gets long (more than half full), Claude writes the state to <code>ctx/TASKS.md</code> and <code>SUMMARY.md</code> and suggests a new chat.</li>
     </ul>
@@ -444,10 +447,12 @@ ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column
       <li>Say "why" when you do not understand. Ask for plain words.</li>
       <li>Do not worry about the exact words. "go", "yes, build it" and "rob" all mean the same.</li>
       <li>Cost: the plan shows a rough token estimate. The estimate follows the number of steps: a small step uses about 30-80k tokens, a larger one about 100-200k. After the work the real number is written to <code>SUMMARY.md</code>.</li>
-      <li>A second guide explains how skills can hold company knowledge: <a href="skills-as-company-knowledge.html">skills-as-company-knowledge.html</a>.</li>
+      <li>A second guide explains how skills can hold personal and company knowledge: <a href="skills-as-personal-and-company-knowledge.html">skills-as-personal-and-company-knowledge.html</a>.</li>
+      <li>What loads when and why the context fills up: <a href="what-loads-when.html">what-loads-when.html</a>.</li>
     </ul>
   </section>
 
+<p class="sitefoot">@panthea.sk</p>
 </div>
 
 </div>

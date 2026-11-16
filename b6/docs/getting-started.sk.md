@@ -26,7 +26,7 @@ flowchart TD
     S2 --> S3["Worker stavia"]:::bld
     S3 --> S4["Reviewer kontroluje"]:::bld
     S4 --> S5["Claude to zapíše"]
-    S5 --> S6["Vyskúšaš to ty"]:::you
+    S5 --> S6["Čo môžeš skúsiť"]
     SIZE -- M --> M1["<b>Brainstorming</b><br/>otázky po jednej"]
     M1 --> M2["Schváliš požiadavky a jazyk dokumentov"]:::you
     M2 --> M3["<b>Plán</b><br/>najprv v chate"]
@@ -39,7 +39,7 @@ flowchart TD
         STILL["Stále FIX: rozhodneš ty"]:::younote
     end
     BUILD --> M5["<b>Uzavretie</b><br/>zhrnutie a dôkazy"]
-    M5 --> M6["Vyskúšaš: funguje / čiastočne / nie / ešte nie"]:::you
+    M5 --> M6["Povie, čo môžeš skúsiť.<br/>Nefunguje? Nová zmena"]
     M6 --> M7["Súhlasíš so zmazaním pracovných súborov"]:::you
     subgraph LEGEND["Legenda"]
         L1["Rozhoduješ ty"]:::you
@@ -75,9 +75,9 @@ Napíš to vlastnými slovami. Ak projekt už má `ctx/TASKS.md`, Claude ti najp
 
 Claude sa najprv pozrie, čo projekt už má. Potom sa pýta jednu otázku v jednej správe. Spočiatku sú otázky otvorené, neskôr ponúkne možnosti s odporúčaním. Pri ťažko vratnej voľbe ukáže dve-tri cesty a jednu odporučí. Občas sa spýta: „Čo je nesprávne alebo chýba?“
 
-Potom ukáže všetko naraz: zámer, čo je mimo rozsahu, požiadavky (každá s prioritou, zdrojom a kritériom, ktoré sa dá skontrolovať), rozhodnutia, otvorené otázky a krátky návrh. Spýta sa aj, v akom jazyku budú dokumenty. Ty schváliš, alebo povieš, čo zmeniť. „rob“ tu znamená „zapíš dokumenty“, nie „stavaj“.
+Potom ukáže všetko naraz: zámer, čo je mimo rozsahu, požiadavky (každá s prioritou, zdrojom a kritériom, ktoré sa dá skontrolovať), rozhodnutia, otvorené otázky a krátky návrh. Vždy sa spýta aj na jazyk dokumentov, aj keď už nejaké sú; odporučí jazyk existujúcich dokumentov, aby sa jazyky nemiešali. Ty schváliš, alebo povieš, čo zmeniť. „rob“ tu znamená „zapíš dokumenty“, nie „stavaj“.
 
-Po schválení Claude zapíše `ctx/requirements.md`, `ctx/TASKS.md`, `docs/architecture.md`, záznamy rozhodnutí (ak nejaké sú), súbor s návrhom v `ctx/plans/` a riadky v `CLAUDE.md`.
+Po schválení Claude zapíše `ctx/requirements.md`, `ctx/TASKS.md`, `docs/architecture.md`, záznamy rozhodnutí (ak nejaké sú), súbor s návrhom v `ctx/plans/` a riadky v `CLAUDE.md`, vrátane jazyka dokumentov.
 
 > **Môžeš odpovedať**
 >
@@ -87,7 +87,7 @@ Po schválení Claude zapíše `ctx/requirements.md`, `ctx/TASKS.md`, `docs/arch
 
 `ctx/plans/`
 
-Claude ukáže plán v chate: tabuľku krokov s tým, ako sa každý overí, voľby pre teba s odporúčaním a hrubý odhad tokenov (token je malý kúsok textu; podľa tokenov sa meria práca aj náklady). Potom sa spýta na súhlas. Kým nesúhlasíš, nezapíše žiadny súbor a nezačne žiadnu prácu.
+Claude ukáže plán v chate: tabuľku krokov s tým, ako sa každý overí, voľby pre teba s odporúčaním a hrubý odhad tokenov (token je malý kúsok textu; podľa tokenov sa meria práca aj náklady). Potom sa spýta na súhlas. Jazyk dokumentov si prevezme z `CLAUDE.md` a potvrdí ho jednou vetou. Kým nesúhlasíš, nezapíše žiadny súbor a nezačne žiadnu prácu.
 
 Po „rob“ sa plán uloží do `ctx/plans/` a do `ctx/TASKS.md` pribudne úloha. Uložený plán sa nikdy nemení; zmena znamená nový plán.
 
@@ -105,23 +105,17 @@ Po „rob“ sa plán uloží do `ctx/plans/` a do `ctx/TASKS.md` pribudne úloh
 
 Priečinok behu sa volá podľa dátumu a krátkeho názvu úlohy, napríklad takto. Pre každý krok Claude napíše zadanie a spustí agenta `worker`. Claude potom výsledok sám pozrie a skontroluje ho nový agent `reviewer`. Hlavný chat sám nerobí žiadnu prácu. Ak reviewer nájde problémy, opraví ich nový worker. Opravy prebehnú najviac v dvoch kolách. Priebeh sa vedie v `SUMMARY.md` v priečinku behu. Ak agent nájde konflikt alebo voľbu, Claude ti ju prinesie s odporúčaním a nerozhodne za teba.
 
-### 5. Uzavretie: vyskúšaš to
+### 5. Uzavretie: čo môžeš vyskúšať
 
 `ctx/requirements.md`
 
-Claude ti povie, čo vzniklo, čo sa overilo (príkaz a výsledok) a čo je ešte otvorené. Každá požiadavka dostane stav `na vyskúšanie` s dôkazom. (V dokumentoch v angličtine sú stavy `ready to try`, `met` a `partly met`; jazyk dokumentov si volíš ty.) Claude ti po krokoch povie, čo vyskúšať. Potom sa spýta jedno: „Skúšal si to? Funguje to?“
+Claude ti povie, čo vzniklo, čo sa overilo (príkaz a výsledok) a čo je ešte otvorené. Požiadavka dostane stav `splnená` s dôkazom až vtedy, keď ju čerstvý reviewer schválil s dôkazom pre každé kritérium; ty ju skúšať nemusíš. (V dokumentoch v angličtine sú stavy `met` a `partly met`; jazyk dokumentov si volíš ty.) Potom ti po krokoch povie, čo si môžeš vyskúšať. Je to len informácia; Claude sa nepýta, či si to skúšal.
 
-Až keď si to vyskúšal, môže sa požiadavka stať `splnená`. Ak to funguje len sčasti, stane sa `čiastočne splnená` a Claude zapíše, čo chýba. Ak to nefunguje, ďalším krokom je nová zmena.
+Ak po dvoch kolách opráv prijmeš výsledok s medzerou, požiadavka je `čiastočne splnená` a Claude zapíše, čo chýba. Ak neskôr zistíš, že niečo nefunguje, povedz to Claudovi: požiadavka sa vráti na `schválená` a ďalším krokom je nová zmena.
 
-> **Ak to funguje**
+> **Ak niečo nefunguje**
 >
-> Áno, funguje.
-
-> **Ak to teraz nemôžeš skúsiť**
->
-> Ešte nie.
-
-„Ešte nie“ je v poriadku. Claude netlačí. Úloha „Try R-...“ čaká v `ctx/TASKS.md` a Claude ti ju pripomenie v ďalšom chate.
+> Toto nefunguje: pri zrušení rezervácie ostane udalosť v kalendári.
 
 ### 6. Upratanie: rozhodneš, čo sa zmaže
 
@@ -143,7 +137,7 @@ Malú zmenu v jednom alebo dvoch existujúcich súboroch, bez nových požiadavi
 
 - Žiadny brainstorming, žiadny súbor s plánom a žiadny priečinok `ctx/`.
 - Claude v chate povie, ako výsledok overí. Ty povieš „rob“. Urobí to worker a skontroluje nový reviewer.
-- Potom sa to zapíše: ak sa zmenilo správanie, worker upraví `docs/architecture.md` (ak priečinok `docs/` existuje) a dôkaz sa zapíše k požiadavke, ktorej sa zmena týka. Claude ti povie, čo vyskúšať.
+- Potom sa to zapíše: ak sa zmenilo správanie, worker upraví `docs/architecture.md` (ak priečinok `docs/` existuje) a dôkaz sa zapíše k požiadavke, ktorej sa zmena týka. Claude ti povie, čo si môžeš vyskúšať.
 - Ak by zmena menila kritérium existujúcej požiadavky alebo potrebuje novú požiadavku, je to M. Nová funkcia alebo nový príkaz je vždy M, aj keď je malá.
 - S sa dokončí v jednom chate. Ak chceš pokračovať neskôr, Claude ju prepne na M, aby sa dohoda zapísala do `ctx/`.
 - Veľkosť môžeš vždy zmeniť. Otázky, preklepy a formátovanie nie sú práca pre túto metódu; Claude ich jednoducho spraví.
@@ -153,7 +147,7 @@ Malú zmenu v jednom alebo dvoch existujúcich súboroch, bez nových požiadavi
 Okno môžeš kedykoľvek zatvoriť. Stav je v súboroch, nie v chate. V novom chate Claude prečíta `ctx/TASKS.md` a v dvoch-troch vetách povie, kde projekt stojí a čo čaká na teba.
 
 - Ak existuje plán alebo `SUMMARY.md`, Claude povie, kde sa práca zastavila a čo nasleduje. Pokračuje po tvojom súhlase. Požiadavky sa znova nepýta.
-- Ak na teba čaká úloha, napríklad „Try R-001“, Claude ti povie, čo vyskúšať, a po tvojej odpovedi prácu uzavrie.
+- Ak na teba čaká úloha, napríklad rozhodnutie alebo schválenie, Claude ti povie, čo od teba potrebuje, a po tvojej odpovedi pokračuje.
 - Ak ostali staré pracovné súbory, Claude ponúkne ich zmazanie.
 - Keď je chat dlhý (viac ako do polovice plný), Claude zapíše stav do `ctx/TASKS.md` a `SUMMARY.md` a navrhne nový chat.
 
@@ -175,4 +169,7 @@ Okno môžeš kedykoľvek zatvoriť. Stav je v súboroch, nie v chate. V novom c
 - Povedz „prečo“, keď niečomu nerozumieš. Popros o jednoduché slová.
 - Na presných slovách nezáleží. „go“, „yes, build it“ aj „rob“ znamenajú to isté.
 - Náklady: plán ukáže hrubý odhad tokenov. Odhad vychádza z počtu krokov: malý krok spotrebuje orientačne 30-80 tisíc tokenov, väčší 100-200 tisíc. Po práci sa skutočné číslo zapíše do `SUMMARY.md`.
-- Druhý sprievodca vysvetľuje, ako môžu skilly niesť firemné znalosti: [skills-as-company-knowledge.html](skills-as-company-knowledge.html).
+- Druhý sprievodca vysvetľuje, ako môžu skilly niesť osobné a firemné znalosti: [skills-as-personal-and-company-knowledge.html](skills-as-personal-and-company-knowledge.html).
+- Čo sa načíta kedy a prečo sa kontext zapĺňa: [what-loads-when.html](what-loads-when.html).
+
+@panthea.sk

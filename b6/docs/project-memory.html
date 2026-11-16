@@ -105,6 +105,7 @@ ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column
 .prompt { max-width: 780px; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; }
 .prompt .when { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
 .prompt .say { font-family: var(--font-mono); font-size: 0.86rem; line-height: 1.55; }
+.sitefoot { margin: 24px 0 0; font-size: 0.8rem; color: var(--muted); }
 </style>
 
 <div class="page">
@@ -194,7 +195,7 @@ ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column
         <table>
           <thead><tr><th>ID</th><th>Priorita</th><th>Požiadavka</th><th>Zdroj</th><th>Kritérium splnenia</th><th>Stav</th><th>Dôkaz</th></tr></thead>
           <tbody>
-            <tr><td class="id">R-001</td><td>MUST</td><td>Zamestnanec si rezervuje voľnú zasadačku na konkrétny čas</td><td>vlastník 2026-03-02</td><td>test: rezervácia voľného termínu sa uloží a je viditeľná v rozvrhu zasadačky; rezervácia, ktorá sa prekrýva s inou, je odmietnutá s hláškou</td><td class="nw">splnená</td><td>14 testov rezervácie prešlo; ručná skúška vlastníka 2026-03-09</td></tr>
+            <tr><td class="id">R-001</td><td>MUST</td><td>Zamestnanec si rezervuje voľnú zasadačku na konkrétny čas</td><td>vlastník 2026-03-02</td><td>test: rezervácia voľného termínu sa uloží a je viditeľná v rozvrhu zasadačky; rezervácia, ktorá sa prekrýva s inou, je odmietnutá s hláškou</td><td class="nw">splnená</td><td>14 testov rezervácie prešlo; reviewer OK pre obe kritériá 2026-03-09</td></tr>
             <tr><td class="id">R-002</td><td>MUST</td><td>Rezervácia, na ktorú do 10 minút nikto neprišiel, sa uvoľní</td><td>office manažérka 2026-03-04</td><td>test: rezervácia bez potvrdenia príchodu je 10 minút po začiatku zrušená a zasadačka je voľná; potvrdená rezervácia ostáva</td><td class="nw">schválená</td><td>—</td></tr>
             <tr><td class="id">R-003</td><td>SHOULD</td><td>Rezervácia sa objaví v kalendári Outlook organizátora</td><td>vlastník 2026-03-04</td><td>udalosť je v kalendári do 1 minúty po vytvorení rezervácie; po zrušení rezervácie z kalendára zmizne</td><td>čiastočne splnená</td><td>vytvorenie funguje (6 testov synchronizácie); zrušenie udalosť nemaže, pozri <code>TASKS.md</code></td></tr>
           </tbody>
@@ -205,10 +206,10 @@ ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column
       <h3>Čo si všimnúť</h3>
       <ul class="plain">
         <li>Kritérium sa dá overiť testom. „Rezervácia má fungovať dobre“ by sa overiť nedalo.</li>
-        <li>Stavy: návrh → schválená → na vyskúšanie → splnená / čiastočne splnená; zrušená.</li>
+        <li>Stavy: návrh → schválená → splnená / čiastočne splnená; zrušená.</li>
         <li>Priorita hovorí, čo sa smie vynechať. MUST: bez nej sa práca neuzavrie. SHOULD: odchýlka sa zdôvodní. NICE: ak ostane čas.</li>
         <li>Stav bez dôkazu neplatí. R-003 je len čiastočne splnená a dôkaz hovorí presne, čo chýba a kde sa to rieši.</li>
-        <li>„Splnená“ sa zapíše až vtedy, keď si to vlastník sám vyskúšal. Testy od Clauda nestačia, preto je pri R-001 aj ručná skúška vlastníka.</li>
+        <li>„Splnená“ sa zapíše až po tom, čo čerstvý reviewer dal OK s dôkazom pre každé kritérium. Testy samotného autora nestačia, preto je pri R-001 dôkazom aj OK nezávislého reviewera. Vlastník to skúšať nemusí; ak neskôr zistí, že to nefunguje, požiadavka sa vráti na „schválená“ a rieši sa novou zmenou.</li>
       </ul>
     </div>
   </section>
@@ -229,7 +230,7 @@ ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column
           <thead><tr><th>Úloha</th><th>Kto koná</th><th>Čo ju blokuje</th><th>Vstupy</th><th>Ďalší krok</th></tr></thead>
           <tbody>
             <tr><td>Automatické uvoľnenie nepotvrdenej rezervácie (R-002)</td><td>Claude</td><td>nič</td><td>R-002; <code>architecture.md</code>, časť „Stavy rezervácie“</td><td>napísať test podľa kritéria, potom doplniť stav „nepotvrdená“ a úlohu, ktorá beží každú minútu</td></tr>
-            <tr><td>Zrušenie rezervácie nemaže udalosť v Outlooku (R-003)</td><td>IT oddelenie</td><td>aplikácia nemá právo mazať udalosti v kalendároch zamestnancov</td><td>výsledok testu synchronizácie z 2026-03-09</td><td>po pridelení práva doplniť mazanie a test; potom dať vlastníkovi vyskúšať; po skúške R-003 splnená</td></tr>
+            <tr><td>Zrušenie rezervácie nemaže udalosť v Outlooku (R-003)</td><td>IT oddelenie</td><td>aplikácia nemá právo mazať udalosti v kalendároch zamestnancov</td><td>výsledok testu synchronizácie z 2026-03-09</td><td>po pridelení práva doplniť mazanie a test; potom nový reviewer; ak dá OK s dôkazom, R-003 splnená</td></tr>
             <tr><td>Smie asistentka rezervovať v mene niekoho iného?</td><td>vlastník</td><td>rozhodnutie vlastníka</td><td>otázka office manažérky z 2026-03-06</td><td>ak áno, zapísať ako novú požiadavku R-004 s kritériom</td></tr>
           </tbody>
         </table>
@@ -281,7 +282,7 @@ ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column
     <p>Krátke očíslované záznamy o tom, prečo je systém postavený práve takto. Claude ich číta, keď sa navrhovaná zmena dotýka pravidla z architektúry. Nenavrhne tak znova to, čo už bolo raz zvážené a odmietnuté.</p>
     <dl class="facts">
       <div><dt>Kto zapisuje</dt><dd>Rozhoduje vlastník. Claude pripraví záznam aj s alternatívami.</dd></div>
-      <div><dt>Kedy vzniká</dt><dd>Keď sa voľba ťažko vracia: databáza, hranica medzi systémami, pravidlo nad dátami. Bežný technický detail záznam nepotrebuje.</dd></div>
+      <div><dt>Kedy vzniká</dt><dd>Keď sa voľba ťažko vracia: databáza, hranica medzi systémami, pravidlo, ktoré musia dodržať existujúce dáta. Skúška: vrátenie by znamenalo meniť alebo presúvať existujúce dáta alebo iný systém. Bežný detail (nepovinné pole, voľba, formát výstupu) záznam nepotrebuje.</dd></div>
       <div><dt>Pravidlo</dt><dd>Jeden súbor na rozhodnutie. Čísla sa nemenia a záznam sa neprepisuje. Keď ho nové rozhodnutie nahradí, do starého pribudne iba odkaz na nový a starý sa presunie do <code>docs/decisions/archive/</code>.</dd></div>
     </dl>
     <div class="file">
@@ -314,20 +315,20 @@ ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column
     <ol class="trace">
       <li class="req"><span class="num">1</span><div class="body"><span class="where">ctx/requirements.md</span><h3>Vlastník povie, čo chce</h3><p>Vznikne riadok R-003, SHOULD, s kritériom: udalosť v kalendári do 1 minúty, po zrušení zmizne.</p></div></li>
       <li class="arch"><span class="num">2</span><div class="body"><span class="where">docs/decisions/</span><h3>Claude navrhne postup a vlastník ho schváli</h3><p>Claude povie, čo spraví a čo nie: zmeny z Outlooku sa čítať nebudú. Vlastník súhlasí a rozhodnutie sa zapíše ako 0003.</p></div></li>
-      <li><span class="num">3</span><div class="body"><span class="where">kód, testy, docs/architecture.md</span><h3>Vznikne výstup a s ním architektúra</h3><p>Worker napíše zápis udalosti do kalendára a 6 testov synchronizácie. V tej istej zmene doplní do architektúry kapitolu „Kalendár Outlook“ (aplikácia do Outlooku len zapisuje) s odkazom na rozhodnutie 0003. Test zrušenia zlyhá, lebo aplikácia nemá právo mazať udalosti; kódom sa to opraviť nedá, preto to Claude prinesie vlastníkovi.</p></div></li>
-      <li class="req"><span class="num">4</span><div class="body"><span class="where">ctx/requirements.md</span><h3>Požiadavka je na vyskúšanie</h3><p>Stav: na vyskúšanie. Dôkaz: 6 testov synchronizácie, zrušenie udalosť nemaže. Claude povie vlastníkovi, čo vyskúšať.</p></div></li>
-      <li class="req"><span class="num">5</span><div class="body"><span class="where">ctx/requirements.md</span><h3>Vlastník vyskúša a zapíše sa výsledok</h3><p>Vytvorenie funguje, zrušenie nie. Stav: čiastočne splnená; do dôkazu sa zapíše, čo chýba.</p></div></li>
+      <li><span class="num">3</span><div class="body"><span class="where">kód, testy, docs/architecture.md</span><h3>Vznikne výstup a s ním architektúra</h3><p>Worker napíše zápis udalosti do kalendára a 6 testov synchronizácie. V tej istej zmene doplní do architektúry kapitolu „Kalendár Outlook“ (aplikácia do Outlooku len zapisuje) s odkazom na rozhodnutie 0003. Test zrušenia zlyhá: zrušenie udalosť z kalendára nezmaže.</p></div></li>
+      <li class="req"><span class="num">4</span><div class="body"><span class="where">ctx/requirements.md</span><h3>Výsledok má medzeru</h3><p>Reviewer dá verdikt <code>FIX</code>. Ani dve opravné kolá to neopravia: aplikácia nemá právo mazať udalosti v kalendári a kódom sa to opraviť nedá. Claude sa zastaví a povie to vlastníkovi jednoduchými slovami. Vlastník medzeru prijme. Stav zostáva <code>schválená</code>; dôkaz a nový stav sa zapíšu spolu pri uzavretí.</p></div></li>
+      <li class="req"><span class="num">5</span><div class="body"><span class="where">ctx/requirements.md</span><h3>Vlastník prijme výsledok a zapíše sa stav</h3><p>Vytvorenie funguje, zrušenie nie. Vlastník výsledok prijme: stav čiastočne splnená; do dôkazu sa zapíše, čo chýba. Claude mu povie, čo si môže vyskúšať.</p></div></li>
       <li class="task"><span class="num">6</span><div class="body"><span class="where">ctx/TASKS.md</span><h3>Čo ostalo, ide do otvorenej práce</h3><p>Pribudne úloha „Zrušenie rezervácie nemaže udalosť v Outlooku“. Koná IT oddelenie, ďalší krok je jasný.</p></div></li>
     </ol>
   </section>
 
   <section class="stack">
     <h2>Ako to použiť v Claude Code</h2>
-    <p>S pluginom b6 stačí povedať, čo chceš. Claude si sám prečíta, čo treba, a dokumenty zapisuje až po tvojom súhlase: požiadavky po brainstormingu, stav a dôkaz pri uzavretí, „splnená“ až po tvojej skúške. Ručné pokyny typu „pridaj R-004“ netreba; obišli by schválenie aj skúšku.</p>
+    <p>S pluginom b6 stačí povedať, čo chceš. Claude si sám prečíta, čo treba, a dokumenty zapisuje až po tvojom súhlase: požiadavky po brainstormingu, stav a dôkaz pri uzavretí, „splnená“ až po nezávislej kontrole s dôkazom. Ručné pokyny typu „pridaj R-004“ netreba; obišli by schválenie aj kontrolu.</p>
     <div class="prompt"><span class="when">Na začiatku chatu</span><span class="say">Kde sme?</span></div>
     <div class="prompt"><span class="when">Keď príde nová požiadavka</span><span class="say">Vlastník rozhodol, že asistentka môže rezervovať v mene iného. Poďme to pridať.</span></div>
     <div class="prompt"><span class="when">Keď treba ťažko vratné rozhodnutie</span><span class="say">Chcem, aby sa prihlasovalo firemným účtom Microsoft. Aké sú možnosti?</span></div>
-    <div class="prompt"><span class="when">Po skúške</span><span class="say">Vyskúšal som to, funguje.</span></div>
+    <div class="prompt"><span class="when">Keď niečo nefunguje</span><span class="say">Toto nefunguje: pri zrušení rezervácie ostane udalosť v kalendári.</span></div>
 
     <h3>Kam čo patrí</h3>
     <div class="scroll">
@@ -348,6 +349,7 @@ ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column
       <li>Architektúra, ktorá opisuje plány. Claude ju berie ako fakt a píše kód proti niečomu, čo neexistuje.</li>
     </ul>
   </section>
+<p class="sitefoot">@panthea.sk</p>
 </div>
 
 <!-- ============================== ENGLISH ============================== -->
@@ -430,7 +432,7 @@ ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column
         <table>
           <thead><tr><th>ID</th><th>Priority</th><th>Requirement</th><th>Source</th><th>Acceptance criterion</th><th>Status</th><th>Evidence</th></tr></thead>
           <tbody>
-            <tr><td class="id">R-001</td><td>MUST</td><td>An employee books a free meeting room for a specific time</td><td>owner 2026-03-02</td><td>test: a booking of a free slot is saved and visible in the room's schedule; a booking that overlaps another is refused with a message</td><td class="nw">met</td><td>14 booking tests passed; owner's manual check 2026-03-09</td></tr>
+            <tr><td class="id">R-001</td><td>MUST</td><td>An employee books a free meeting room for a specific time</td><td>owner 2026-03-02</td><td>test: a booking of a free slot is saved and visible in the room's schedule; a booking that overlaps another is refused with a message</td><td class="nw">met</td><td>14 booking tests passed; reviewer OK for both criteria 2026-03-09</td></tr>
             <tr><td class="id">R-002</td><td>MUST</td><td>A booking nobody showed up for within 10 minutes is released</td><td>office manager 2026-03-04</td><td>test: a booking with no check-in is cancelled 10 minutes after its start and the room is free; a checked-in booking stays</td><td class="nw">approved</td><td>—</td></tr>
             <tr><td class="id">R-003</td><td>SHOULD</td><td>The booking appears in the organiser's Outlook calendar</td><td>owner 2026-03-04</td><td>the event is in the calendar within 1 minute of the booking; it disappears when the booking is cancelled</td><td>partly met</td><td>creation works (6 sync tests); cancelling does not delete the event, see <code>TASKS.md</code></td></tr>
           </tbody>
@@ -441,10 +443,10 @@ ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column
       <h3>What to notice</h3>
       <ul class="plain">
         <li>A test can check the criterion. "Booking should work well" could not be checked.</li>
-        <li>Statuses: proposed → approved → ready to try → met / partly met; cancelled.</li>
+        <li>Statuses: proposed → approved → met / partly met; cancelled.</li>
         <li>The priority says what may be left out. MUST: work does not close without it. SHOULD: a deviation needs a reason. NICE: if time remains.</li>
         <li>A status without evidence does not count. R-003 is only partly met, and the evidence says exactly what is missing and where it is handled.</li>
-        <li>"Met" is written only once the owner has tried it themselves. Claude's tests are not enough, which is why R-001 also has the owner's manual check.</li>
+        <li>"Met" is written only after a fresh reviewer gave OK with evidence for every criterion. The author's own tests are not enough, which is why R-001's evidence includes an independent reviewer's OK. The owner does not have to try it; if they find later that it does not work, the requirement goes back to "approved" and a new change handles it.</li>
       </ul>
     </div>
   </section>
@@ -465,7 +467,7 @@ ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column
           <thead><tr><th>Task</th><th>Who acts</th><th>What blocks it</th><th>Inputs</th><th>Next step</th></tr></thead>
           <tbody>
             <tr><td>Automatic release of a booking with no check-in (R-002)</td><td>Claude</td><td>nothing</td><td>R-002; <code>architecture.md</code>, section "Booking states"</td><td>write the test from the criterion, then add the "unconfirmed" state and a job that runs every minute</td></tr>
-            <tr><td>Cancelling a booking does not delete the Outlook event (R-003)</td><td>IT department</td><td>the app has no permission to delete events in employees' calendars</td><td>sync test result of 2026-03-09</td><td>once the permission is granted, add the deletion and its test; then let the owner try it; after the trial R-003 is met</td></tr>
+            <tr><td>Cancelling a booking does not delete the Outlook event (R-003)</td><td>IT department</td><td>the app has no permission to delete events in employees' calendars</td><td>sync test result of 2026-03-09</td><td>once the permission is granted, add the deletion and its test; then a fresh reviewer; if they give OK with evidence, R-003 is met</td></tr>
             <tr><td>May an assistant book on someone else's behalf?</td><td>owner</td><td>the owner's decision</td><td>the office manager's question of 2026-03-06</td><td>if yes, record it as a new requirement R-004 with a criterion</td></tr>
           </tbody>
         </table>
@@ -517,7 +519,7 @@ ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column
     <p>Short numbered records of why the system is built this way. Claude reads them when a proposed change touches a rule from the architecture. That keeps it from proposing again what was already considered and rejected.</p>
     <dl class="facts">
       <div><dt>Who writes it</dt><dd>The owner decides. Claude prepares the record, alternatives included.</dd></div>
-      <div><dt>When one is written</dt><dd>When the choice is hard to reverse: the database, a boundary between systems, a rule over the data. An ordinary technical detail needs no record.</dd></div>
+      <div><dt>When one is written</dt><dd>When the choice is hard to reverse: the database, a boundary between systems, a rule that existing data must follow. Test: undoing it would mean changing or moving existing data, or another system. An ordinary detail (optional field, option, output format) needs no record.</dd></div>
       <div><dt>Rule</dt><dd>One file per decision. Numbers never change and a record is not rewritten. When a new decision replaces it, the old one only gets a pointer to the new one and moves to <code>docs/decisions/archive/</code>.</dd></div>
     </dl>
     <div class="file">
@@ -550,20 +552,20 @@ ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column
     <ol class="trace">
       <li class="req"><span class="num">1</span><div class="body"><span class="where">ctx/requirements.md</span><h3>The owner says what they want</h3><p>Row R-003 is added, SHOULD, with the criterion: event in the calendar within 1 minute, gone after cancelling.</p></div></li>
       <li class="arch"><span class="num">2</span><div class="body"><span class="where">docs/decisions/</span><h3>Claude proposes the approach and the owner approves it</h3><p>Claude says what it will do and what it will not: changes will not be read from Outlook. The owner agrees and the decision is recorded as 0003.</p></div></li>
-      <li><span class="num">3</span><div class="body"><span class="where">code, tests, docs/architecture.md</span><h3>The output is produced, and the architecture with it</h3><p>The worker writes the event to the calendar and 6 sync tests. In the same change it adds the section "Outlook calendar" to the architecture (the app only writes to Outlook), pointing to decision 0003. The cancellation test fails because the app has no permission to delete events; code cannot fix that, so Claude brings it to the owner.</p></div></li>
-      <li class="req"><span class="num">4</span><div class="body"><span class="where">ctx/requirements.md</span><h3>The requirement is ready to try</h3><p>Status: ready to try. Evidence: 6 sync tests, cancelling does not delete the event. Claude tells the owner what to try.</p></div></li>
-      <li class="req"><span class="num">5</span><div class="body"><span class="where">ctx/requirements.md</span><h3>The owner tries it and the result is written</h3><p>Creating works, cancelling does not. Status: partly met; the evidence says what is missing.</p></div></li>
+      <li><span class="num">3</span><div class="body"><span class="where">code, tests, docs/architecture.md</span><h3>The output is produced, and the architecture with it</h3><p>The worker writes the event to the calendar and 6 sync tests. In the same change it adds the section "Outlook calendar" to the architecture (the app only writes to Outlook), pointing to decision 0003. The cancellation test fails: cancelling does not delete the event from the calendar.</p></div></li>
+      <li class="req"><span class="num">4</span><div class="body"><span class="where">ctx/requirements.md</span><h3>The result has a gap</h3><p>The reviewer gives the verdict <code>FIX</code>. Two fix rounds cannot fix it: the app has no permission to delete events in the calendar, and code cannot change that. Claude stops and tells the owner in plain words. The owner accepts the gap. The status stays <code>approved</code>; the evidence and the new status are written together at wrap-up.</p></div></li>
+      <li class="req"><span class="num">5</span><div class="body"><span class="where">ctx/requirements.md</span><h3>The owner accepts the result and the status is written</h3><p>Creating works, cancelling does not. The owner accepts the result: status partly met; the evidence says what is missing. Claude tells them what they can try.</p></div></li>
       <li class="task"><span class="num">6</span><div class="body"><span class="where">ctx/TASKS.md</span><h3>What is left goes to open work</h3><p>The task "Cancelling a booking does not delete the Outlook event" is added. IT acts, and the next step is clear.</p></div></li>
     </ol>
   </section>
 
   <section class="stack">
     <h2>How to use it in Claude Code</h2>
-    <p>With the b6 plugin it is enough to say what you want. Claude reads what it needs on its own and writes the documents only after you agree: requirements after brainstorming, status and evidence at wrap-up, "met" only after your trial. Manual commands such as "add R-004" are not needed; they would skip the approval and the trial.</p>
+    <p>With the b6 plugin it is enough to say what you want. Claude reads what it needs on its own and writes the documents only after you agree: requirements after brainstorming, status and evidence at wrap-up, "met" only after an independent check with evidence. Manual commands such as "add R-004" are not needed; they would skip the approval and the check.</p>
     <div class="prompt"><span class="when">At the start of a session</span><span class="say">Where are we?</span></div>
     <div class="prompt"><span class="when">When a new requirement arrives</span><span class="say">The owner decided that an assistant can book on someone else's behalf. Let's add it.</span></div>
     <div class="prompt"><span class="when">When a hard-to-reverse choice is needed</span><span class="say">I want people to sign in with their company Microsoft account. What are the options?</span></div>
-    <div class="prompt"><span class="when">After a trial</span><span class="say">I tried it, it works.</span></div>
+    <div class="prompt"><span class="when">When something does not work</span><span class="say">This does not work: after cancelling a booking the event stays in the calendar.</span></div>
 
     <h3>What goes where</h3>
     <div class="scroll">
@@ -584,6 +586,7 @@ ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column
       <li>An architecture that describes plans. Claude takes it as fact and writes code against something that does not exist.</li>
     </ul>
   </section>
+<p class="sitefoot">@panthea.sk</p>
 </div>
 
 </div>

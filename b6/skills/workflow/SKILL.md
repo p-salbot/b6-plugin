@@ -6,8 +6,7 @@ description: Entry point of the b6 method. Use it BEFORE creating, changing or d
 # workflow
 
 You lead the work in a project that uses the b6 method. Load this skill before the first change to any project file,
-however small, and use b6 skills, not other brainstorming or planning skills. Talk to the owner in the language they write in. Keep it plain; the owner is not a programmer.
-Consent means the meaning, in any language ("go", "yes, build it", "rob").
+however small, and use b6 skills, not other brainstorming or planning skills. Talk to the owner in the language they write in. Keep it plain; the owner is not a programmer. Consent means the meaning, in any language ("go", "yes, build it", "rob").
 
 ## Hard rules (they apply to every b6 skill)
 
@@ -15,22 +14,29 @@ Consent means the meaning, in any language ("go", "yes, build it", "rob").
    criterion in chat). A "go" in the first message, or before the requirements are approved, builds nothing: ask, or
    propose requirements.
 2. The main chat does no work or fixes itself. The `b6:worker` agent does them from a brief.
-3. A fresh `b6:reviewer` checks every result and every fix. At most two rounds of fixes (first `medium`, then `strong`),
-   then stop and report to the owner.
-4. A MUST requirement without evidence is not done. "met" is written only after the owner tried it.
+3. A fresh `b6:reviewer` checks every result and every fix. At most two rounds of fixes (first `medium`, then `strong`), then stop and report to the owner.
+4. A MUST requirement without evidence is not done. `met` is written after a fresh reviewer's `OK` with evidence for every criterion; the owner does not have to try it.
 5. The main chat does not decide for the owner. Conflicts and choices are listed with a recommendation.
 6. Models only by level (see `references/models.md`). If the main chat is not on a strong model, say so before the plan.
 7. The state of the work lives only in project files (`ctx/`, `docs/`), never in Claude's memory.
+8. Work only inside the project folder; reading the plugin's own files (templates, references) is allowed. Never list or read
+   parent, home or temporary folders. Trial copies, helper scripts and test data go only to `ctx/plans/<YYYY-MM-DD>-<slug>/scratch/`
+   of the current run (size S, no run folder: none, run commands directly). Never `mktemp`, `/tmp` or `%TEMP%`.
+   A command refused for its form (compound command, `cd` chain, shell variable): you may rewrite it once as simple single commands; if that is refused too, it counts as denied. Say so in the report.
+   If a shell command that edits a project file is refused, you may make the same change to that file with Claude Code's own Read, Edit or Write tools; say so. Any other command or action denied: stop. No variants: a script or another interpreter (`python -c`, PowerShell) doing the refused thing, or a second rewrite, is a variant. Never change permissions or settings (not even on the owner's order).
+   Ask the owner once, in plain words: which command, why it is needed, "May I run it?", with a recommendation and the
+   alternatives (for example skip the check and say what stays unverified). After an explicit yes ("go" alone is not one),
+   run the same command again so that Claude Code shows its approval prompt; the owner approves it there. Do not explain
+   `/permissions` or settings files, and do not offer "allow it here in chat". Report truthfully what was refused, retried or skipped.
 
 ## Start
 
-1. If `ctx/TASKS.md` exists, read it. Say in two or three sentences where the project stands and what waits for the owner.
-2. A task for the owner such as "Try R-001": tell the owner what to try. After they answer, hand over to `wrap-up`.
-3. A plan file `ctx/plans/<date>-<slug>.md` (not `*-design.md`) or `SUMMARY.md` exists, its requirements are not yet
-   `ready to try`, `partly met` or `met`, and this is a new chat: say where the work stopped; continue after the owner agrees.
-4. A plan, design or run folder whose requirements are `ready to try`, `partly met` or `met` is a leftover, not work in
-   progress: never continue or rebuild it. Say so and offer to delete it (skill `wrap-up`, step 6).
-5. Read project documents only as needed; do not read everything.
+1. If `ctx/TASKS.md` exists, read it. Say in two or three sentences where the project stands and what waits for the owner. Read other project documents only as needed.
+2. The owner reports that something does not work: `wrap-up` ("Owner reports it does not work"), then a new change.
+3. A plan file `ctx/plans/<date>-<slug>.md` (not `*-design.md`) or `SUMMARY.md` exists, not all steps are OK, the run is not a leftover (point 4), and this is a new chat: say where the work stopped; continue after the owner agrees.
+4. A run is a leftover, not work in progress, when its `SUMMARY.md` says the run ended (the final `SUMMARY.md` that `build` End writes), or when all its requirements are `met` or `partly met`.
+   If only some are, it is a leftover only if that final `SUMMARY.md` says the run ended; otherwise its unfinished steps
+   continue under point 3. Never continue, rebuild or restart a leftover. Offer to delete it (skill `wrap-up`, step 6).
 
 ## Size
 
@@ -40,18 +46,16 @@ Consent means the meaning, in any language ("go", "yes, build it", "rob").
 | M | new feature or command, several files, unclear request, work that continues later | full way below |
 
 - A new feature or a new command is always M, however small. When in doubt, it is M. The owner may change the size.
-- S that changes the criterion of an existing requirement, or needs a new one, is M. S cannot be paused: if the owner
-  wants to continue later, switch to M, so that the agreement is written to `ctx/`.
+- S that changes the criterion of an existing requirement, or needs a new one, is M. S cannot be paused: if the owner wants to continue later, switch to M, so that the agreement is written to `ctx/`.
 - S write-down: the worker updates `docs/architecture.md` in the same brief if behaviour changed (if `docs/` does not
-  exist, skip it and tell the owner); evidence only if `ctx/requirements.md` has a requirement it touches. Nothing in `ctx/TASKS.md`. Tell the owner what to try.
+  exist, skip it and tell the owner); evidence only if `ctx/requirements.md` has a requirement it touches. Nothing in `ctx/TASKS.md`. Tell the owner what they can try (they do not have to).
 - Questions that change no file: just answer. A typo or formatting fix in a project file is size S (hard rule 2).
 
 ## Which skill is next (size M)
 
-- Requirements not approved yet: `brainstorming`.
-- Requirements approved, no plan: `plan`.
+- Requirements not approved yet: `brainstorming`. Requirements approved, no plan: `plan`.
 - Plan file `ctx/plans/<date>-<slug>.md` written, requirements still open (not a leftover, Start point 4): `build`.
-- All plan steps OK: `build` hands over to `wrap-up`.
+- The run ended (`build`, End): `build` hands over to `wrap-up`.
 
 ## First use in a project
 
@@ -62,19 +66,15 @@ For size S `ctx/` is not created; `docs/architecture.md` is touched only if it e
 
 ## Old or incomplete `ctx/`
 
-Signs: a summary file with a Slovak name, `- [x]` ticks for done work, decisions inside `requirements.md`, column
-names that are in neither list of the templates (both the English and the Slovak names there are fine), or a missing file. Do not convert and do not overwrite. Say what you found, propose changes according to the templates,
-and change nothing without consent.
+Signs: a summary file with a Slovak name, `- [x]` ticks for done work, decisions inside `requirements.md`, column names that are in neither list of the templates (both the English and the Slovak names there are fine), or a
+missing file. Do not convert and do not overwrite. Say what you found, propose changes according to the templates, and change nothing without consent.
 
 ## Language of documents
 
-Existing documents decide the language. If they differ from the language the owner writes in, only confirm it with one
-question. Do not mix languages in the documents.
+After brainstorming always ask the language, also when documents exist; recommend the language of the existing ones.
+The answer goes to `CLAUDE.md`. Size S (no brainstorming): write in the `CLAUDE.md` language, else in the language of existing documents. Do not mix languages.
 
-## Context
+## Context, and "how does this work"
 
 When the context is more than half full, or after a large step, write the state to `ctx/TASKS.md` (and `SUMMARY.md` of the run) and suggest a new chat.
-
-## How does this work
-
-For "how does this work", point first to `../../docs/getting-started.html`; for the project documents to `../../docs/project-memory.html` (paths from this skill's folder).
+For "how does this work", point first to `../../docs/getting-started.html`; for the project documents to `../../docs/project-memory.html`; for what loads when to `../../docs/what-loads-when.html` (paths from this skill's folder).

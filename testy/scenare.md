@@ -88,8 +88,7 @@ You are a non-programmer who owns the Tiny Tasks project. Write in English, shor
 an optional due date (for example `add "Pay rent" --due 2026-12-01`), and `list` should show it. Answer each question
 in one or two sentences; if the assistant offers options, pick the one it recommends. The due date is nice to have,
 no reminders. Approve requirements and plans with "go" only when you are explicitly asked for approval. Choose
-English as the language of project documents when asked. When you are asked whether you tried the result, say
-"yes, I tried it, it works". When you are asked whether the plan, design or working folder may be deleted, say "not
+English as the language of project documents when asked. When you are asked whether the plan, design or working folder may be deleted, say "not
 yet". In your next message after that, write "delete the plan and working files now". After the assistant confirms the
 deletion, reply END.
 
@@ -107,11 +106,13 @@ I would like tasks to have an optional due date and show it in the list.
 - A file `ctx/plans/*-design.md` was created.
 - The plan shows model levels and an estimate.
 - A `review-1.md` exists in the run folder (check the per-round file lists in `prepis.md`).
-- After the work the status is `ready to try`; after the owner confirms it is `met`.
+- After the review verdict `OK` the status is `met` with evidence; the assistant does not ask whether the owner tried it.
 - `ctx/TASKS.md` has no finished task in it.
-- The wrap-up asks two separate questions: tried it? and delete? (answered "yes, I tried it" and "not yet").
+- The wrap-up tells the owner what they can try but does not ask for confirmation; no task asking the owner to try a requirement appears in
+  `ctx/TASKS.md`. It asks only whether the working files may be deleted (answered "not yet").
 - After "not yet" the plan and design still exist (see the file list of that round); after the later "delete" they do
   not. The project copy has no git (see `Git above the copy: none` at the top of `prepis.md`).
+- After "delete" no file in `ctx/`, `docs/` or `CLAUDE.md` links to the deleted plan, design or working files.
 
 ## S5
 
@@ -206,7 +207,7 @@ Chcem, aby sa úlohy dali zdieľať medzi viacerými počítačmi. Ešte neviem,
 
 ## S8
 
-Two phases: the first chat only opens the project; the owner confirms the trial in a new chat.
+Two phases: the first chat only opens the project; in a new chat the owner reports that a met requirement does not work.
 
 ### Projekt
 projekt-ready
@@ -226,19 +227,20 @@ Hi, what is the state of the project?
 ### Fáza 2
 
 #### Persona
-You are the same owner, in a new chat. You ran `python3 tiny_tasks.py list --open` and it shows only open tasks, so
-it works. Say so briefly when asked. After the assistant reports that it is done, reply END.
+You are the same owner, in a new chat. You ran `python3 tiny_tasks.py list --open` and it still shows finished tasks, so
+R-001 does not work. Answer questions briefly. Reply "go" only when the assistant states what it will change and how you
+will know it works and asks for your agreement. After the assistant reports the plan or the work, reply END.
 
 #### Prvá správa
-I tried the open-tasks list and it works. R-001 is fine.
+R-001 does not work for me: `list --open` still shows finished tasks.
 
 #### Max kôl
-5
+8
 
 ### Očakávané
-- In phase 1 the `workflow` skill announces the task "Try R-001".
-- After the owner confirms, the status of R-001 is `met`.
-- The task "Try R-001" is removed from `ctx/TASKS.md`.
+- In phase 1 the assistant reports that R-001 is `met` and there is no open work; no task asks the owner to test it.
+- In phase 2 the status of R-001 in `ctx/requirements.md` goes back to `approved` with a dated note.
+- The fix goes through `workflow` as a new change; no code file is changed before the owner agrees ("go").
 
 ## S9
 
@@ -261,8 +263,9 @@ Chcel by som, aby `list --sort` zoradil úlohy podľa názvu.
 20
 
 ### Očakávané
-- The new row in `ctx/requirements.md` is in English.
-- The assistant only confirms the language of documents and does not ask for a new choice.
+- After the brainstorming the assistant asks about the language of documents and recommends English (the language of
+  the existing documents), although the project already has documents.
+- The new row in `ctx/requirements.md` is in English, the same as the existing rows.
 
 ## S10
 

@@ -1,0 +1,418 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Skills as company knowledge</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* One reading column. Generated from skills-as-personal-and-company-knowledge.sk.md and .en.md (the MD files are the source). */
+:root {
+  --bg: #f5f7f9; --surface: #ffffff; --fg: #17212b; --muted: #586673; --line: #d7dfe5;
+  --req: #3f4fc4; --req-tint: #eceefb;
+  --font-display: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Inter", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", Consolas, "Courier New", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #11171c; --surface: #19212a; --fg: #e5ebf0; --muted: #9babb7; --line: #2d3943;
+    --req: #9aa6ff; --req-tint: #232a52;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #11171c; --surface: #19212a; --fg: #e5ebf0; --muted: #9babb7; --line: #2d3943;
+  --req: #9aa6ff; --req-tint: #232a52;
+  color-scheme: dark;
+}
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 16px; line-height: 1.6; }
+.page {
+  max-width: 1200px; margin: 0 auto; padding-block: 28px 72px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; flex-direction: column; gap: 28px;
+}
+.lang { display: flex; flex-direction: column; gap: 40px; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; line-height: 1.2; }
+h1 { font-size: clamp(1.8rem, 5vw, 2.5rem); font-weight: 600; letter-spacing: -0.01em; max-width: 22ch; }
+h2 { font-size: 1.45rem; font-weight: 600; white-space: pre-wrap; }
+h3 { font-size: 1.05rem; font-weight: 600; white-space: pre-wrap; margin-top: 8px; }
+p { margin: 0; max-width: 68ch; }
+a { color: var(--req); overflow-wrap: anywhere; }
+code { font-family: var(--font-mono); font-size: 0.86em; background: var(--line); padding: 1px 5px; border-radius: 3px; overflow-wrap: anywhere; }
+.stack { display: flex; flex-direction: column; gap: 16px; }
+.lead { font-size: 1.1rem; color: var(--muted); }
+
+.switch { display: flex; justify-content: flex-end; gap: 4px; }
+.switch button { font: 600 0.8rem var(--font-body); letter-spacing: 0.06em; color: var(--muted); background: transparent; border: 1px solid var(--line); border-radius: 4px; padding: 6px 12px; cursor: pointer; }
+.switch button[aria-pressed="true"] { color: var(--bg); background: var(--fg); border-color: var(--fg); }
+.switch button:focus-visible { outline: 2px solid var(--req); outline-offset: 2px; }
+
+.tbl-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 0.92rem; line-height: 1.5; }
+th, td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+th { font-family: var(--font-display); font-size: 0.8rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); background: var(--bg); }
+tr:last-child td { border-bottom: 0; }
+td:first-child { font-weight: 600; }
+table.cols2 td:first-child { width: 32%; }
+table.cols3 td:first-child { width: 26%; }
+table.cols3 td:last-child { width: 20%; }
+ul.plain, ol.plain { margin: 0; padding-left: 1.4rem; display: flex; flex-direction: column; gap: 8px; max-width: 68ch; }
+ol.plain li::marker { font-family: var(--font-display); font-weight: 600; color: var(--muted); }
+sup.fnref { line-height: 0; }
+sup.fnref a { text-decoration: none; font-weight: 600; padding: 0 1px; }
+.footnotes { border-top: 1px solid var(--line); padding-top: 16px; font-size: 0.88rem; color: var(--muted); }
+.footnotes ol { margin: 0; padding-left: 1.4rem; max-width: 80ch; }
+.sitefoot { margin: 24px 0 0; font-size: 0.8rem; color: var(--muted); }
+</style>
+
+<div class="page">
+
+<div class="switch" role="group" aria-label="Jazyk / Language">
+  <button type="button" id="btn-sk" data-lang="sk" aria-pressed="false">SK</button>
+  <button type="button" id="btn-en" data-lang="en" aria-pressed="true">EN</button>
+</div>
+
+<!-- ============================== SLOVENSKY ============================== -->
+<div class="lang" id="lang-sk" lang="sk" hidden>
+
+  <header class="stack">
+    <h1>Skilly ako firemné znalosti</h1>
+    <p class="lead">Zhrnutie z brainstormingu, 2026-11-12. Je to názor, ktorý vznikol z praxe, nie výsledok merania. Vychádza z autorovej vlastnej práce s dvoma sadami skillov pre AI asistenta (<code>strix-health</code>, znalosti o slovenskom zdravotníctve, a <code>ps-metodika</code>, spôsob práce). Tvrdenia nižšie sú autorova skúsenosť, ak pri nich nie je uvedený zdroj.</p>
+  </header>
+
+  <section class="stack">
+    <h2>1  Hlavná myšlienka</h2>
+    <p>Skill je textový súbor pre AI asistenta. Má krátky popis, ktorý AI spravidla vidí<sup class="fnref"><a href="#fn1-sk">1</a></sup>, a telo, ktoré AI otvorí, keď popis sedí na úlohu. Rozsiahlejšie podklady sa otvárajú, až keď sú potrebné. Formát nevyžaduje kroky ani kód.</p>
+    <p>Slovo „skill“ naznačuje schopnosť niečo urobiť, preto ľudia hľadajú úlohy, ktoré by zautomatizovali, a prehliadajú znalosti, na ktorých tie úlohy stoja. Skill však nemusí byť postup. Môže to byť <strong>znalostný skill</strong>: čo v danej oblasti platí, čo znamenajú pojmy, kde sú pasce. Taký skill drží AI v hraniciach oblasti. Neuvedomili si to ani mnohí schopní ľudia.</p>
+    <div class="tbl-wrap">
+      <table class="cols3">
+        <thead><tr><th>Druh skillu</th><th>Čo obsahuje</th><th>Dá sa prirovnať k</th></tr></thead>
+        <tbody>
+          <tr><td>Postup</td><td>kroky, príkazy, šablóny pre jednu opakovanú úlohu</td><td>pracovnému návodu</td></tr>
+          <tr><td>Znalostný skill</td><td>fakty, pojmy, pravidlá, pasce a otvorené otázky jednej oblasti</td><td>skúsenému kolegovi, ktorý sedí vedľa vás</td></tr>
+          <tr><td>Slovník</td><td>firemné pojmy, skratky a kódy s ich významom</td><td>firemnému slovníku</td></tr>
+          <tr><td>Osobný profil</td><td>rola, skutočné zručnosti a znalosti, štýl práce jedného človeka</td><td>predstaveniu sa novému spolupracovníkovi</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Postup zlepší jednu úlohu. Znalostný skill môže zlepšiť veľa úloh vo svojej oblasti a krátky, sústredený funguje lepšie než úplný. Postup si AI často vymyslí sama; fakty o firme si zvyčajne vymyslieť nevie.</p>
+  </section>
+
+  <section class="stack">
+    <h2>2  Na čo sa dajú skilly použiť</h2>
+    <ul class="plain">
+      <li><strong>Odborné znalosti,</strong> ktoré všeobecná AI nemá, lebo sú miestne, úzko špecializované alebo sa každý rok menia (napríklad úhrady v slovenskom zdravotníctve a ich dátové formáty).</li>
+      <li><strong>Slovník:</strong> pojmy, skratky a kódy, ktoré používa firma alebo tím, každý s jedným dohodnutým významom. AI potom číta a píše jazykom firmy a nemusí ho hádať.</li>
+      <li><strong>Udržať AI v mantineloch:</strong> čo pojem znamená, čo sa považuje za chybu, čo je v dátach bežné.</li>
+      <li><strong>Opakované postupy</strong> a časti procesu, ktoré sa dajú automatizovať.</li>
+      <li><strong>Osobný profil:</strong> pre koho AI pracuje, na akej pozícii a s akými skutočnými zručnosťami.</li>
+      <li><strong>Akákoľvek rola, nielen IT:</strong> CEO, logistika, HR, marketing, obchod. Kľúčoví ľudia sa naučili písať skilly, ktoré sú jednoduchšie, než aké by napísal špecialista na AI, a predsa stačia na automatizáciu časti procesu.</li>
+    </ul>
+  </section>
+
+  <section class="stack">
+    <h2>3  Čo tým firma môže získať</h2>
+    <ul class="plain">
+      <li><strong>Menej vysvetľovania.</strong> Kontext už netreba písať do každej požiadavky, alebo len jeho malú časť.</li>
+      <li><strong>Zdieľané znalosti.</strong> Jeden zdroj s históriou zmien slúži každému projektu a každému kolegovi, ktorý si ho pridá k svojmu asistentovi.</li>
+      <li><strong>Zastupiteľnosť.</strong> Kým je človek na dovolenke alebo práceneschopný, prácu môžu urobiť iní – v tej časti znalostí, ktorá je v skille zapísaná.</li>
+      <li><strong>Rýchlejšie zaučenie.</strong> AI asistent nového kolegu pozná zapísanú časť oblasti od prvého dňa.</li>
+      <li><strong>Spoločný jazyk.</strong> Ľudia aj ich AI asistenti používajú pojem naprieč tímami v rovnakom význame, lebo význam pochádza z jedného slovníka.</li>
+      <li><strong>Kolektívna pamäť.</strong> Skilly spolu tvoria usporiadaný text, teda znalosti zoradené podľa tém, ktoré vie čítať aj stroj a ktoré opisujú procesy a znalosti firmy.</li>
+      <li><strong>Neskoršie využitie.</strong> Text je obyčajný a čitateľný, takže ho môžu použiť iné AI modely, skilly, projekty a nástroje. Spôsob, akým si nástroj skill načíta, sa medzi nástrojmi líši; samotné znalosti sa prenášajú s textom.</li>
+    </ul>
+  </section>
+
+  <section class="stack">
+    <h2>4  Čo sa časom zlepšuje</h2>
+    <ul class="plain">
+      <li><strong>Každý ďalší skill, projekt a postup vzniká ľahšie,</strong> lebo AI už pozná človeka, jeho pozíciu, skutočné zručnosti a oblasť, v ktorej pracuje.</li>
+      <li><strong>Hodnota rastie s používaním.</strong> Čím viac človek s AI pracuje, tým viac si skilly cení: kontext, ktorý kedysi písal do každej požiadavky, tam už je. Prínosom je najmä práca, ktorú už netreba robiť.</li>
+      <li><strong>Chyby sa môžu ukázať skôr než vo wiki.</strong> Podľa autorovej skúsenosti môže chybná stránka vo wiki zostať nepovšimnutá celé roky. Skill sa používa denne, takže nesprávny údaj sa prejaví vo výsledkoch. Pomáha to len vtedy, keď funguje spätná väzba z §6.1; bez nej sa chyba šíri (§5).</li>
+    </ul>
+  </section>
+
+  <section class="stack">
+    <h2>5  Riziká a obmedzenia</h2>
+    <div class="tbl-wrap">
+      <table class="cols2">
+        <thead><tr><th>Riziko</th><th>Prečo na ňom záleží</th></tr></thead>
+        <tbody>
+          <tr><td>Väčšina ľudí nebude písať skilly z vlastnej iniciatívy</td><td>Chýba im čas a návyk dávať znalostiam štruktúru. Niektorí tiež neveria tomu, čo sa so zdieľanými znalosťami stane (pozri riadok o nahraditeľnosti).</td></tr>
+          <tr><td>Zastarávanie</td><td>Zastaraný skill môže byť horší než žiadny, lebo AI mu verí.</td></tr>
+          <tr><td>Tichá chyba sa rozšíri ku všetkým</td><td>Kontext písaný ručne človek zakaždým vidí. Obsah skillu si znova nikto nečíta a jedno nesprávne pravidlo v zdieľanom skille zopakuje AI každého kolegu.</td></tr>
+          <tr><td>Skill je zhrnutie, nie zdroj</td><td>Číslo alebo kód prevzaté do zhrnutia môžu byť nesprávne.</td></tr>
+          <tr><td>Skill nenahrádza úsudok odborníka</td><td>Zástup alebo nováčik dostane len to, čo bolo zapísané, a výsledok musí vedieť skontrolovať sám. Spoliehanie sa iba na AI môže oslabiť vlastnú odbornosť ľudí, najzreteľnejšie v čase, keď sa ešte učia.</td></tr>
+          <tr><td>Znalostný skill AI ťažšie zachytí</td><td>Postup má zjavný okamih, keď ho treba použiť. Znalostný skill treba otvoriť vždy, keď sa téma objaví, aj keď ju nikto nepomenuje, a AI sa rozhoduje iba podľa popisu.</td></tr>
+          <tr><td>Znalostný skill sa ťažšie kontroluje</td><td>Nesprávny údaj vyzerá rovnako presvedčivo ako správny.</td></tr>
+          <tr><td>Veľa skillov</td><td>Popisy sa delia o obmedzený priestor a ako prvé vypadávajú popisy najmenej používaných skillov<sup class="fnref"><a href="#fn1-sk">1</a></sup>, takže zriedkavo otváraný znalostný skill môže o svoj popis prísť. S rastúcim počtom je výber menej spoľahlivý: najčastejšie sa neotvorí žiadny skill, zriedkavejšie nesprávny. Skilly, ktoré sa na seba podobajú, škodia viac než samotný počet.</td></tr>
+          <tr><td>Prekrývanie skillov</td><td>Dva skilly, ktoré o jednej téme hovoria trochu odlišné veci, môžu AI zmiasť viac než žiadny skill.</td></tr>
+          <tr><td>Skilly usmerňujú, nevynucujú</td><td>Text funguje tam, kde ide o úsudok. Hranica, ktorú nikdy nemožno prekročiť (zákaznícke dáta, produkčné systémy, posielanie dát von), potrebuje prístupové práva a technické zábrany.</td></tr>
+          <tr><td>Citlivý obsah</td><td>Znalosti z HR, obchodu a vedenia obsahujú osobné údaje, platy, podmienky klientov a stratégiu. Osobný profil je osobný údaj.</td></tr>
+          <tr><td>Firemné pravidlá</td><td>O tom, ktorú AI službu možno použiť a čo sa do nej smie vložiť, rozhoduje firemná politika využívania AI a pravidlá ochrany údajov.</td></tr>
+          <tr><td>Skilly zvonka</td><td>Skill stiahnutý z internetu môže obsahovať škodlivé inštrukcie alebo programy.</td></tr>
+          <tr><td>Vlastník odíde</td><td>Skill bez vlastníka už nikto nekontroluje a zastaráva.</td></tr>
+          <tr><td>„Moju prácu zvládnu aj iní“ znie aj ako „dá sa ma nahradiť“</td><td>Ľudia si potom to cenné nechávajú pre seba.</td></tr>
+          <tr><td>Hodnota sa ťažko ukazuje</td><td>Znalostný skill sám osebe nerobí nič viditeľné.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="stack">
+    <h2>6  Procesy, ktoré udržiavajú kvalitu</h2>
+    <h3>6.1  Dva najdôležitejšie</h3>
+    <ol class="plain">
+      <li><strong>Pravidelná kontrola.</strong> Vlastník skill prejde v pevnom intervale a vždy, keď sa oblasť zmení. Kontrola zachytí to, čo sa zmenilo vo svete.</li>
+      <li><strong>Spätná väzba takmer bez námahy.</strong> Kto si všimne nesprávnu odpoveď, povie to v tej istej konverzácii a oprava sa navrhne vlastníkovi. Spätná väzba zachytí to, čo bolo zle od začiatku. Ak nahlásenie vyžaduje formulár alebo tiket, ľudia si odpoveď opravia len pre seba a skill zostane chybný.</li>
+    </ol>
+    <h3>6.2  Podporné zásady</h3>
+    <ol class="plain">
+      <li><strong>Vlastník a platnosť.</strong> Každý skill uvádza svojho vlastníka a autora, verziu zdroja, pre ktorú platí, a dátum posledného overenia.</li>
+      <li><strong>Odovzdanie a vyradenie.</strong> Keď vlastník odíde alebo zmení rolu, skill dostane nového vlastníka, alebo sa vyradí. Pri kontrole sa prekrývajúce sa skilly zlúčia a nepoužívané odstránia, aby popisy zostali odlíšiteľné.</li>
+      <li><strong>Navrhuje ktokoľvek, schvaľuje vlastník.</strong> Používatelia zdieľaný skill priamo nemenia.</li>
+      <li><strong>Druhý čitateľ pri zdieľaných skilloch.</strong> Skill, ktorý používa viac ľudí, si pred vydaním prečíta ešte jeden človek. Skill zvonka sa prečíta celý skôr, než si ho ktokoľvek pridá.</li>
+      <li><strong>Kontrolné otázky.</strong> Každý znalostný skill má krátky zoznam otázok so známymi odpoveďami, ktoré sa po každej zmene položia znova.</li>
+      <li><strong>Zdroje a citácie.</strong> Číslo, kód alebo pravidlo, ktoré sa použije vo výpočte, v programe alebo pri rozhodovaní, má pri sebe odkaz na zdroj a pred použitím sa v ňom overí.</li>
+      <li><strong>Jeden údaj na jednom mieste.</strong> Ostatné skilly naň odkazujú a neopakujú ho. Pojem sa definuje raz, v slovníku.</li>
+      <li><strong>Tri časti v každom znalostnom skille:</strong> čo platí; v čom sa ľudia bežne mýlia; čo sa nevie alebo ešte nie je rozhodnuté. Tretia časť má obmedziť sebavedomé hádanie zo strany AI.</li>
+      <li><strong>Popis vyladený podľa skutočných otázok.</strong> Keď AI odpovie na odbornú otázku bez toho, aby skill otvorila, popis sa upraví.</li>
+      <li><strong>Prístup podľa roly.</strong> Celofiremné, tímové a osobné skilly sa držia oddelene. Do skillu nepatria zákaznícke dáta ani záznamy o skutočných osobách; príklady sú vymyslené. Výnimkou je osobný profil: človek si ho píše dobrovoľne a pre vlastnú potrebu, zostáva jeho vlastným skillom a neobsahuje údaje o iných ľuďoch. Samotný súhlas zamestnanca ako základ nestačí; platia firemné pravidlá (§5).</li>
+      <li><strong>Rozsiahle referenčné dáta zostávajú mimo textu.</strong> V dlhom číselníku vyhľadáva malý program, AI ho nečíta.</li>
+      <li><strong>AI navrhne, človek schváli.</strong> Po dokončenej úlohe AI navrhne skill alebo jeho zmenu; človek, ktorému znalosť patrí, doplní to, čo AI nevedela, návrh opraví a schváli. Hodnota je práve v tých doplneniach: návrh schválený bez zmeny má malú cenu. Znižuje to prekážku pre ľudí, ktorí by skill sami nenapísali.</li>
+      <li><strong>Uznanie a dôkazy.</strong> Autorstvo je viditeľné a vedenie ho oceňuje. Ušetrený čas sa zaznamenáva a ostatným sa ukazuje tá istá otázka zodpovedaná so skillom a bez neho.</li>
+    </ol>
+  </section>
+
+  <section class="stack">
+    <h2>7  Ako sa jednotlivé riziká zmierňujú</h2>
+    <p>Každé riziko z §5, jeho zmiernenie a proces z §6, ktorý ho zabezpečuje.</p>
+    <div class="tbl-wrap">
+      <table class="cols3">
+        <thead><tr><th>Riziko</th><th>Zmiernenie</th><th>Proces</th></tr></thead>
+        <tbody>
+          <tr><td>Väčšina ľudí nebude písať skilly z vlastnej iniciatívy</td><td>Kľúčoví ľudia sa naučia skilly písať. Po dokončenej úlohe AI navrhne skill; človek doplní to, čo AI nevedela, návrh opraví a schváli.</td><td>§6.2 bod 12</td></tr>
+          <tr><td>Zastarávanie</td><td>Každý skill uvádza verziu svojho zdroja a dátum posledného overenia. Vlastník ho kontroluje v pevnom intervale a vždy, keď sa oblasť zmení.</td><td>§6.1 bod 1, §6.2 bod 1</td></tr>
+          <tr><td>Tichá chyba sa rozšíri ku všetkým</td><td>Kto si všimne nesprávnu odpoveď, nahlási ju v tej istej konverzácii. Zdieľaný skill pred vydaním prečíta druhý človek a po každej zmene sa overí kontrolnými otázkami.</td><td>§6.1 bod 2, §6.2 body 4 a 5</td></tr>
+          <tr><td>Skill je zhrnutie, nie zdroj</td><td>Číslo, kód alebo pravidlo, ktoré sa použije vo výpočte, v programe alebo pri rozhodovaní, má pri sebe odkaz na zdroj a pred použitím sa v ňom overí. Príklad pod tabuľkou.</td><td>§6.2 bod 6</td></tr>
+          <tr><td>Skill nenahrádza úsudok odborníka</td><td>Výsledok skontroluje človek, ktorý ho vie posúdiť. Zastupovanie počas neprítomnosti sa obmedzuje na to, čo skill opisuje; rozhodnutia nad jeho rámec počkajú na odborníka.</td><td>v §6 zatiaľ nie je; dohodne sa v každom tíme</td></tr>
+          <tr><td>Znalostný skill AI ťažšie zachytí</td><td>Popis obsahuje slová, ktoré ľudia naozaj používajú: bežné pojmy, skratky, kódy a typické situácie. Keď AI odpovie na odbornú otázku bez otvorenia skillu, chýbajúce slová z tej otázky sa do popisu doplnia. Príklad pod tabuľkou.</td><td>§6.2 bod 9</td></tr>
+          <tr><td>Znalostný skill sa ťažšie kontroluje</td><td>Znalostný skill má tri poistky: kontrolné otázky so známymi odpoveďami, odkazy na zdroj pri dôležitých tvrdeniach a časť o tom, čo sa nevie alebo nie je rozhodnuté. Príklad pod tabuľkou.</td><td>§6.2 body 5, 6 a 8</td></tr>
+          <tr><td>Veľa skillov</td><td>Pri kontrole sa prekrývajúce sa skilly zlúčia a nepoužívané odstránia, aby popisy zostali odlíšiteľné.</td><td>§6.2 bod 2</td></tr>
+          <tr><td>Prekrývanie skillov</td><td>Každý údaj je zapísaný na jednom mieste; ostatné skilly naň odkazujú.</td><td>§6.2 bod 7</td></tr>
+          <tr><td>Skilly usmerňujú, nevynucujú</td><td>Hranicu, ktorú nikdy nemožno prekročiť, chránia prístupové práva a technické zábrany, nie text skillu.</td><td>mimo skillov; nastavuje IT</td></tr>
+          <tr><td>Citlivý obsah</td><td>Celofiremné, tímové a osobné skilly sa držia oddelene. Žiadne zákaznícke dáta ani záznamy o skutočných osobách; príklady sú vymyslené. Osobný profil si človek píše dobrovoľne a zostáva u neho.</td><td>§6.2 bod 10</td></tr>
+          <tr><td>Firemné pravidlá</td><td>Pred zdieľaním vlastník skill porovná s firemnou politikou využívania AI a pravidlami ochrany údajov; kde to pravidlá vyžadujú, vyžiada si schválenie.</td><td>v §6 zatiaľ nie je; riadi sa firemnou politikou</td></tr>
+          <tr><td>Skilly zvonka</td><td>Skill zvonka sa prečíta celý skôr, než si ho ktokoľvek pridá.</td><td>§6.2 bod 4</td></tr>
+          <tr><td>Vlastník odíde</td><td>Skill pri odovzdaní dostane nového vlastníka, alebo sa vyradí.</td><td>§6.2 bod 2</td></tr>
+          <tr><td>„Moju prácu zvládnu aj iní“ znie aj ako „dá sa ma nahradiť“</td><td>Autorstvo je v každom skille viditeľné a vedenie ho oceňuje.</td><td>§6.2 bod 13</td></tr>
+          <tr><td>Hodnota sa ťažko ukazuje</td><td>Ušetrený čas sa zaznamenáva. Ostatným sa ukazuje tá istá otázka zodpovedaná so skillom a bez neho.</td><td>§6.2 bod 13</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>Príklady k trom riadkom</h3>
+    <p><strong>Skill je zhrnutie, nie zdroj.</strong> Skill údaje zo zdroja prepisuje v skrátenej podobe; pri prepise sa môže stať chyba, alebo sa zdroj medzičasom zmení. <em>Príklad:</em> skill uvádza základnú sadzbu pre daný rok. Kým sa ňou prepočítajú úhrady, sadzba sa overí v platnom cenníku, na ktorý skill odkazuje. Bežné vysvetlenie pojmu sa overovať nemusí.</p>
+    <p><strong>Znalostný skill AI ťažšie zachytí.</strong> AI otvorí skill len vtedy, keď v jeho popise nájde slová z otázky, a ľudia sa málokedy pýtajú odborným názvom témy. <em>Príklad:</em> kolega sa opýta „prečo má tento prípad nižšiu úhradu, keď pacient ležal dlhšie?“ a slovo DRG nepovie. Ak sú v popise len slová „SK-DRG, zaraďovanie“, skill sa neotvorí. Po doplnení „úhrada za hospitalizáciu, ošetrovacia doba, prípad“ sa otvorí.</p>
+    <p><strong>Znalostný skill sa ťažšie kontroluje.</strong> Pri postupe je chyba vidieť hneď: krok zlyhá. Nesprávny fakt nezlyhá, AI ho len zopakuje. <em>Príklad:</em> kontrolná otázka „Koľko položiek má riadok dávky 751d?“ má známu odpoveď 29. Ak AI po úprave skillu odpovie inak, úprava niečo pokazila. V časti o neznámom môže stáť: „Či sa pravidlo vzťahuje aj na opravné dávky, nie je potvrdené.“ AI potom medzeru nedoplní odhadom.</p>
+  </section>
+
+  <section class="stack">
+    <h2>Poznámka</h2>
+    <p>Zdroj bol čítaný 2026-11-12.</p>
+  </section>
+
+  <section class="footnotes">
+    <ol>
+      <li id="fn1-sk" value="1"><strong>Kedy AI popis nevidí</strong> (Claude Code; iné nástroje sa správajú inak). Zoznam skillov, ktorý AI dostáva, má obmedzenú veľkosť: 1 % kontextového okna modelu. Limit sa dá zmeniť nastavením <code>skillListingBudgetFraction</code> alebo premennou prostredia <code>SLASH_COMMAND_TOOL_CHAR_BUDGET</code>. Zoznam vždy obsahuje názov každého skillu. Keď sa popisy nezmestia, Claude Code niektoré vynechá, počnúc skillmi, ktoré sa spúšťajú najmenej, a upozornenie zapíše iba do ladiaceho logu. Skill, ktorý prišiel o popis, sa dá vybrať už len podľa názvu. Okrem toho sa popis spolu s nepovinným poľom <code>when_to_use</code> v zozname skracuje na 1 536 znakov a skill označený <code>disable-model-invocation: true</code> v zozname popis nemá vôbec; otvorí sa, iba keď ho zavolá človek. Dôsledok pre tento dokument: pri veľkom počte nainštalovaných skillov sa ako prvý stane neviditeľným znalostný skill, ktorý sa otvára zriedka, a používateľa na to nič neupozorní. Zdroj: dokumentácia Claude Code, „Extend Claude with skills“, <a href="https://code.claude.com/docs/en/skills">https://code.claude.com/docs/en/skills</a>.</li>
+    </ol>
+  </section>
+
+  <p class="sitefoot">@panthea.sk</p>
+</div>
+
+<!-- ============================== ENGLISH ============================== -->
+<div class="lang" id="lang-en" lang="en">
+
+  <header class="stack">
+    <h1>Skills as company knowledge</h1>
+    <p class="lead">Summary of a brainstorming session, 2026-11-12. It records an opinion formed from practice, not a measured result. The evidence is the author's own work with two sets of skills for an AI assistant (<code>strix-health</code>, knowledge of Slovak healthcare, and <code>ps-metodika</code>, a working method). Statements below are the author's experience unless a source is given.</p>
+  </header>
+
+  <section class="stack">
+    <h2>1  The main idea</h2>
+    <p>A skill is a text file for an AI assistant. It has a short description, which the AI normally sees<sup class="fnref"><a href="#fn1-en">1</a></sup>, and a body, which the AI opens when the description matches the task. Larger reference material is opened only when needed. Nothing in the format requires steps or code.</p>
+    <p>The word "skill" suggests an ability to do something, so people look for tasks to automate and overlook the knowledge those tasks rest on. A skill does not have to be a procedure. It can be a <strong>knowledge map</strong>: what is true in a domain, what the terms mean, where the traps are. Such a map keeps the AI between the borders of the domain. Even many capable people have not realised this.</p>
+    <div class="tbl-wrap">
+      <table class="cols3">
+        <thead><tr><th>Kind of skill</th><th>What it contains</th><th>Comparable to</th></tr></thead>
+        <tbody>
+          <tr><td>Procedure</td><td>steps, commands, templates for one recurring task</td><td>a work instruction</td></tr>
+          <tr><td>Knowledge map</td><td>facts, terms, rules, traps, open questions of a domain</td><td>an experienced colleague sitting next to you</td></tr>
+          <tr><td>Glossary</td><td>the company's terms, abbreviations and codes with their meaning</td><td>a company dictionary</td></tr>
+          <tr><td>Personal profile</td><td>role, real skills and knowledge, working style of one person</td><td>an introduction to a new co-worker</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>A procedure improves one task. A knowledge map can improve many tasks in its domain, and a short, focused map works better than a complete one. The AI can often work out a procedure for itself; it usually cannot work out the company's own facts.</p>
+  </section>
+
+  <section class="stack">
+    <h2>2  What skills can be used for</h2>
+    <ul class="plain">
+      <li><strong>Domain knowledge</strong> that a general AI lacks because it is local, niche or changes every year (for example Slovak healthcare reimbursement and its data formats).</li>
+      <li><strong>Glossary:</strong> the terms, abbreviations and codes a company or a team uses, each with one agreed meaning. The AI then reads and writes the company's language instead of guessing it.</li>
+      <li><strong>Keeping the AI inside the lines:</strong> what a term means, what counts as an error, what is normal in the data.</li>
+      <li><strong>Recurring procedures</strong> and the parts of a process that can be automated.</li>
+      <li><strong>Personal profile:</strong> who the AI works for, in what position and with what real skills.</li>
+      <li><strong>Any role, not only IT:</strong> CEO, logistics, HR, marketing, sales. Key people have been taught to write skills that are simpler than an AI specialist would write, yet sufficient to automate part of a process.</li>
+    </ul>
+  </section>
+
+  <section class="stack">
+    <h2>3  What the company can achieve</h2>
+    <ul class="plain">
+      <li><strong>Less explaining.</strong> The context no longer has to be typed into every request, or only a small part of it.</li>
+      <li><strong>Shared knowledge.</strong> One source with a history of changes serves every project and every colleague who adds it to their assistant.</li>
+      <li><strong>Cover during absence.</strong> Others can do the work while a person is on holiday or off work, for the part of the knowledge that is written in the skill.</li>
+      <li><strong>Faster onboarding.</strong> A newcomer's AI assistant knows the written part of the domain from the first day.</li>
+      <li><strong>Common language.</strong> People and their AI assistants use a term in the same meaning across teams, because the meaning comes from one glossary.</li>
+      <li><strong>Collective memory.</strong> The skills together are organised text, meaning knowledge arranged by topic that a machine can read, describing the company's processes and knowledge.</li>
+      <li><strong>Reuse later.</strong> The text is plain and readable, so other AI models, skills, projects and tools can use it. How a tool picks a skill up differs between tools; the knowledge itself moves with the text.</li>
+    </ul>
+  </section>
+
+  <section class="stack">
+    <h2>4  What improves over time</h2>
+    <ul class="plain">
+      <li><strong>Every next skill, project and procedure is easier to create,</strong> because the AI already knows the person, their position, their real skills and the domain.</li>
+      <li><strong>The value grows with use.</strong> The more a person works with the AI, the more they value the skills: the context that used to be typed into each request is already there. The benefit is mostly work that no longer has to be done.</li>
+      <li><strong>Errors can surface sooner than in a wiki.</strong> In the author's experience a wrong wiki page can sit unnoticed for years. A skill is used daily, so a wrong fact shows up in results. This helps only when the feedback process in §6.1 exists; without it the error spreads (§5).</li>
+    </ul>
+  </section>
+
+  <section class="stack">
+    <h2>5  Caveats</h2>
+    <div class="tbl-wrap">
+      <table class="cols2">
+        <thead><tr><th>Caveat</th><th>Why it matters</th></tr></thead>
+        <tbody>
+          <tr><td>Most people will not write skills on their own initiative</td><td>They lack the time and the habit of structuring knowledge. Some also do not trust what will happen with the knowledge they share (see the row on being replaced).</td></tr>
+          <tr><td>Staleness</td><td>An outdated skill can be worse than none, because the AI trusts it.</td></tr>
+          <tr><td>A silent error spreads to everyone</td><td>Context typed by hand is seen by the person each time. The content of a skill is not re-read, and one wrong rule in a shared skill is repeated by every colleague's AI.</td></tr>
+          <tr><td>A skill is a summary, not the source</td><td>A summarised number or code can be wrong.</td></tr>
+          <tr><td>A skill does not replace the expert's judgment</td><td>A substitute or a newcomer gets only what was written down and must still be able to check the result. Relying on the AI alone can weaken people's own expertise, most clearly while they are still learning.</td></tr>
+          <tr><td>A knowledge map is harder for the AI to pick up</td><td>A procedure has an obvious moment. A knowledge map must be opened whenever the topic appears, even when nobody names it, and the AI decides that from the description alone.</td></tr>
+          <tr><td>A knowledge map is harder to check</td><td>A wrong fact looks as convincing as a right one.</td></tr>
+          <tr><td>Many skills</td><td>Descriptions share limited space, and those of the least used skills are dropped first<sup class="fnref"><a href="#fn1-en">1</a></sup>, so a rarely opened knowledge map can lose its description. As the number grows, the choice becomes less reliable: most often no skill is opened, less often the wrong one. Skills that resemble each other do more harm than the number itself.</td></tr>
+          <tr><td>Overlap between skills</td><td>Two skills that say slightly different things about one topic can confuse the AI more than no skill.</td></tr>
+          <tr><td>Skills guide; they do not enforce</td><td>Text works for judgment. A line that must never be crossed (customer data, live systems, sending data outside) needs access rights and technical blocks.</td></tr>
+          <tr><td>Sensitive content</td><td>Knowledge of HR, sales and management includes personal data, salaries, client terms and strategy. A personal profile is personal data.</td></tr>
+          <tr><td>Company rules</td><td>The company's AI policy and data protection rules decide which AI service may be used and what may be put into it.</td></tr>
+          <tr><td>Skills from outside</td><td>A skill taken from the internet can carry harmful instructions or programs.</td></tr>
+          <tr><td>The owner leaves</td><td>A skill without an owner is no longer reviewed and goes stale.</td></tr>
+          <tr><td>"Others can do my work" also reads as "I can be replaced"</td><td>People then keep the valuable parts to themselves.</td></tr>
+          <tr><td>The value is hard to show</td><td>A knowledge map does nothing visible by itself.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="stack">
+    <h2>6  Processes that maintain quality</h2>
+    <h3>6.1  The two that matter most</h3>
+    <ol class="plain">
+      <li><strong>Periodic review.</strong> The owner reviews the skill at a fixed interval and whenever the domain changes. Review catches what changed in the world.</li>
+      <li><strong>Feedback at almost no cost.</strong> Whoever notices a wrong answer says so in the same conversation, and the correction is proposed to the owner. Feedback catches what was wrong from the start. If reporting needs a form or a ticket, people fix the answer for themselves and the skill stays wrong.</li>
+    </ol>
+    <h3>6.2  Supporting practices</h3>
+    <ol class="plain">
+      <li><strong>Owner and validity.</strong> Every skill names its owner and author, and states which version of the source it is valid for and when it was last verified.</li>
+      <li><strong>Handover and retirement.</strong> When the owner leaves or changes role, the skill gets a new owner or is retired. At review, skills that overlap are merged and unused ones removed, so that descriptions stay distinct.</li>
+      <li><strong>Anyone proposes, the owner approves.</strong> Users do not change a shared skill directly.</li>
+      <li><strong>Second reader for shared skills.</strong> A skill used by more people is read by one more person before release. A skill from outside is read in full before anyone adds it.</li>
+      <li><strong>Test questions.</strong> Each knowledge map has a short list of questions with known answers, asked again after every change.</li>
+      <li><strong>Sources and citations.</strong> A number, code or rule that will be used in a calculation, in a program or in a decision carries a reference to its source and is verified there before use.</li>
+      <li><strong>One fact in one place.</strong> Other skills refer to it instead of repeating it. A term is defined once, in the glossary.</li>
+      <li><strong>Three parts in every knowledge map:</strong> what is true; what people commonly get wrong; what is unknown or undecided. The third part is meant to reduce confident guessing by the AI.</li>
+      <li><strong>Description tuned to real questions.</strong> When the AI answers a domain question without opening the skill, the description is corrected.</li>
+      <li><strong>Access by role.</strong> Company-wide, team and personal skills are kept apart. No customer data and no records of real persons go into a skill; examples are made up. The exception is the personal profile: the person writes it voluntarily and for their own use, it stays that person's own skill, and it holds no data about other people. An employee's agreement alone is not a sufficient basis; the company rules (§5) apply.</li>
+      <li><strong>Large reference data stay outside the text.</strong> A long code list is looked up by a small program, not read.</li>
+      <li><strong>The AI drafts, the person approves.</strong> After a finished task the AI proposes a skill or a change to one; the person who owns the knowledge adds what the AI did not know, corrects the draft and approves it. The value is in those additions: a draft approved as it stands is worth little. This lowers the barrier for people who would not write a skill themselves.</li>
+      <li><strong>Credit and evidence.</strong> Authorship is visible and acknowledged by management. Time saved is recorded, and the same question answered with and without the skill is shown to others.</li>
+    </ol>
+  </section>
+
+  <section class="stack">
+    <h2>7  How each caveat is mitigated</h2>
+    <p>Every caveat from §5 with its mitigation and the process in §6 that carries it.</p>
+    <div class="tbl-wrap">
+      <table class="cols3">
+        <thead><tr><th>Caveat</th><th>Mitigation</th><th>Process</th></tr></thead>
+        <tbody>
+          <tr><td>Most people will not write skills on their own initiative</td><td>Key people are taught to write skills. After a finished task the AI drafts the skill; the person adds what the AI did not know, corrects and approves it.</td><td>§6.2 item 12</td></tr>
+          <tr><td>Staleness</td><td>Every skill states the version of its source and the date it was last verified. The owner reviews it at a fixed interval and whenever the domain changes.</td><td>§6.1 item 1, §6.2 item 1</td></tr>
+          <tr><td>A silent error spreads to everyone</td><td>Anyone who notices a wrong answer reports it in the same conversation. A shared skill is read by a second person before release and checked with test questions after every change.</td><td>§6.1 item 2, §6.2 items 4 and 5</td></tr>
+          <tr><td>A skill is a summary, not the source</td><td>A number, code or rule that will be used in a calculation, in a program or in a decision carries a reference to its source and is verified there before use. Example below the table.</td><td>§6.2 item 6</td></tr>
+          <tr><td>A skill does not replace the expert's judgment</td><td>The result is checked by a person who can judge it. Work covered during an absence is limited to what the skill describes, and decisions outside it wait for the expert.</td><td>not yet a process in §6; to be agreed per team</td></tr>
+          <tr><td>A knowledge map is harder for the AI to pick up</td><td>The description contains the words people really use: everyday terms, abbreviations, codes and typical situations. When the AI answers a domain question without opening the skill, the missing words from that question are added to the description. Example below the table.</td><td>§6.2 item 9</td></tr>
+          <tr><td>A knowledge map is harder to check</td><td>A knowledge map has three safeguards: test questions with known answers, references to the source for important claims, and a part that says what is unknown or undecided. Example below the table.</td><td>§6.2 items 5, 6 and 8</td></tr>
+          <tr><td>Many skills</td><td>At review, overlapping skills are merged and unused ones removed, so that descriptions stay distinct.</td><td>§6.2 item 2</td></tr>
+          <tr><td>Overlap between skills</td><td>Each fact is written in one place; other skills refer to it.</td><td>§6.2 item 7</td></tr>
+          <tr><td>Skills guide; they do not enforce</td><td>A line that must never be crossed is protected by access rights and technical blocks, not by the text of a skill.</td><td>outside the skills; set up by IT</td></tr>
+          <tr><td>Sensitive content</td><td>Company-wide, team and personal skills are kept apart. No customer data and no records of real persons; examples are made up. A personal profile is written voluntarily by its person and stays with them.</td><td>§6.2 item 10</td></tr>
+          <tr><td>Company rules</td><td>Before a skill is shared, the owner checks it against the company's AI policy and data protection rules; approval is obtained where the rules require it.</td><td>not yet a process in §6; follows company policy</td></tr>
+          <tr><td>Skills from outside</td><td>A skill from outside is read in full before anyone adds it.</td><td>§6.2 item 4</td></tr>
+          <tr><td>The owner leaves</td><td>The skill gets a new owner at handover, or is retired.</td><td>§6.2 item 2</td></tr>
+          <tr><td>"Others can do my work" also reads as "I can be replaced"</td><td>Authorship is visible in every skill and acknowledged by management.</td><td>§6.2 item 13</td></tr>
+          <tr><td>The value is hard to show</td><td>Time saved is recorded. The same question answered with and without the skill is shown to others.</td><td>§6.2 item 13</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>Examples for three of the rows</h3>
+    <p><strong>A skill is a summary, not the source.</strong> A skill copies facts from the source in a shortened form; a mistake can happen in copying, or the source can change later. <em>Example:</em> the skill gives the base rate for a year. Before reimbursements are recalculated with it, the rate is checked in the valid price list the skill refers to. An ordinary explanation of a term does not need checking.</p>
+    <p><strong>A knowledge map is harder for the AI to pick up.</strong> The AI opens a skill only when it finds words from the question in the description, and people rarely ask with the official name of the topic. <em>Example:</em> a colleague asks "why is the payment for this case lower when the patient stayed longer?" and never says DRG. If the description holds only "SK-DRG, grouping", the skill is not opened. After "payment for a hospital stay, length of stay, case" is added, it is.</p>
+    <p><strong>A knowledge map is harder to check.</strong> In a procedure an error shows at once: a step fails. A wrong fact does not fail; the AI repeats it. <em>Example:</em> the test question "How many items does a row of batch 751d have?" has the known answer 29. If the AI answers differently after the skill was changed, the change broke something. The part on unknowns can say: "Whether the rule also applies to corrective batches is not confirmed." The AI then does not fill the gap with a guess.</p>
+  </section>
+
+  <section class="stack">
+    <h2>Note</h2>
+    <p>The source was read on 2026-11-12.</p>
+  </section>
+
+  <section class="footnotes">
+    <ol>
+      <li id="fn1-en" value="1"><strong>When the AI does not see a description</strong> (Claude Code; other tools differ). The list of skills given to the AI has a size limit of 1% of the model's context window. The limit can be changed with the setting <code>skillListingBudgetFraction</code> or the environment variable <code>SLASH_COMMAND_TOOL_CHAR_BUDGET</code>. The list always contains the name of every skill. When the descriptions do not fit, Claude Code drops some of them, starting with the skills that are invoked least, and writes a warning only to the debug log. A skill that has lost its description can be chosen by its name alone. In addition, the description together with the optional field <code>when_to_use</code> is cut at 1,536 characters in the list, and a skill marked <code>disable-model-invocation: true</code> has no description in the list at all; it opens only when a person calls it. The consequence for this document: with many skills installed, a knowledge map that is opened rarely is the first to become invisible, and nothing tells the user. Source: Claude Code documentation, "Extend Claude with skills", <a href="https://code.claude.com/docs/en/skills">https://code.claude.com/docs/en/skills</a>.</li>
+    </ol>
+  </section>
+
+  <p class="sitefoot">@panthea.sk</p>
+</div>
+
+</div>
+
+<script>
+(function () {
+  var blocks = { sk: document.getElementById('lang-sk'), en: document.getElementById('lang-en') };
+  var buttons = { sk: document.getElementById('btn-sk'), en: document.getElementById('btn-en') };
+  function show(lang) {
+    if (!blocks[lang]) lang = 'en';
+    for (var k in blocks) {
+      blocks[k].hidden = k !== lang;
+      buttons[k].setAttribute('aria-pressed', String(k === lang));
+    }
+    document.documentElement.lang = lang;
+  }
+  // a footnote link (#fn1-sk) keeps its own language
+  function fromHash() { var h = location.hash.replace('#', ''); var m = h.match(/-(sk|en)$/); show(m ? m[1] : (h || 'en')); }
+  for (var k in buttons) {
+    buttons[k].addEventListener('click', function () {
+      var lang = this.getAttribute('data-lang');
+      show(lang);
+      try { location.hash = lang; } catch (e) {}
+    });
+  }
+  window.addEventListener('hashchange', fromHash);
+  fromHash();
+})();
+</script>
+
+</body></html>

@@ -1,4 +1,4 @@
-"""Statická kontrola pluginu b6 (K1-K11).
+"""Statická kontrola pluginu b6 (K1-K12).
 
 Spustenie: python3 -I testy/kontrola.py   (Windows: py -3 -I testy/kontrola.py)
 Výstup: riadok "OK K<n>" alebo "FAIL K<n>: <dôvod>"; exit 0 iba ak je všetko OK.
@@ -14,10 +14,11 @@ KOREN = Path(__file__).resolve().parent.parent
 PLUGIN = KOREN / "b6"
 DOCS = PLUGIN / "docs"
 SPRIEVODCA = DOCS / "project-memory.html"
-SPRIEVODCA_SKILLY = DOCS / "skills-as-company-knowledge.html"
+SPRIEVODCA_SKILLY = DOCS / "skills-as-personal-and-company-knowledge.html"
 SPRIEVODCA_START = DOCS / "getting-started.html"
+SPRIEVODCA_KDE = DOCS / "what-loads-when.html"
 SPRIEVODCOVIA_TITLE = [(SPRIEVODCA, "Project memory"), (SPRIEVODCA_SKILLY, "Skills as company knowledge"),
-                       (SPRIEVODCA_START, "Getting started with b6")]
+                       (SPRIEVODCA_START, "Getting started with b6"), (SPRIEVODCA_KDE, "What loads when")]
 TEMPLATES = PLUGIN / "skills" / "workflow" / "references" / "templates.md"
 HOOKS = PLUGIN / "hooks" / "hooks.json"
 
@@ -29,8 +30,8 @@ MAX_ZNAKOV_POPISU = 1024
 ZAKAZANE_SLOVA = ["pracovnik", "recenzent", "orchestrator", "SUHRN", "zadania", "fable"]
 SLOVENSKA_DIAKRITIKA = "áäčďéíĺľňóôŕšťúýž"
 
-STAVY_EN = ["proposed", "approved", "ready to try", "met", "partly met", "cancelled"]
-STAVY_SK = ["návrh", "schválená", "na vyskúšanie", "splnená", "čiastočne splnená", "zrušená"]
+STAVY_EN = ["proposed", "approved", "met", "partly met", "cancelled"]
+STAVY_SK = ["návrh", "schválená", "splnená", "čiastočne splnená", "zrušená"]
 STLPCE_POZIADAVIEK_EN = ["ID", "Priority", "Requirement", "Source", "Acceptance criterion", "Status", "Evidence"]
 STLPCE_POZIADAVIEK_SK = ["ID", "Priorita", "Požiadavka", "Zdroj", "Kritérium splnenia", "Stav", "Dôkaz"]
 STLPCE_ULOH_EN = ["Task", "Who acts", "What blocks it", "Inputs", "Next step"]
@@ -182,7 +183,7 @@ def k2():
     cesty = [PLUGIN / "skills" / s / "SKILL.md" for s in SKILLY]
     cesty += [TEMPLATES, PLUGIN / "skills" / "workflow" / "references" / "models.md"]
     cesty += [PLUGIN / "agents" / f"{a}.md" for a in AGENTI]
-    cesty += [PLUGIN / n for n in ("README.md", "LICENSE", "NOTICE")] + [SPRIEVODCA, SPRIEVODCA_SKILLY, SPRIEVODCA_START, HOOKS]
+    cesty += [PLUGIN / n for n in ("README.md", "LICENSE", "NOTICE")] + [SPRIEVODCA, SPRIEVODCA_SKILLY, SPRIEVODCA_START, SPRIEVODCA_KDE, HOOKS]
     chybajuce = [str(c.relative_to(PLUGIN)) for c in cesty if not c.is_file()]
     return "chýbajú: " + ", ".join(chybajuce) if chybajuce else ""
 
@@ -320,11 +321,11 @@ def k7():
 
 
 def k8():
-    """K8: sprievodca má hlavičku Intent/Zámer a stav ready to try, a neobsahuje cesty zo starého balíka."""
+    """K8: sprievodca má hlavičku Intent/Zámer a neobsahuje cesty zo starého balíka."""
     if not SPRIEVODCA.is_file():
         return "sprievodca chýba"
     text = cti(SPRIEVODCA)
-    chyby = [f"chýba '{s}'" for s in ("Intent", "Out of scope", "Zámer", "Mimo rozsahu", "ready to try", "na vyskúšanie")
+    chyby = [f"chýba '{s}'" for s in ("Intent", "Out of scope", "Zámer", "Mimo rozsahu")
              if s not in text]
     chyby += [f"obsahuje '{s}'" for s in ("ctx/plans", "-design.md") if s in text]
     return "; ".join(chyby)
@@ -357,7 +358,7 @@ ZAKAZANE_SLOVA_BEZ_VELKOSTI = ("fable",)
 
 
 def k10():
-    """K10: všetci traja sprievodcovia majú obe jazykové časti, správny title a neobsahujú názvy klienta ani metodiky."""
+    """K10: všetci štyria sprievodcovia majú obe jazykové časti, správny title a neobsahujú názvy klienta ani metodiky."""
     chyby = []
     for cesta, title in SPRIEVODCOVIA_TITLE:
         meno = cesta.name
@@ -401,8 +402,71 @@ def k11():
     return "; ".join(chyby)
 
 
+AGENT_REVIEWER = PLUGIN / "agents" / "reviewer.md"
+SKILL_BUILD = PLUGIN / "skills" / "build" / "SKILL.md"
+SKILL_WORKFLOW = PLUGIN / "skills" / "workflow" / "SKILL.md"
+ZASTARANE_FRAZY = ("ready to try", "na vyskúšanie", "Try R-")
+
+
+def sekcia_sablony(text, nazov):
+    """Text sekcie `## <názov>` v templates.md po ďalší nadpis druhej úrovne mimo blokov ```."""
+    out = []
+    v_sekcii = v_bloku = False
+    for riadok in text.splitlines():
+        if riadok.lstrip().startswith("```"):
+            v_bloku = not v_bloku
+        elif not v_bloku and riadok.startswith("## "):
+            if v_sekcii:
+                break
+            v_sekcii = riadok[3:].strip() == nazov
+            continue
+        if v_sekcii:
+            out.append(riadok)
+    return "\n".join(out)
+
+
+def obsahuje_cesta(cesta, slova):
+    """Ako `obsahuje`, ale hlásenie uvádza cestu voči b6/ (ako K2)."""
+    meno = str(cesta.relative_to(PLUGIN)) if PLUGIN in cesta.parents else cesta.name
+    return [m.replace(cesta.name + ":", meno + ":", 1) for m in obsahuje(cesta, slova)]
+
+
+def k12():
+    """K12: súlad s požiadavkami R-025, R-026, R-028, R-030 a R-031 (nálezy z predchádzajúcich recenzií, nedá sa overiť,
+    sprievodca kedy sa čo načíta, žiadne zastarané frázy, jazyk dokumentov)."""
+    chyby = []
+    sablony = cti(TEMPLATES) if TEMPLATES.is_file() else ""
+    sekcia_review = sekcia_sablony(sablony, "review")
+    # R-025
+    chyby += [f"R-025: {m}" for m in obsahuje_cesta(AGENT_REVIEWER, ["Earlier findings"])]
+    if "Earlier findings" not in sekcia_review:
+        chyby.append("R-025: sekcia review v templates.md neobsahuje 'Earlier findings'")
+    chyby += [f"R-025: {m}" for m in obsahuje_cesta(SKILL_BUILD, ["earlier `review-"])]
+    # R-026
+    for cesta in (AGENT_REVIEWER, TEMPLATES, SKILL_BUILD):
+        chyby += [f"R-026: {m}" for m in obsahuje_cesta(cesta, ["cannot verify"])]
+    # R-028
+    if not SPRIEVODCA_KDE.is_file():
+        chyby.append("R-028: docs/what-loads-when.html chýba")
+    for cesta in (PLUGIN / "README.md", SKILL_WORKFLOW):
+        chyby += [f"R-028: {m}" for m in obsahuje_cesta(cesta, ["what-loads-when"])]
+    # R-030: všetky textové súbory v b6/ vrátane docs/ (aj vygenerované kópie sprievodcov *.sk.md, *.en.md); binárne (.pdf) sa preskakujú.
+    for c in sorted(PLUGIN.rglob("*")):
+        if not c.is_file() or c.suffix == ".pdf":
+            continue
+        try:
+            text = cti(c)
+        except (OSError, UnicodeDecodeError):
+            continue
+        chyby += [f"R-030: {c.relative_to(PLUGIN)} obsahuje '{f}'" for f in ZASTARANE_FRAZY if f.lower() in text.lower()]
+    # R-031
+    chyby += [f"R-031: {m}" for m in obsahuje_cesta(PLUGIN / "skills" / "brainstorming" / "SKILL.md", ["always ask which language"])]
+    chyby += [f"R-031: {m}" for m in obsahuje_cesta(PLUGIN / "skills" / "plan" / "SKILL.md", ["document language written in `CLAUDE.md`"])]
+    return "; ".join(chyby)
+
+
 KONTROLY = [("K1", k1), ("K2", k2), ("K3", k3), ("K4", k4), ("K5", k5), ("K6", k6), ("K7", k7), ("K8", k8),
-            ("K9", k9), ("K10", k10), ("K11", k11)]
+            ("K9", k9), ("K10", k10), ("K11", k11), ("K12", k12)]
 
 
 def main():

@@ -15,7 +15,7 @@ You do one step of the work, exactly as the brief says. Your brief is in the pro
 2. If the brief names `docs/architecture.md`, update it in the same change as the code. Write only what is in the code now:
    what holds, what follows from it for future changes, a link to the decision. Never write plans or wishes there.
 3. Never change anything in `ctx/` or `docs/decisions/`, except files in the run folder
-   (`ctx/plans/<YYYY-MM-DD>-<slug>/`) or a decision record that the brief names. The owner and the main chat do the rest.
+   (`ctx/plans/<YYYY-MM-DD>-<slug>/`), a decision record that the brief names, or a file in `ctx/` or `docs/` that the brief names explicitly as allowed (for example to fix a link at wrap-up). The owner and the main chat do the rest.
 4. Do not settle conflicts or choices. If the brief, the requirements or the files disagree, or something is unclear, stop on
    that point, list it in **Open** with a suggested default, and continue with the rest.
 5. Do not start other agents.
@@ -25,9 +25,18 @@ You do one step of the work, exactly as the brief says. Your brief is in the pro
    mention it in **Open**.
 8. Never read or print secrets (passwords, keys, tokens, environment files). Never put personal data into reports.
 9. No git commands that change anything (commit, add, stash, branch). The main chat commits.
-10. Work only inside the project folder. Never write files outside it, not even in a parent or temporary folder, unless
-   the brief names it. Delete helper files you made (scripts, test data) before you report, unless the brief keeps them.
+10. Work only inside the project folder. Never write files outside it, not even in a temporary, home or parent folder.
+   Never list or read folders outside the project either (reading the plugin's own files is allowed). Prefer running commands directly. Helper files and trial copies (scripts, test data) go only to
+   `<run folder>/scratch/` named in the brief; delete them before you report, unless the brief keeps them. Never delete
+   files you did not create (for example `scratch/.gitignore`); when cleaning `scratch/`, delete only your own copies.
 11. Write code and documents simply, so that a non-programmer can follow them. Match the style of the existing files.
+12. A refused command. If only its form is refused (compound command, `cd` chain, shell variable), you may rewrite it once
+   as simple single commands with the same effect; if the rewrite is refused too, it counts as denied. If a shell command
+   that edits a project file is refused, you may make the same change to that file with Read, Edit or Write. If any other
+   command or action is denied, stop and skip that part. A script or another interpreter (`python -c`, PowerShell) doing
+   the refused thing, or a second rewrite, is a variant and not allowed; never change permissions or settings. List every
+   refused command in **Open**, a second refusal too: the command, why it was needed and how it ended (rewritten once,
+   done with Edit/Write, skipped), so that the main chat can ask the owner.
 
 ## Report
 

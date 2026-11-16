@@ -1,0 +1,288 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>What loads when</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* One reading column. Colours: blue = always loaded, orange = loaded when used, teal = separate context (agents). */
+:root {
+  --bg: #f5f7f9; --surface: #ffffff; --fg: #17212b; --muted: #586673; --line: #d7dfe5;
+  --req: #3f4fc4; --req-tint: #eceefb;
+  --task: #a35f00; --task-text: #8a5000; --task-tint: #fbf1df;
+  --arch: #0b756c; --arch-tint: #e1f3f1;
+  --font-display: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Inter", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", Consolas, "Courier New", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #11171c; --surface: #19212a; --fg: #e5ebf0; --muted: #9babb7; --line: #2d3943;
+    --req: #9aa6ff; --req-tint: #232a52;
+    --task: #f0b558; --task-text: #f0b558; --task-tint: #3b2c10;
+    --arch: #62d2c5; --arch-tint: #123733;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #11171c; --surface: #19212a; --fg: #e5ebf0; --muted: #9babb7; --line: #2d3943;
+  --req: #9aa6ff; --req-tint: #232a52;
+  --task: #f0b558; --task-text: #f0b558; --task-tint: #3b2c10;
+  --arch: #62d2c5; --arch-tint: #123733;
+  color-scheme: dark;
+}
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 16px; line-height: 1.6; }
+.page {
+  max-width: 1200px; margin: 0 auto; padding-block: 28px 72px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; flex-direction: column; gap: 28px;
+}
+.lang { display: flex; flex-direction: column; gap: 40px; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; line-height: 1.2; }
+h1 { font-size: clamp(1.8rem, 5vw, 2.5rem); font-weight: 600; letter-spacing: -0.01em; }
+h2 { font-size: 1.45rem; font-weight: 600; }
+h3 { font-size: 1.05rem; font-weight: 600; }
+p { margin: 0; max-width: 68ch; }
+code { font-family: var(--font-mono); font-size: 0.86em; background: var(--line); padding: 1px 5px; border-radius: 3px; overflow-wrap: anywhere; }
+.eyebrow { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
+.stack { display: flex; flex-direction: column; gap: 16px; }
+.lead { font-size: 1.1rem; color: var(--muted); }
+
+.switch { display: flex; justify-content: flex-end; gap: 4px; }
+.switch button { font: 600 0.8rem var(--font-body); letter-spacing: 0.06em; color: var(--muted); background: transparent; border: 1px solid var(--line); border-radius: 4px; padding: 6px 12px; cursor: pointer; }
+.switch button[aria-pressed="true"] { color: var(--bg); background: var(--fg); border-color: var(--fg); }
+.switch button:focus-visible { outline: 2px solid var(--req); outline-offset: 2px; }
+
+.req { --c: var(--req); --t: var(--req-tint); }
+.task { --c: var(--task); --t: var(--task-tint); }
+.arch { --c: var(--arch); --t: var(--arch-tint); }
+
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-top: 4px solid var(--c); border-radius: 8px; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; }
+.card .tag { align-self: flex-start; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--c); background: var(--t); border-radius: 4px; padding: 2px 8px; }
+.card p { font-size: 0.95rem; }
+.tbl-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 0.92rem; }
+th, td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+th { font-family: var(--font-display); font-size: 0.8rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); background: var(--bg); }
+tr:last-child td { border-bottom: 0; }
+td.moment { font-weight: 600; white-space: nowrap; }
+.pill { display: inline-block; font-size: 0.78rem; font-weight: 600; border-radius: 4px; padding: 1px 7px; margin: 0 4px 4px 0; color: var(--c); background: var(--t); }
+ul.plain { margin: 0; padding-left: 1.2rem; display: flex; flex-direction: column; gap: 8px; max-width: 68ch; }
+footer { border-top: 1px solid var(--line); padding-top: 16px; font-size: 0.85rem; color: var(--muted); }
+</style>
+
+<div class="page">
+
+<div class="switch" role="group" aria-label="Jazyk / Language">
+  <button type="button" id="btn-sk" data-lang="sk" aria-pressed="false">SK</button>
+  <button type="button" id="btn-en" data-lang="en" aria-pressed="true">EN</button>
+</div>
+
+<!-- ============================== SLOVENSKY ============================== -->
+<div class="lang" id="lang-sk" lang="sk" hidden>
+
+  <section class="stack">
+    <span class="eyebrow">Sprievodca · plugin b6</span>
+    <h1>Čo sa načíta kedy</h1>
+    <p class="lead">Claude si v jednom chate pamätá len to, čo sa doň načítalo. Keď sa kontext zaplní, práca sa spomalí, zdražie a robí sa v nej viac chýb. Plugin b6 preto načítava veľa vecí až vtedy, keď sa naozaj použijú.</p>
+  </section>
+
+  <section class="stack">
+    <h2>Šesť pojmov</h2>
+    <div class="cards">
+      <div class="card req">
+        <span class="tag">Vždy</span>
+        <h3>Kontext</h3>
+        <p>Všetko, čo Claude v jednom chate drží v hlave: tvoje správy, jeho odpovede, prečítané súbory, výstupy príkazov. Rastie s každou správou; zmenší sa až pri zhustení (compact) alebo v novom chate. Plný kontext znamená pomalšiu a drahšiu prácu a viac chýb. Preto je lepšie čítať málo a až vtedy, keď to treba.</p>
+      </div>
+      <div class="card task">
+        <span class="tag">Pri použití</span>
+        <h3>Skill</h3>
+        <p>Textový súbor s postupom. Jeho krátky popis (v hlavičke) Claude vidí vždy. Celé telo <code>SKILL.md</code> sa načíta, až keď popis sedí na tvoju požiadavku. Obyčajná otázka, ktorá nemení súbory, ho nepotrebuje; otázky o stave práce alebo o postupe („čo je rozrobené“, „kde sme“, „ako to funguje“) <code>workflow</code> načítajú.</p>
+      </div>
+      <div class="card task">
+        <span class="tag">Pri kroku</span>
+        <h3>Referencia</h3>
+        <p>Súbor, ktorý skill otvorí iba v kroku, ktorý ho potrebuje: <code>templates.md</code> (tvary dokumentov) a <code>models.md</code> (úrovne modelov a odhad tokenov) v skille <code>workflow</code>. Pri jasnej drobnej zmene sa neotvorí vôbec.</p>
+      </div>
+      <div class="card arch">
+        <span class="tag">Vlastný kontext</span>
+        <h3>Agent</h3>
+        <p><code>worker</code> a <code>reviewer</code>. Každý začína s čistým kontextom: nevidí chat; okrem vlastných pokynov (<code>agents/&lt;meno&gt;.md</code>) a <code>CLAUDE.md</code> projektu dostane len zadanie (brief). Vráti najviac 20 riadkov, takže hlavný chat sa nezaplní. Reviewer je vždy nový, nevidel prácu workera.</p>
+      </div>
+      <div class="card req">
+        <span class="tag">Pri štarte</span>
+        <h3>Hook SessionStart</h3>
+        <p>Jeden riadok, ktorý sa vloží na začiatku chatu: plugin je aktívny a pred každou zmenou súboru sa má načítať skill <code>b6:workflow</code>. Nič iné sa tým nenačíta.</p>
+      </div>
+      <div class="card req">
+        <span class="tag">Podľa potreby</span>
+        <h3>Súbory projektu</h3>
+        <p><code>CLAUDE.md</code> sa načíta vždy. Priečinky <code>ctx/</code> (požiadavky, úlohy, plány) a <code>docs/</code> (architektúra, rozhodnutia) sa čítajú iba vtedy, keď ich krok potrebuje.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="stack">
+    <h2>Čo je v kontexte v ktorom momente</h2>
+    <p>Príklad: jedna zmena veľkosti M, od štartu chatu po uzavretie. Hlavný chat je kontext, ktorý rastie. Agenti pracujú vo vlastnom kontexte a do hlavného vrátia len krátku správu.</p>
+    <div class="tbl-wrap">
+      <table>
+        <tr><th>Moment</th><th>Pribudne do hlavného chatu</th><th>Nenačíta sa</th></tr>
+        <tr><td class="moment">Štart chatu</td>
+          <td><span class="pill req">vždy</span> <code>CLAUDE.md</code>, krátke popisy skillov a agentov, riadok z hooku SessionStart</td>
+          <td>telá skillov, referencie, <code>ctx/</code>, <code>docs/</code></td></tr>
+        <tr><td class="moment">Zadanie zmeny</td>
+          <td><span class="pill task">skill</span> telo <code>workflow</code>, ktorý na začiatku prečíta <code>ctx/TASKS.md</code>, ak existuje; potom podľa veľkosti M skill <code>brainstorming</code></td>
+          <td><code>plan</code>, <code>build</code>, <code>wrap-up</code>, agenti</td></tr>
+        <tr><td class="moment">Brainstorming</td>
+          <td><span class="pill task">referencia</span> <code>templates.md</code> pri zápise požiadaviek; <span class="pill req">súbory</span> <code>ctx/</code>, <code>docs/</code> a existujúci kód, ktoré sú k téme; na konci sa opýta na jazyk dokumentov a po schválení zapíše <code>ctx/</code>, <code>docs/</code> a riadky do <code>CLAUDE.md</code> podľa <code>templates.md</code></td>
+          <td><code>models.md</code></td></tr>
+        <tr><td class="moment">Plán</td>
+          <td><span class="pill task">skill</span> telo <code>plan</code>; <span class="pill req">súbory</span> <code>ctx/requirements.md</code> a návrh <code>ctx/plans/&lt;dátum&gt;-&lt;slug&gt;-design.md</code>; <span class="pill task">referencie</span> <code>templates.md</code> a <code>models.md</code> (úrovne a odhad tokenov)</td>
+          <td>telo <code>build</code>, agenti</td></tr>
+        <tr><td class="moment">Krok stavby</td>
+          <td><span class="pill task">skill</span> telo <code>build</code>; <span class="pill task">referencia</span> <code>templates.md</code> (zadanie, recenzia, <code>SUMMARY.md</code>); plán a <code>SUMMARY.md</code>; kontrolu spúšťa hlavný chat sám; od <code>worker</code> len správa (najviac 20 riadkov)</td>
+          <td>ostatné kroky; práca workera v hlavnom chate</td></tr>
+        <tr><td class="moment">Recenzia</td>
+          <td>v hlavnom chate od <code>reviewer</code> len verdikt, očíslované nálezy a cesta k súboru <code>review-&lt;n&gt;.md</code></td>
+          <td>čo reviewer čítal</td></tr>
+        <tr><td class="moment">Uzavretie</td>
+          <td><span class="pill task">skill</span> telo <code>wrap-up</code>; <span class="pill task">referencia</span> <code>templates.md</code>; súbory, ktoré treba aktualizovať (<code>ctx/requirements.md</code>, <code>ctx/TASKS.md</code>, <code>docs/architecture.md</code>); <code>review-&lt;n&gt;.md</code> a <code>SUMMARY.md</code> behu; <code>met</code> sa zapíše až po <code>OK</code> od nového recenzenta</td>
+          <td><code>models.md</code>; agenti len keď treba opraviť architektúru alebo odkazy</td></tr>
+      </table>
+    </div>
+    <p>Pri malej zmene S (jeden či dva existujúce súbory) sa brainstorming, plán ani šablóny nečítajú, v <code>ctx/</code> sa nevytvárajú žiadne súbory a <code>ctx/TASKS.md</code> sa nemení. Stačí <code>workflow</code> (ten pri štarte prečíta <code>ctx/TASKS.md</code>, ak existuje), zmena cez <code>worker</code> a kontrola cez <code>reviewer</code>. Dôkaz sa zapíše do <code>ctx/requirements.md</code> iba vtedy, keď sa zmena dotýka požiadavky, ktorá tam už je.</p>
+  </section>
+
+  <section class="stack">
+    <h2>Čo z toho vyplýva</h2>
+    <ul class="plain">
+      <li>Dlhý chat spomaľuje a draží. Novú úlohu začni v novom chate; pokračovanie je v <code>SUMMARY.md</code> a v <code>ctx/</code>.</li>
+      <li>Popis skillu rozhoduje, či sa skill otvorí. Preto obsahuje slová, ktoré ľudia naozaj používajú.</li>
+      <li>Jeden krok robí agent s čistým kontextom: nevidí chat, preto zadanie musí byť úplné.</li>
+      <li>Do <code>CLAUDE.md</code> patrí len to, čo platí vždy. Čo platí iba pri jednej práci, patrí do skillu alebo do dokumentu v <code>ctx/</code> či <code>docs/</code>.</li>
+    </ul>
+  </section>
+
+  <footer>Interné · @panthea.sk</footer>
+</div>
+
+<!-- ============================== ENGLISH ============================== -->
+<div class="lang" id="lang-en" lang="en">
+
+  <section class="stack">
+    <span class="eyebrow">Guide · b6 plugin</span>
+    <h1>What loads when</h1>
+    <p class="lead">In one chat, Claude keeps in mind only what was loaded into it. When the context fills up, work gets slower, costs more and makes more mistakes. So the b6 plugin loads many things only at the moment they are really used.</p>
+  </section>
+
+  <section class="stack">
+    <h2>Six terms</h2>
+    <div class="cards">
+      <div class="card req">
+        <span class="tag">Always</span>
+        <h3>Context</h3>
+        <p>Everything Claude holds in mind in one chat: your messages, its answers, files it read, command outputs. It grows with every message; it shrinks only when it is compacted or in a new chat. A full context means slower, more expensive work and more mistakes. That is why it is better to read little, and only when needed.</p>
+      </div>
+      <div class="card task">
+        <span class="tag">When used</span>
+        <h3>Skill</h3>
+        <p>A text file with a procedure. Its short description (in the header) is always visible to Claude. The whole <code>SKILL.md</code> body loads only when the description fits your request. A plain question that changes no file does not need it; questions about the work or the method ("what is in progress", "where are we", "how does this work") do load <code>workflow</code>.</p>
+      </div>
+      <div class="card task">
+        <span class="tag">In one step</span>
+        <h3>Reference</h3>
+        <p>A file a skill opens only in the step that needs it: <code>templates.md</code> (shapes of documents) and <code>models.md</code> (model levels and token estimate) in the skill <code>workflow</code>. For a clear small change it is never opened.</p>
+      </div>
+      <div class="card arch">
+        <span class="tag">Own context</span>
+        <h3>Agent</h3>
+        <p><code>worker</code> and <code>reviewer</code>. Each starts with a fresh context: it does not see the chat; besides its own instructions (<code>agents/&lt;name&gt;.md</code>) and the project <code>CLAUDE.md</code> it gets only the brief. It returns at most 20 lines, so the main chat does not fill up. The reviewer is always new and did not see the worker's work.</p>
+      </div>
+      <div class="card req">
+        <span class="tag">At start</span>
+        <h3>SessionStart hook</h3>
+        <p>One line added at the start of the chat: the plugin is active and the skill <code>b6:workflow</code> must be loaded before any file is changed. Nothing else is loaded by it.</p>
+      </div>
+      <div class="card req">
+        <span class="tag">As needed</span>
+        <h3>Project files</h3>
+        <p><code>CLAUDE.md</code> is always loaded. The folders <code>ctx/</code> (requirements, tasks, plans) and <code>docs/</code> (architecture, decisions) are read only when a step needs them.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="stack">
+    <h2>What is in context at which moment</h2>
+    <p>Example: one change of size M, from the start of the chat to wrap-up. The main chat is the context that grows. Agents work in their own context and return only a short report to the main chat.</p>
+    <div class="tbl-wrap">
+      <table>
+        <tr><th>Moment</th><th>Added to the main chat</th><th>Not loaded</th></tr>
+        <tr><td class="moment">Start of chat</td>
+          <td><span class="pill req">always</span> <code>CLAUDE.md</code>, short descriptions of skills and agents, the SessionStart hook line</td>
+          <td>skill bodies, references, <code>ctx/</code>, <code>docs/</code></td></tr>
+        <tr><td class="moment">Request for a change</td>
+          <td><span class="pill task">skill</span> body of <code>workflow</code>, which at the start reads <code>ctx/TASKS.md</code> if it exists; then, for size M, skill <code>brainstorming</code></td>
+          <td><code>plan</code>, <code>build</code>, <code>wrap-up</code>, agents</td></tr>
+        <tr><td class="moment">Brainstorming</td>
+          <td><span class="pill task">reference</span> <code>templates.md</code> when requirements are written; <span class="pill req">files</span> <code>ctx/</code>, <code>docs/</code> and existing code related to the topic; at the end it asks for the document language and, after approval, writes <code>ctx/</code>, <code>docs/</code> and the <code>CLAUDE.md</code> lines from <code>templates.md</code></td>
+          <td><code>models.md</code></td></tr>
+        <tr><td class="moment">Plan</td>
+          <td><span class="pill task">skill</span> body of <code>plan</code>; <span class="pill req">files</span> <code>ctx/requirements.md</code> and the design <code>ctx/plans/&lt;date&gt;-&lt;slug&gt;-design.md</code>; <span class="pill task">references</span> <code>templates.md</code> and <code>models.md</code> (levels and token estimate)</td>
+          <td>body of <code>build</code>, agents</td></tr>
+        <tr><td class="moment">Build step</td>
+          <td><span class="pill task">skill</span> body of <code>build</code>; <span class="pill task">reference</span> <code>templates.md</code> (brief, review, <code>SUMMARY.md</code>); the plan and <code>SUMMARY.md</code>; the main chat runs the check itself; from <code>worker</code> only the report (at most 20 lines)</td>
+          <td>other steps; the worker's own work</td></tr>
+        <tr><td class="moment">Review</td>
+          <td>in the main chat from <code>reviewer</code> only the verdict, numbered findings and the path to the file <code>review-&lt;n&gt;.md</code></td>
+          <td>what the reviewer read</td></tr>
+        <tr><td class="moment">Wrap-up</td>
+          <td><span class="pill task">skill</span> body of <code>wrap-up</code>; <span class="pill task">reference</span> <code>templates.md</code>; files to update (<code>ctx/requirements.md</code>, <code>ctx/TASKS.md</code>, <code>docs/architecture.md</code>); the run's <code>review-&lt;n&gt;.md</code> and <code>SUMMARY.md</code>; <code>met</code> is set only after <code>OK</code> from a fresh reviewer</td>
+          <td><code>models.md</code>; agents only if architecture or links need a fix</td></tr>
+      </table>
+    </div>
+    <p>For a small change of size S (one or two existing files), brainstorming, the plan and the templates are not read, no files in <code>ctx/</code> are created and <code>ctx/TASKS.md</code> is not changed. <code>workflow</code> (which reads <code>ctx/TASKS.md</code> at the start if it exists), the change by <code>worker</code> and the check by <code>reviewer</code> are enough. Evidence goes into <code>ctx/requirements.md</code> only if the change touches a requirement that is already there.</p>
+  </section>
+
+  <section class="stack">
+    <h2>What follows from this</h2>
+    <ul class="plain">
+      <li>A long chat makes work slower and more expensive. Start a new task in a new chat; the continuation is in <code>SUMMARY.md</code> and in <code>ctx/</code>.</li>
+      <li>The description of a skill decides whether the skill opens. That is why it holds words people really use.</li>
+      <li>One step is done by an agent with a fresh context: it does not see the chat, so the brief must be complete.</li>
+      <li>Only what is always true belongs in <code>CLAUDE.md</code>. What holds for one piece of work belongs in a skill or in a document in <code>ctx/</code> or <code>docs/</code>.</li>
+    </ul>
+  </section>
+
+  <footer>Internal · @panthea.sk</footer>
+</div>
+
+</div>
+
+<script>
+(function () {
+  var blocks = { sk: document.getElementById('lang-sk'), en: document.getElementById('lang-en') };
+  var buttons = { sk: document.getElementById('btn-sk'), en: document.getElementById('btn-en') };
+  function show(lang) {
+    if (!blocks[lang]) lang = 'en';
+    for (var k in blocks) {
+      blocks[k].hidden = k !== lang;
+      buttons[k].setAttribute('aria-pressed', String(k === lang));
+    }
+    document.documentElement.lang = lang;
+  }
+  function fromHash() { show(location.hash.replace('#', '') || 'en'); }
+  for (var k in buttons) {
+    buttons[k].addEventListener('click', function () {
+      var lang = this.getAttribute('data-lang');
+      show(lang);
+      try { location.hash = lang; } catch (e) {}
+    });
+  }
+  window.addEventListener('hashchange', fromHash);
+  fromHash();
+})();
+</script>
+
+</body></html>
