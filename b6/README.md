@@ -33,8 +33,8 @@ or the person who gave you the plugin before you install it.
 
   New version: unpack the new zip into the same folder, run `/plugin marketplace update panthea`, then `/plugin`,
   pick `b6` and update it.
-- b) From GitHub: the plugin source is the private repository `p-salbot/b6-plugin`. You need access to it (ask the
-  person who gave you the plugin) and Git signed in to GitHub on your computer. In Claude Code run:
+- b) From GitHub: the plugin source is the public repository `p-salbot/b6-plugin`. You need Git installed on your
+  computer; no GitHub account is needed. In Claude Code run:
   1. `/plugin marketplace add p-salbot/b6-plugin`
   2. `/plugin install b6@panthea`
   3. Restart Claude Code.

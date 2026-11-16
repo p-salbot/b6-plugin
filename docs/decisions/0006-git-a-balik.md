@@ -24,6 +24,13 @@ Do zipu ide okrem `b6/` aj `.claude-plugin/marketplace.json` (zdroj pluginov `pa
 klient plugin v `/plugin` nevidí a môže ho spustiť iba cez `--plugin-dir`. Súbor obsahuje iba názov, autora a cestu
 `./b6`, žiadne informácie klienta.
 
+## Doplnenie 2026-11-16 – verejný repozitár
+
+Repozitár je verejný, aby si ho klient mohol pridať ako zdroj pluginov bez prístupu na GitHub (rozhodnutie Petra).
+Pred zverejnením boli z repozitára aj celej histórie odstránené pracovné dokumenty s informáciami o klientovi
+(`navrh.md`, `posudenie-*.md`, `plan.md`, `stav-stavby.md`, `ctx/plans/`); ostávajú iba lokálne a sú v `.gitignore`.
+Do repozitára patrí iba plugin, jeho dokumentácia, rozhodnutia a testy so syntetickými dátami.
+
 ## Čo by ho zmenilo
 
 Presun pluginu do repozitára Panthea pre viac klientov (potom aj premenovanie z `b6`), alebo požiadavka klienta

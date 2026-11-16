@@ -2,3 +2,10 @@ testy/vysledky/
 __pycache__/
 .DS_Store
 *.zip
+
+# pracovné dokumenty mimo repozitára (repozitár je verejný)
+navrh.md
+posudenie-*.md
+plan.md
+stav-stavby.md
+ctx/plans/
