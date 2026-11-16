@@ -25,15 +25,24 @@ or the person who gave you the plugin before you install it.
 
 - Approved company way: in Claude Code run `/plugin`, find `b6` in the plugin source your company set up and choose
   install. Then restart Claude Code.
-- From the zip file: unpack the zip into a folder of your own (for example `Documents\b6-0.1.0`). It holds the
+- a) From the zip file: unpack the zip into a folder of your own (for example `Documents\b6-0.1.0`). It holds the
   folder `.claude-plugin` (the plugin source `panthea`) and the folder `b6` (the plugin). In Claude Code run:
   1. `/plugin marketplace add <path to the unpacked folder>` (the folder that holds `.claude-plugin`, not `b6`)
   2. `/plugin install b6@panthea`
   3. Restart Claude Code.
+
+  New version: unpack the new zip into the same folder, run `/plugin marketplace update panthea`, then `/plugin`,
+  pick `b6` and update it.
+- b) From GitHub: the plugin source is the private repository `p-salbot/b6-plugin`. You need access to it (ask the
+  person who gave you the plugin) and Git signed in to GitHub on your computer. In Claude Code run:
+  1. `/plugin marketplace add p-salbot/b6-plugin`
+  2. `/plugin install b6@panthea`
+  3. Restart Claude Code.
+
+  New version: run `/plugin marketplace update panthea`, then `/plugin`, pick `b6` and update it. You do not need
+  a new zip.
 - For trying it out without installing: start Claude Code with `claude --plugin-dir <path to the unpacked b6 folder>`.
   The plugin is active only in that session; start it the same way each time.
-- New version: unpack the new zip into the same folder, run `/plugin marketplace update panthea`, then `/plugin`,
-  pick `b6` and update it.
 
 Check that it works: in a new chat write "how does this work?". Claude should point you to `docs/getting-started.html`.
 
