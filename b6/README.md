@@ -91,6 +91,8 @@ It also has a Slovak and an English version.
 A short guide to what Claude loads and when (context, skills, references, agents, the start hook, project files) is in `docs/what-loads-when.html`.
 It also has a Slovak and an English version.
 
+A recorded example session is in `docs/walkthrough.html`. It shows a small old VBA tool rebuilt as a Python tool with the method of this plugin, step by step; the finished project is linked on the first page.
+
 ## License
 
 See `LICENSE` and `NOTICE`.
