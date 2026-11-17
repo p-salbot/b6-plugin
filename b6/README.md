@@ -25,7 +25,7 @@ or the person who gave you the plugin before you install it.
 
 - Approved company way: in Claude Code run `/plugin`, find `b6` in the plugin source your company set up and choose
   install. Then restart Claude Code.
-- a) From the zip file: unpack the zip into a folder of your own (for example `Documents\b6-0.1.0`). It holds the
+- a) From the zip file: unpack the zip into a folder of your own (for example `Documents\b6-0.2.0`). It holds the
   folder `.claude-plugin` (the plugin source `panthea`) and the folder `b6` (the plugin). In Claude Code run:
   1. `/plugin marketplace add <path to the unpacked folder>` (the folder that holds `.claude-plugin`, not `b6`)
   2. `/plugin install b6@panthea`

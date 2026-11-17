@@ -11,7 +11,7 @@
       "name": "b6",
       "source": "./b6",
       "description": "Guides Claude Code from an idea through requirements, plan and build to a documented wrap-up.",
-      "version": "0.1.0"
+      "version": "0.2.0"
     }
   ]
 }
