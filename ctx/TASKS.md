@@ -1,6 +1,7 @@
 # Úlohy
 
-**Stav 2026-11-16:** Plugin 0.1.0 je postavený vrátane plánu `2026-11-15-z-orchestracie` (R-025 až R-031) a opráv
+**Stav 2026-11-17:** Plugin 0.2.0 na GitHube: pribudol walkthrough ukážkovej session (`b6/docs/walkthrough.html`)
+a ukážkový projekt `examples/reorder-settings/` (R-032 až R-034 splnené). Predtým 2026-11-16: plugin 0.1.0 je postavený vrátane plánu `2026-11-15-z-orchestracie` (R-025 až R-031) a opráv
 z behu 2; `testy/kontrola.py` K1–K12 OK; opakované behy S3, S4, S6, S8, S9 (Windows, bez sandboxu, 2026-11-16) vyhodnotené
 v `review-24.md` až `review-34.md`. Požiadavky so scenárovým alebo recenzným dôkazom sú `splnená`, R-029 `čiastočne
 splnená`. Zostáva: rozhodnutie o medzere R-029, overenie R-005 (S5), R-003, R-011, R-015, R-016 a R-024 bez nového
@@ -16,4 +17,4 @@ dôkazu, úpravy testov, zmena dokumentácie od Petra a odovzdanie zipu iba z `b
 | Overiť riziko `wrap-up`/`workflow`: plán s požiadavkami v rôznych stavoch (zvyšok po R-006 a R-018, ktoré sú zrušené; „not yet“ a S8 overené 2026-11-16) | Peter | nič | `stav-stavby.md` „Otvorené“ (git a0364be) | Pri ďalšom behu S4 alebo S6 sledovať tento bod |
 | Overiť riziká testovacieho behu: `END` v simulátore bez ohľadu na veľkosť písmen, persony S7/S9/S11 schvaľujú aj plán, či `--setting-sources` skryje používateľské skilly, pri prerušení sa projekt neskopíruje do `vysledky/` | Claude | nič (nie je blokujúce) | `testy/spust.py`, `testy/scenare.md` | Navrhnúť Petrovi opravy `spust.py` a person; meniť až po súhlase |
 | Upraviť testy po behu 2026-11-16 (`review-28.md`, `review-29.md`, `review-31.md`, `review-34.md`): persóna S8 (nemení jazyk, nevedie mimo projektu, povie „go“), persóna S4 pri otázke na povolenie, `Očakávané` S4 a S6 o odmietnutých príkazoch a zápisoch mimo kópie (kritérium R-012 je už v S4/S6), `prepis.md` bez zamietnutých príkazov; spúšťač je neinteraktívny, výzva na povolenie = zamietnutie | Claude | nič (nie je blokujúce) | `testy/scenare.md`, `testy/spust.py` | Navrhnúť Petrovi úpravy; meniť až po súhlase |
-| Odovzdať plugin klientovi | Peter | nič | `b6-0.1.0.zip` (`b6/` a `.claude-plugin/marketplace.json`, zabalený 2026-11-16; inštalácia overená v čistom profile) | Poslať nový zip klientovi s postupom cez `/plugin marketplace add` |
+| Odovzdať plugin 0.2.0 klientovi | Peter | nič | `b6-0.2.0.zip` (`b6/` a `.claude-plugin/marketplace.json`, z commitu 78e3b64, 2026-11-17); na GitHube pushnuté | Odoslať pripravené maily klientovi s postupom aktualizácie cez `/plugin marketplace update panthea` |
