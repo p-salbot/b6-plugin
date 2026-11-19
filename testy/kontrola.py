@@ -1,4 +1,4 @@
-"""Statická kontrola pluginu b6 (K1-K12).
+"""Statická kontrola pluginu b6 (K1-K13).
 
 Spustenie: python3 -I testy/kontrola.py   (Windows: py -3 -I testy/kontrola.py)
 Výstup: riadok "OK K<n>" alebo "FAIL K<n>: <dôvod>"; exit 0 iba ak je všetko OK.
@@ -22,7 +22,7 @@ SPRIEVODCOVIA_TITLE = [(SPRIEVODCA, "Project memory"), (SPRIEVODCA_SKILLY, "Skil
 TEMPLATES = PLUGIN / "skills" / "workflow" / "references" / "templates.md"
 HOOKS = PLUGIN / "hooks" / "hooks.json"
 
-SKILLY = ["workflow", "brainstorming", "plan", "build", "wrap-up"]
+SKILLY = ["workflow", "brainstorming", "plan", "build", "wrap-up", "lessons"]
 AGENTI = ["worker", "reviewer"]
 MAX_RIADKOV_SKILLU = 80
 MAX_ZNAKOV_POPISU = 1024
@@ -54,7 +54,8 @@ HLAVICKY_TABULIEK_SK = [STLPCE_POZIADAVIEK_SK, STLPCE_ULOH_SK, STLPCE_ARCHITEKTU
 NADPISY_ROZHODNUTIA_EN = ["## " + p for p in POLIA_ROZHODNUTIA_EN]
 
 SEKCIE_TEMPLATES = ["requirements.md", "TASKS.md", "architecture.md", "decision record", "design", "plan",
-                    "SUMMARY.md", "brief", "review", "CLAUDE.md lines", "Language"]
+                    "SUMMARY.md", "brief", "review", "CLAUDE.md lines", "Language", "lessons", "b6-lessons.md",
+                    "CLAUDE.md lessons"]
 
 
 def cti(cesta):
@@ -179,7 +180,7 @@ def k1():
 
 
 def k2():
-    """K2: všetky súbory pluginu existujú (5 skillov, šablóny, modely, 2 agenti, README, LICENSE, NOTICE, sprievodcovia, hook)."""
+    """K2: všetky súbory pluginu existujú (6 skillov, šablóny, modely, 2 agenti, README, LICENSE, NOTICE, sprievodcovia, hook)."""
     cesty = [PLUGIN / "skills" / s / "SKILL.md" for s in SKILLY]
     cesty += [TEMPLATES, PLUGIN / "skills" / "workflow" / "references" / "models.md"]
     cesty += [PLUGIN / "agents" / f"{a}.md" for a in AGENTI]
@@ -465,8 +466,34 @@ def k12():
     return "; ".join(chyby)
 
 
+SKILL_LESSONS = PLUGIN / "skills" / "lessons" / "SKILL.md"
+SKILL_WRAPUP = PLUGIN / "skills" / "wrap-up" / "SKILL.md"
+
+
+def k13():
+    """K13: súlad s požiadavkami R-035 až R-039 (poučenia: krok 5a vo wrap-up, podmienky a limit, zápis do CLAUDE.md,
+    metodické poučenia v ctx/b6-lessons.md, jazykový riadok v šablónach)."""
+    chyby = []
+    # R-035: wrap-up má nadpis 5a pred nadpisom kroku 6 a volá skill lessons
+    chyby += [f"R-035: {m}" for m in obsahuje_cesta(SKILL_WRAPUP, ["## 5a. Lessons", "`lessons`"])]
+    if SKILL_WRAPUP.is_file():
+        nadpisy = [r_ for r_ in cti(SKILL_WRAPUP).splitlines() if r_.startswith("## ")]
+        i5a = next((i for i, r_ in enumerate(nadpisy) if r_.startswith("## 5a.")), None)
+        i6 = next((i for i, r_ in enumerate(nadpisy) if r_.startswith("## 6.")), None)
+        if i5a is None or i6 is None or i5a > i6:
+            chyby.append("R-035: '## 5a. Lessons' nie je pred '## 6.' vo wrap-up/SKILL.md")
+    # R-036 až R-038
+    chyby += [f"R-036: {m}" for m in obsahuje_cesta(SKILL_LESSONS, ["all four conditions", "At most 2", "Zero lessons", "b6:reviewer"])]
+    chyby += [f"R-037: {m}" for m in obsahuje_cesta(SKILL_LESSONS, ["## Lessons", "at most 10 lines", "Only after a yes"])]
+    chyby += [f"R-038: {m}" for m in obsahuje_cesta(SKILL_LESSONS, ["ctx/b6-lessons.md", "Send nothing yourself"])]
+    # R-039: riadok v tabuľke Language
+    if ["## Lessons", "## Poučenia"] not in bunky_markdownu(sekcia_sablony(cti(TEMPLATES), "Language")):
+        chyby.append("R-039: v sekcii Language v templates.md chýba riadok '| ## Lessons | ## Poučenia |'")
+    return "; ".join(chyby)
+
+
 KONTROLY = [("K1", k1), ("K2", k2), ("K3", k3), ("K4", k4), ("K5", k5), ("K6", k6), ("K7", k7), ("K8", k8),
-            ("K9", k9), ("K10", k10), ("K11", k11), ("K12", k12)]
+            ("K9", k9), ("K10", k10), ("K11", k11), ("K12", k12), ("K13", k13)]
 
 
 def main():

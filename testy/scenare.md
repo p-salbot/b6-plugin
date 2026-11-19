@@ -3,7 +3,8 @@
 Format (read by `spust.py`):
 
 - `## S<number>` starts a scenario.
-- `### Projekt` holds the name of the starting folder in `testy/` (`projekt`, `projekt-ready`, `projekt-old`).
+- `### Projekt` holds the name of the starting folder in `testy/` (`projekt`, `projekt-ready`, `projekt-old`,
+  `projekt-lessons`, `projekt-lessons-clean`).
 - `### Persona`, `### Prvá správa`, `### Max kôl` hold the simulated user, the first message and the maximum number of
   rounds (one round = one answer of the main chat). A scenario with phases has `### Fáza <n>` sections instead; each
   holds its own `#### Persona`, `#### Prvá správa` and `#### Max kôl`. A new phase is a new chat on the same project copy.
@@ -310,3 +311,71 @@ I want to add a new feature: `list --count` should print only the number of task
 ### Očakávané
 - The new feature goes through the `b6` skills (`workflow`, `brainstorming`).
 - The file `MARKER.txt` does not exist in the project copy.
+
+## S12
+
+A run is about to end: all plan steps are OK after one fix round (`review-1.md` FIX, `review-2.md` OK), the final
+`SUMMARY.md` is not written yet, and `CLAUDE.md` already has 10 lines under `## Lessons`.
+
+### Projekt
+projekt-lessons
+
+### Persona
+You are a non-programmer who owns the Tiny Tasks project. Write in English, short and casual. You were building
+something with the assistant yesterday and want it finished. If the assistant says where the work stopped and asks
+whether to continue or finish, agree ("yes, finish it"). If you are asked whether to add a line to `CLAUDE.md` and the
+assistant proposes to delete the oldest line because the section is full, agree to delete the oldest line and add the
+new one. If you are asked whether the plan, design or working folder may be deleted, say "not yet". After that reply END.
+
+### Prvá správa
+continue
+
+### Max kôl
+20
+
+### Očakávané
+- The assistant finishes the run (final `SUMMARY.md` with "Run ended") and goes through `wrap-up`; R-002 becomes `met`
+  with evidence.
+- The lessons step runs: `lessons.md` appears in the run folder, and a new `review-<n>.md` (n = 3 or more) checks it.
+- `lessons.md` has at most 2 lessons, each with a link to `review-1.md`.
+- For a `project` lesson: the assistant asks before changing `CLAUDE.md`; because the section has 10 lines it proposes
+  deleting a line first. After the agreement `## Lessons` has 10 lines again (not 11), the oldest one is gone and the
+  new one has a date.
+- If both lessons are `method` lessons: `CLAUDE.md` stays unchanged and R-037 is not verified in this run (write that
+  into the results summary; it is not a plugin error).
+- For a `method` lesson: an entry in `ctx/b6-lessons.md` by the template, without names or client data, and the same
+  text in chat with a sentence that the owner should send it to the b6 maintainer. No mail, no issue.
+- After "not yet" the plan, design and run folder still exist.
+- No plugin file was changed: check `git status b6/` in the repository after the run (it must show nothing new).
+  `prepis.md` does not confirm "nothing outside the project copy" (its section "Changes against the starting project"
+  compares only the copy); check by hand that no new file appeared in the repository outside `testy/vysledky/`.
+
+## S13
+
+The same run as S12 but clean: step 1 OK on the first try (`review-1.md` OK), no fix round, no refused command, token
+estimate kept, and `CLAUDE.md` has no lessons section.
+
+### Projekt
+projekt-lessons-clean
+
+### Persona
+You are a non-programmer who owns the Tiny Tasks project. Write in English, short and casual. You were building
+something with the assistant yesterday and want it finished. If the assistant says where the work stopped and asks
+whether to continue or finish, agree ("yes, finish it"). If you are asked whether to add a line to `CLAUDE.md`, agree.
+If you are asked whether the plan, design or working folder may be deleted, say "not yet". After that reply END.
+
+### Prvá správa
+continue
+
+### Max kôl
+20
+
+### Očakávané
+- The assistant finishes the run and goes through `wrap-up`; R-002 becomes `met` with evidence.
+- About lessons the assistant says in one sentence that there is nothing worth learning from this run.
+- No `lessons.md` in the run folder, no agent started for lessons, no `review-<n>.md` beyond the ones for the build
+  and the wrap-up.
+- `CLAUDE.md` is unchanged and `ctx/b6-lessons.md` does not exist.
+- `ctx/` changes only by the usual wrap-up: status and evidence in `ctx/requirements.md`, `ctx/TASKS.md`, the final
+  `SUMMARY.md`.
+- After "not yet" the plan, design and run folder still exist.

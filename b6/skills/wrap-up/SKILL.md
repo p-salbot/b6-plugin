@@ -5,17 +5,16 @@ description: 'Closes a finished piece of work - summary, evidence, requirement s
 
 # wrap-up - write down the result
 
-The hard rules in skill `workflow` apply. If it is not loaded yet, load it first.
-Templates are read from the `workflow` skill folder in the plugin (`../workflow/references/templates.md`), not from the project.
+The hard rules in skill `workflow` apply. If it is not loaded yet, load it first. Templates are read from the `workflow` skill folder in the plugin (`../workflow/references/templates.md`), not from the project.
 When you start `b6:worker` or `b6:reviewer` (steps 5 and 6), read their refused commands and handle them as in `build` (hard rule 8).
 
 Talk in the owner's language; write documents in the language in `CLAUDE.md`.
 
 ## Where you come from
 
-- From `build` (all steps OK): do steps 1-6 in order.
+- From `build` (all steps OK): do steps 1-6 (with 5a) in order.
 - From `build` after two fix rounds, the owner accepts the result with gaps (remaining steps built, or the owner stopped):
-  do steps 1-6 in order; step 2 sets `partly met`, step 4 adds the steps not done.
+  do steps 1-6 (with 5a) in order; step 2 sets `partly met`, step 4 adds the steps not done.
 - From `workflow` because the owner reports that a `met` requirement does not work: do only "Owner reports it does not
   work" below.
 - From `workflow` to delete leftovers: do only step 6.
@@ -51,6 +50,10 @@ add a task with its R-IDs; those requirements stay `approved`.
 
 Check that `docs/architecture.md` describes what is in the code today and no plans. If it does not match, tell the owner
 and start `b6:worker` with a brief to fix it, then a fresh `b6:reviewer`. You do not edit it yourself.
+
+## 5a. Lessons
+
+Load skill `lessons` and follow it; it needs the run folder, so it runs before step 6. Then go on with step 6.
 
 ## 6. Delete the working files
 

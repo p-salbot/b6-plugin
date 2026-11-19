@@ -296,13 +296,71 @@ OK / FIX
 
 - Writer: main chat, with the owner's consent, when the project is first set up, and again after every brainstorming:
   then it sets the language line to the chosen language and adds missing lines, never duplicating a line. Path: `CLAUDE.md` in the project root.
-- Rules: exactly these three lines. The second keeps other brainstorming and planning skills from taking over.
+- Rules: exactly these three lines; the only other b6 text allowed in `CLAUDE.md` is the section `## Lessons` (template
+  `CLAUDE.md lessons`). The second line keeps other brainstorming and planning skills from taking over.
   Replace `<language>` with the chosen project language.
 
 ```markdown
 Work status is in `ctx/TASKS.md`, requirements in `ctx/requirements.md`, architecture in `docs/architecture.md`.
 For building and changes, follow the method of the `b6` plugin (skill `workflow`), not another brainstorming or planning skill.
 Project documents are written in <language>.
+```
+
+## CLAUDE.md lessons
+
+- Writer: main chat in skill `lessons`, only after the owner agrees to the line. When: at wrap-up, after the reviewer's `OK`.
+- Path: section `## Lessons` at the end of `CLAUDE.md` in the project root (created when the first line is added).
+- Rules: at most 10 lines; one line is one lesson with its date. With 10 lines, no 11th is written: propose deleting the
+  oldest or an outdated line and add the new one only after the owner agrees. No names or client data.
+
+```markdown
+## Lessons
+
+- <date>: <rule for later work in this project>
+```
+
+## lessons
+
+- Writer: `worker` in skill `lessons`; checked by a fresh `reviewer`. When: at wrap-up, only when the run files show evidence.
+- Path: `ctx/plans/<YYYY-MM-DD>-<slug>/lessons.md`
+- Rules: at most 2 lessons; each meets all four conditions (cost with a link to a run file, general, actionable, new).
+  Zero lessons is a valid result: write "none" under `## Lessons`. Every rejected candidate gets one line with the reason.
+  No names, client data, user names in paths or quotes from client files. Deleted with the run folder.
+
+```markdown
+# Lessons: <title of the run>
+
+## Lessons
+
+### <one-line lesson>
+
+- Level: <project / method>
+- What happened: <one or two sentences>
+- Cost (evidence): <fix rounds, stop, refused command, tokens; link to the run file, for example review-3.md>
+- General rule: <why it would happen again>
+- Proposed change: <project: the line for CLAUDE.md; method: the plugin file and the change in 1-2 sentences>
+- Why existing rules did not cover it: <no rule yet / the rule and why it did not work>
+
+## Rejected
+
+- <candidate>: <reason in one line>, or "none".
+```
+
+## b6-lessons.md
+
+- Writer: main chat in skill `lessons`, after the reviewer's `OK`. When: at wrap-up, for each `method` lesson.
+- Path: `ctx/b6-lessons.md`
+- Rules: the file only grows; a new entry goes at the end. The owner may delete an entry after sending it to the b6
+  maintainer. Nothing is sent automatically. No names, client data or user names in paths.
+
+```markdown
+## <date> <one-line lesson>
+
+- What happened: <one or two sentences>
+- Cost: <fix rounds, stop, refused command, tokens>
+- Proposed change in the plugin: <file and change in 1-2 sentences>
+- b6 version: <version>
+- This entry contains no names and no client data.
 ```
 
 ## Language
@@ -345,6 +403,19 @@ Project documents are written in <language>.
 | ## Earlier findings | ## Predchádzajúce nálezy |
 | Resolved? | Vyriešené? |
 | cannot verify | nedá sa overiť |
+| ## Lessons | ## Poučenia |
+| ## Rejected | ## Vyradené |
+| Level | Úroveň |
+| What happened | Čo sa stalo |
+| Cost (evidence) | Cena (doklad) |
+| Cost | Cena |
+| General rule | Všeobecné pravidlo |
+| Proposed change | Navrhovaná zmena |
+| Why existing rules did not cover it | Prečo to doterajšie pravidlá nepokryli |
+| Proposed change in the plugin | Navrhovaná zmena v plugine |
+| b6 version | Verzia b6 |
+| project | projekt |
+| method | metóda |
 | proposed | návrh |
 | approved | schválená |
 | met | splnená |

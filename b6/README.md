@@ -67,7 +67,7 @@ The plugin then leads you through four stages:
 1. Brainstorming - a few questions, one at a time, ending with written requirements you approve.
 2. Plan - how the work will be split and checked.
 3. Build - helper agents do the work and a reviewer checks it.
-4. Wrap-up - a summary, and you decide what to keep.
+4. Wrap-up - a summary, and you decide what to keep; a `lessons` step may pick at most two lessons from the run; a project lesson is added to `CLAUDE.md` only with your agreement, and nothing is sent anywhere.
 
 Nothing is built before you approve the requirements and say "go" on the plan.
 Small changes skip brainstorming and the plan: Claude tells you how it will check the result
