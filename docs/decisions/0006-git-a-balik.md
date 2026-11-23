@@ -20,7 +20,7 @@ klient dostane plugin bez pracovných dokumentov a testov.
 
 ## Doplnenie 2026-11-16
 
-Do zipu ide okrem `b6/` aj `.claude-plugin/marketplace.json` (zdroj pluginov `panthea`), oba v koreni zipu. Bez neho
+Do zipu ide okrem `b6/` aj `.claude-plugin/marketplace.json` (zdroj pluginov `panthea-b6`), oba v koreni zipu. Bez neho
 klient plugin v `/plugin` nevidí a môže ho spustiť iba cez `--plugin-dir`. Súbor obsahuje iba názov, autora a cestu
 `./b6`, žiadne informácie klienta.
 

@@ -26,20 +26,20 @@ or the person who gave you the plugin before you install it.
 - Approved company way: in Claude Code run `/plugin`, find `b6` in the plugin source your company set up and choose
   install. Then restart Claude Code.
 - a) From the zip file: unpack the zip into a folder of your own (for example `Documents\b6-0.3.0`). It holds the
-  folder `.claude-plugin` (the plugin source `panthea`) and the folder `b6` (the plugin). In Claude Code run:
+  folder `.claude-plugin` (the plugin source `panthea-b6`) and the folder `b6` (the plugin). In Claude Code run:
   1. `/plugin marketplace add <path to the unpacked folder>` (the folder that holds `.claude-plugin`, not `b6`)
-  2. `/plugin install b6@panthea`
+  2. `/plugin install b6@panthea-b6`
   3. Restart Claude Code.
 
-  New version: unpack the new zip into the same folder, run `/plugin marketplace update panthea`, then `/plugin`,
+  New version: unpack the new zip into the same folder, run `/plugin marketplace update panthea-b6`, then `/plugin`,
   pick `b6` and update it.
 - b) From GitHub: the plugin source is the public repository `p-salbot/b6-plugin`. You need Git installed on your
   computer; no GitHub account is needed. In Claude Code run:
   1. `/plugin marketplace add p-salbot/b6-plugin`
-  2. `/plugin install b6@panthea`
+  2. `/plugin install b6@panthea-b6`
   3. Restart Claude Code.
 
-  New version: run `/plugin marketplace update panthea`, then `/plugin`, pick `b6` and update it. You do not need
+  New version: run `/plugin marketplace update panthea-b6`, then `/plugin`, pick `b6` and update it. You do not need
   a new zip.
 - For trying it out without installing: start Claude Code with `claude --plugin-dir <path to the unpacked b6 folder>`.
   The plugin is active only in that session; start it the same way each time.
@@ -56,7 +56,7 @@ before it changes files. Claude works with the access you give your own Claude C
 
 - Turn it off: run `/plugin`, open the installed plugins, pick `b6` and choose disable. Enable it the same way.
 - Remove it: in the same menu choose uninstall. If you started it with `--plugin-dir`, just start Claude Code without
-  that option and delete the folder. To remove the plugin source too, run `/plugin marketplace remove panthea`.
+  that option and delete the folder. To remove the plugin source too, run `/plugin marketplace remove panthea-b6`.
 - Files the plugin wrote into a project (`ctx/`, `docs/`, lines in `CLAUDE.md`) stay; they are ordinary project files.
 
 ## First use
