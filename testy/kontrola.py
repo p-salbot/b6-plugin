@@ -163,7 +163,7 @@ def obsahuje_postupnost(zoznam, hladane):
 
 
 def k1():
-    """K1: plugin.json je platný JSON s názvom b6, verziou 0.2.0, popisom a autorom Panthea s.r.o."""
+    """K1: plugin.json je platný JSON s názvom b6, verziou 0.3.0, popisom a autorom Panthea s.r.o."""
     try:
         d = json.loads(cti(PLUGIN / ".claude-plugin" / "plugin.json"))
     except (OSError, ValueError) as e:
@@ -171,8 +171,8 @@ def k1():
     chyby = []
     if d.get("name") != "b6":
         chyby.append("name != b6")
-    if d.get("version") != "0.2.0":
-        chyby.append("version != 0.2.0")
+    if d.get("version") != "0.3.0":
+        chyby.append("version != 0.3.0")
     if not str(d.get("description", "")).strip():
         chyby.append("prázdny description")
     if d.get("author", {}).get("name") != "Panthea s.r.o.":
