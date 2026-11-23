@@ -1,0 +1,680 @@
+<!doctype html><html lang="en"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Cowork and Claude Code</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* One reading column, same style as the other b6 guides. Colours: blue = Cowork, teal = Claude Code, orange = check in your app. */
+:root {
+  --bg: #f5f7f9; --surface: #ffffff; --fg: #17212b; --muted: #586673; --line: #d7dfe5;
+  --req: #3f4fc4; --req-tint: #eceefb;
+  --task: #a35f00; --task-text: #8a5000; --task-tint: #fbf1df;
+  --arch: #0b756c; --arch-tint: #e1f3f1;
+  --font-display: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Inter", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", Consolas, "Courier New", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #11171c; --surface: #19212a; --fg: #e5ebf0; --muted: #9babb7; --line: #2d3943;
+    --req: #9aa6ff; --req-tint: #232a52;
+    --task: #f0b558; --task-text: #f0b558; --task-tint: #3b2c10;
+    --arch: #62d2c5; --arch-tint: #123733;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #11171c; --surface: #19212a; --fg: #e5ebf0; --muted: #9babb7; --line: #2d3943;
+  --req: #9aa6ff; --req-tint: #232a52;
+  --task: #f0b558; --task-text: #f0b558; --task-tint: #3b2c10;
+  --arch: #62d2c5; --arch-tint: #123733;
+  color-scheme: dark;
+}
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 16px; line-height: 1.6; }
+.page {
+  max-width: 1200px; margin: 0 auto; padding-block: 28px 72px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; flex-direction: column; gap: 28px;
+}
+.lang { display: flex; flex-direction: column; gap: 40px; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; line-height: 1.2; }
+h1 { font-size: clamp(1.8rem, 5vw, 2.5rem); font-weight: 600; letter-spacing: -0.01em; }
+h2 { font-size: 1.45rem; font-weight: 600; }
+h3 { font-size: 1.05rem; font-weight: 600; }
+p { margin: 0; max-width: 68ch; }
+a { color: var(--req); }
+code { font-family: var(--font-mono); font-size: 0.86em; background: var(--line); padding: 1px 5px; border-radius: 3px; overflow-wrap: anywhere; }
+.eyebrow { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
+.stack { display: flex; flex-direction: column; gap: 16px; }
+.lead { font-size: 1.1rem; color: var(--muted); }
+.back { font-size: 0.9rem; }
+.switch { display: flex; justify-content: flex-end; gap: 4px; }
+.switch button { font: 600 0.8rem var(--font-body); letter-spacing: 0.06em; color: var(--muted); background: transparent; border: 1px solid var(--line); border-radius: 4px; padding: 6px 12px; cursor: pointer; }
+.switch button[aria-pressed="true"] { color: var(--bg); background: var(--fg); border-color: var(--fg); }
+.switch button:focus-visible { outline: 2px solid var(--req); outline-offset: 2px; }
+
+.req { --c: var(--req); --t: var(--req-tint); }
+.task { --c: var(--task); --t: var(--task-tint); }
+.arch { --c: var(--arch); --t: var(--arch-tint); }
+
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-top: 4px solid var(--c); border-radius: 8px; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; }
+.card .tag { align-self: flex-start; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--c); background: var(--t); border-radius: 4px; padding: 2px 8px; }
+.card p { font-size: 0.95rem; }
+.card ul.plain { font-size: 0.95rem; }
+.tbl-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; min-width: 720px; font-size: 0.92rem; }
+th, td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+th { font-family: var(--font-display); font-size: 0.8rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); background: var(--bg); }
+th.cw { color: var(--req); } th.cc { color: var(--arch); }
+tr:last-child td { border-bottom: 0; }
+td.moment { font-weight: 600; }
+td.moment a { color: inherit; text-decoration-color: var(--line); }
+td.none { color: var(--muted); }
+.pill { display: inline-block; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.04em; border-radius: 4px; padding: 1px 7px; margin-left: 4px; color: var(--c); background: var(--t); white-space: nowrap; }
+ul.plain { margin: 0; padding-left: 1.2rem; display: flex; flex-direction: column; gap: 8px; max-width: 68ch; }
+.detail { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 18px 20px; display: flex; flex-direction: column; gap: 12px; scroll-margin-top: 16px; }
+.detail .pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px 24px; }
+.detail .pair > div { display: flex; flex-direction: column; gap: 6px; }
+.detail .side { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--c); }
+.detail p, .detail li { font-size: 0.95rem; }
+.levels { display: flex; flex-direction: column; gap: 12px; }
+.level { display: grid; grid-template-columns: 48px 1fr; gap: 4px 16px; background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--c); border-radius: 8px; padding: 16px 18px; }
+.level .num { font-family: var(--font-display); font-size: 1.6rem; font-weight: 600; color: var(--c); line-height: 1; grid-row: span 3; }
+.level p { font-size: 0.95rem; }
+.level .next { color: var(--muted); }
+.note { border-left: 4px solid var(--task); background: var(--task-tint); border-radius: 0 8px 8px 0; padding: 12px 16px; max-width: 80ch; }
+.note p { font-size: 0.95rem; }
+pre { font-family: var(--font-mono); font-size: 0.85rem; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; margin: 0; overflow-x: auto; line-height: 1.5; }
+footer { border-top: 1px solid var(--line); padding-top: 16px; font-size: 0.85rem; color: var(--muted); }
+@media (max-width: 520px) { .level { grid-template-columns: 1fr; } .level .num { grid-row: auto; } }
+</style>
+
+<div class="page">
+
+<div class="switch" role="group" aria-label="Jazyk / Language">
+  <button type="button" id="btn-sk" data-lang="sk" aria-pressed="false">SK</button>
+  <button type="button" id="btn-en" data-lang="en" aria-pressed="true">EN</button>
+</div>
+
+<!-- ============================== SLOVENSKY ============================== -->
+<div class="lang" id="lang-sk" lang="sk" hidden>
+
+  <section class="stack">
+    <a class="back" href="index.html">← Všetci sprievodcovia</a>
+    <span class="eyebrow">Sprievodca · plugin b6</span>
+    <h1>Cowork a Claude Code</h1>
+    <p class="lead">Oba bežia na tom istom Claude a oba vedia pracovať s tvojimi súbormi, skillmi a pluginmi. Líšia sa tým, kde práca beží, kde sa veci ukladajú a koľko od teba očakávajú. Tento sprievodca ukazuje, kde v Claude Code nájdeš to, čo poznáš z Cowork, a pomôže rozhodnúť, čo sa ku komu hodí.</p>
+    <p>Claude Code tu znamená <strong>záložku Code v desktop aplikácii Claude</strong>. Verzia v termináli (CLI) má rovnaké nastavenia a spomína sa iba tam, kde vie niečo, čo desktop aplikácia nevie.</p>
+  </section>
+
+  <section class="stack">
+    <h2>Dve pracoviská, jeden Claude</h2>
+    <div class="cards">
+      <div class="card req">
+        <span class="tag">Cowork</span>
+        <h3>Na kancelársku prácu, bez terminálu</h3>
+        <p>Dokumenty, tabuľky, prieskum, reporty. Pripojíš priečinky a aplikácie, opíšeš úlohu a Claude ju vykoná. Práca beží v izolovanom prostredí na serveroch Anthropic. Cez desktop aplikáciu číta a zapisuje do priečinkov, ktoré si pripojil.</p>
+      </div>
+      <div class="card arch">
+        <span class="tag">Claude Code</span>
+        <h3>Na prácu so súbormi, skriptmi a kódom</h3>
+        <p>Otvoríš priečinok na svojom počítači a Claude pracuje priamo v ňom: číta súbory, spúšťa skripty a príkazy, verzie drží v gite. Lokálna session beží na tvojom počítači. Môže bežať aj v cloude alebo na inom počítači.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="stack">
+    <h2>Ekvivalenty</h2>
+    <p>Riadky sú napísané ako to, čo chceš urobiť. Klikni na riadok a dostaneš sa k podrobnostiam pod tabuľkou.</p>
+    <div class="tbl-wrap">
+      <table>
+        <tr><th>Čo chceš</th><th class="cw">V Cowork</th><th class="cc">V Claude Code (desktop)</th></tr>
+        <tr><td class="moment"><a href="#sk-place">Jedno miesto pre jednu prácu</a></td>
+          <td><strong>Projekt</strong></td>
+          <td><strong>Priečinok na počítači</strong>, ktorý vyberieš pri štarte session</td></tr>
+        <tr><td class="moment"><a href="#sk-rules">Stále pravidlá pre túto prácu</a></td>
+          <td><strong>Inštrukcie</strong> projektu (a inštrukcie priečinka)</td>
+          <td>Súbor <strong>CLAUDE.md</strong> v priečinku</td></tr>
+        <tr><td class="moment"><a href="#sk-rules">Pravidlá pre všetko, čo robíš</a></td>
+          <td><strong>Globálne inštrukcie</strong> v nastaveniach</td>
+          <td>Tvoj <strong>osobný CLAUDE.md</strong>, platí v každom priečinku</td></tr>
+        <tr><td class="moment"><a href="#sk-docs">Dokumenty, z ktorých má Claude čerpať</a></td>
+          <td><strong>Kontext</strong> projektu: pripojené priečinky, odkazy, prepojené chat projekty</td>
+          <td><strong>Súbory v priečinku</strong>; Claude ich otvorí, keď ich potrebuje</td></tr>
+        <tr><td class="moment"><a href="#sk-memory">Čo si Claude pamätá</a></td>
+          <td><strong>Pamäť</strong> projektu, plní ju Claude</td>
+          <td>Čo napíšeš do <strong>CLAUDE.md</strong> a dokumentov projektu, k tomu automatická pamäť</td></tr>
+        <tr><td class="moment"><a href="#sk-skills">Postupy, podľa ktorých Claude pracuje (skilly)</a></td>
+          <td>Skilly <strong>v tvojom účte</strong> a z pluginov</td>
+          <td>Skilly v účte, <strong>tvoje skilly na tomto počítači</strong> a <strong>skilly tohto projektu</strong></td></tr>
+        <tr><td class="moment"><a href="#sk-plugins">Hotové balíky skillov a nástrojov</a></td>
+          <td><strong>Pluginy</strong> (Customize → Plugins)</td>
+          <td><strong>Pluginy</strong> (+ vedľa poľa na správu)</td></tr>
+        <tr><td class="moment"><a href="#sk-plugins">Prepojenie s inými aplikáciami</a></td>
+          <td><strong>Konektory</strong></td>
+          <td><strong>Konektory</strong> (technicky MCP servery)</td></tr>
+        <tr><td class="moment"><a href="#sk-agents">Odovzdať prácu pomocníkom (agentová práca)</a></td>
+          <td>Claude sám rozdelí väčšiu úlohu na podúlohy pre <strong>subagentov</strong>; dlhé úlohy pokračujú v cloude</td>
+          <td><strong>Agenti</strong> s vlastným kontextom: zabudovaní, z pluginov alebo vlastní; práca na pozadí; súbežné session</td></tr>
+        <tr><td class="moment"><a href="#sk-run">Kde práca beží</a></td>
+          <td>V <strong>cloude</strong>, s prístupom k pripojeným priečinkom</td>
+          <td><strong>Na tvojom počítači</strong> (lokálne), alebo v cloude, alebo cez SSH</td></tr>
+        <tr><td class="moment"><a href="#sk-run">Čo smie Claude bez opýtania</a></td>
+          <td>Manual, Auto, Skip</td>
+          <td>Manual, Accept edits, Plan, Auto, Bypass</td></tr>
+        <tr><td class="moment"><a href="#sk-history">Predchádzajúca práca</a></td>
+          <td>Úlohy v projekte a v bočnom paneli</td>
+          <td><strong>Session</strong> v bočnom paneli</td></tr>
+        <tr><td class="moment"><a href="#sk-history">Práca, ktorá sa opakuje podľa plánu</a></td>
+          <td><strong>Naplánované úlohy</strong> (<code>/schedule</code>)</td>
+          <td><strong>Rutiny</strong> v cloude (<code>/schedule</code>)</td></tr>
+        <tr><td class="moment"><a href="#sk-share">Zdieľanie s tímom</a></td>
+          <td>Pluginy a skilly organizácie; zdieľanie projektu <span class="pill task">over v aplikácii</span></td>
+          <td>Pluginy organizácie; <strong>git repozitár</strong> alebo zdieľaný priečinok s projektom</td></tr>
+        <tr><td class="moment"><a href="#sk-only">Iba v Claude Code</a></td>
+          <td class="none">–</td>
+          <td>História verzií (git), kontrola zmien po riadkoch, vlastné skripty na tvojom počítači, hooky vo vlastných nastaveniach, súbežné session v samostatných kópiách (worktrees)</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section class="stack">
+    <h2>Podrobnosti</h2>
+
+    <div class="detail" id="sk-place">
+      <h3>Jedno miesto pre jednu prácu</h3>
+      <div class="pair">
+        <div class="req"><span class="side">Cowork</span>
+          <p>Projekt združuje súvisiace úlohy s vlastnými inštrukciami, kontextom a pamäťou. Vytvoríš ho v aplikácii a pomenuješ.</p></div>
+        <div class="arch"><span class="side">Claude Code</span>
+          <p>Objekt „projekt“ tu nie je. Projekt je priečinok, ktorý vyberieš pod poľom na správu pred prvou správou. Všetko, čo Claude k práci potrebuje, je v ňom ako obyčajné súbory, ktoré môžeš otvoriť, skopírovať a zálohovať.</p></div>
+      </div>
+      <p>Projekty sú iba v Cowork; Claude Code projekty z Cowork nevidí. Kde Cowork projekt ukladá (na počítači alebo v účte), opisujú stránky Anthropic rôzne <span class="pill task">over v aplikácii</span>.</p>
+    </div>
+
+    <div class="detail" id="sk-rules">
+      <h3>Stále pravidlá: inštrukcie a CLAUDE.md</h3>
+      <div class="pair">
+        <div class="req"><span class="side">Cowork</span>
+          <p><strong>Globálne inštrukcie</strong> (Settings → Cowork, v novších verziách „Instructions for Claude“) platia pre každú úlohu. <strong>Inštrukcie projektu</strong> platia pre úlohy v jednom projekte. <strong>Inštrukcie priečinka</strong> dopĺňajú kontext k pripojenému priečinku; Claude ich môže počas úlohy sám upraviť.</p></div>
+        <div class="arch"><span class="side">Claude Code</span>
+          <p><strong>CLAUDE.md</strong> je obyčajný textový súbor v priečinku projektu. Claude ho prečíta na začiatku každej session. Tvoj <strong>osobný CLAUDE.md</strong> je v tvojom používateľskom priečinku (pozri <a href="#sk-paths">Kde sú tieto súbory</a>) a platí v každom projekte. Oba sa upravujú ako každý iný súbor, tebou alebo Claudom, keď ho o to požiadaš.</p></div>
+      </div>
+      <p>Na oboch miestach drž iba to, čo platí vždy. Postup pre jeden druh úlohy patrí do skillu.</p>
+    </div>
+
+    <div class="detail" id="sk-docs">
+      <h3>Dokumenty, z ktorých má Claude čerpať</h3>
+      <div class="pair">
+        <div class="req"><span class="side">Cowork</span>
+          <p>Kontext projektu tvoria <strong>pripojené lokálne priečinky</strong>, <strong>odkazy</strong> a <strong>prepojené chat projekty</strong> (s dokumentmi, ktoré sú do nich nahrané). Claude číta súbory z pripojených priečinkov do 50 MB na súbor. K lokálnym priečinkom sa dostane, iba keď je desktop aplikácia otvorená.</p></div>
+        <div class="arch"><span class="side">Claude Code</span>
+          <p>Dokumenty sú súbory v priečinku projektu. Na začiatku sa načíta iba CLAUDE.md; ostatné súbory sa otvoria, keď ich práca potrebuje. Malý súbor, ktorý treba čítať zakaždým, sa dá vložiť do CLAUDE.md riadkom ako <code>@docs/pravidla.md</code>.</p></div>
+      </div>
+      <p>V Claude Code môže skill alebo inštrukcia odkázať na presný súbor (<code>ceny/2026.xlsx</code>) a skript z neho prečíta každý riadok. V Cowork odkazuj na dokument menom a tým, čo obsahuje.</p>
+    </div>
+
+    <div class="detail" id="sk-memory">
+      <h3>Čo si Claude pamätá</h3>
+      <div class="pair">
+        <div class="req"><span class="side">Cowork</span>
+          <p>Každý projekt má vlastnú pamäť; čo sa Claude naučí v jednom projekte, do iného neprejde. Projekt predvolene používa aj pamäť tvojho účtu z chatov; na stránke projektu sa to dá vypnúť („Use account memory“).</p></div>
+        <div class="arch"><span class="side">Claude Code</span>
+          <p>Claude si medzi session nepamätá nič okrem toho, čo je zapísané. Spoľahlivá pamäť sú vlastné dokumenty projektu: CLAUDE.md, požiadavky, úlohy a plány (pozri sprievodcu <a href="project-memory.html">Project memory</a>). Automatická pamäť pridáva krátke poznámky, ktoré si Claude vedie ku každému projektu na tvojom počítači.</p></div>
+      </div>
+    </div>
+
+    <div class="detail" id="sk-skills">
+      <h3>Skilly a čo znamená <code>.claude/skills</code></h3>
+      <p>Skill je <strong>priečinok so súborom <code>SKILL.md</code></strong>: hore krátky popis, pod ním postup. Môže obsahovať ďalšie súbory, ktoré postup používa (šablóny, príklady, skripty). Claude vidí iba popisy všetkých skillov; celý skill otvorí, keď popis sedí na tvoju požiadavku.</p>
+      <p>Ten istý skill môže byť na troch miestach. Ktoré miesta prostredie vidí, rozhoduje o tom, kde skill funguje:</p>
+      <div class="tbl-wrap">
+        <table>
+          <tr><th>Miesto</th><th>Kde je</th><th>Kto ho vidí</th><th class="cw">Cowork</th><th class="cc">Claude Code, lokálne</th><th class="cc">Claude Code, cloud</th></tr>
+          <tr><td class="moment">Tvoj účet</td><td>Nahraný v aplikácii Claude alebo nainštalovaný s pluginom</td><td>Ty, na každom zariadení</td><td>áno</td><td>áno</td><td>áno</td></tr>
+          <tr><td class="moment">Tvoj počítač (osobné skilly)</td><td><code>C:\Users\&lt;ty&gt;\.claude\skills\</code></td><td>Ty, na tomto počítači, v každom projekte</td><td>nie</td><td>áno</td><td>nie</td></tr>
+          <tr><td class="moment">Projekt</td><td><code>&lt;priečinok projektu&gt;\.claude\skills\</code></td><td>Každý, kto má priečinok projektu</td><td>nie</td><td>áno</td><td>áno, ak je projekt v repozitári, ktorý session používa</td></tr>
+        </table>
+      </div>
+      <p><code>~/.claude/skills/</code> v dokumentácii je druhý riadok: <code>~</code> znamená tvoj používateľský priečinok. <code>.claude/skills/</code> bez <code>~</code> je tretí riadok, vnútri projektu.</p>
+      <p>Skilly organizácie, ktoré spravuje administrátor, sa v účte zobrazia v knižnici organizácie <span class="pill task">over v aplikácii</span>.</p>
+    </div>
+
+    <div class="detail" id="sk-paths">
+      <h3>Kde sú tieto súbory na tvojom počítači</h3>
+      <ul class="plain">
+        <li><strong>Bodka priečinok skrýva.</strong> Názov, ktorý začína bodkou (<code>.claude</code>), je skrytý priečinok. V Prieskumníkovi vo Windows 11: <em>Zobraziť → Zobraziť → Skryté položky</em>. Na Macu vo Finderi: <em>Cmd + Shift + .</em></li>
+        <li><strong>Najrýchlejšie vo Windows:</strong> napíš <code>%USERPROFILE%\.claude</code> do panela s adresou v Prieskumníkovi a stlač Enter.</li>
+        <li><strong>Pridať osobný skill</strong> znamená skopírovať jeho priečinok do <code>.claude\skills\</code> tak, aby cesta bola <code>.claude\skills\&lt;názov skillu&gt;\SKILL.md</code>. Nová session ho uvidí.</li>
+        <li><strong>Tvoj osobný CLAUDE.md</strong> je <code>%USERPROFILE%\.claude\CLAUDE.md</code>.</li>
+      </ul>
+      <pre>C:\Users\&lt;ty&gt;\.claude\
+  CLAUDE.md              pravidlá pre každý projekt
+  skills\
+    zapis-z-porady\
+      SKILL.md           jeden osobný skill
+moj-projekt\
+  CLAUDE.md              pravidlá pre tento projekt
+  .claude\
+    skills\
+      mesacny-report\
+        SKILL.md         skill tohto projektu</pre>
+    </div>
+
+    <div class="detail" id="sk-plugins">
+      <h3>Pluginy a konektory</h3>
+      <div class="pair">
+        <div class="req"><span class="side">Cowork</span>
+          <p>Customize → Plugins: prehliadať a inštalovať, pridať marketplace cez URL alebo GitHub <code>owner/repo</code>, prípadne nahrať súbor. Plugin sa uloží do tvojho účtu, takže jeho skilly a konektory máš aj v chate a v Claude Code. Konektory sú v Customize → Connectors, s povolením pre každý nástroj.</p></div>
+        <div class="arch"><span class="side">Claude Code</span>
+          <p>Tlačidlo + vedľa poľa na správu → Plugins. Plugin sa dá nainštalovať pre tvoj používateľský účet, pre jeden projekt alebo iba lokálne. Pluginy fungujú v lokálnych a SSH session, nie v cloudových. Konektory sa pridávajú tiež cez +.</p></div>
+      </div>
+      <p>Plugin je balík: skilly, konektory, agenti (pomocníci s vlastným kontextom) a hooky (akcie v pevných momentoch). Administrátor organizácie (Team, Enterprise) môže pluginy nastaviť ako predvolene nainštalované, dostupné, nedostupné alebo povinné.</p>
+    </div>
+
+    <div class="detail" id="sk-agents">
+      <h3>Agentová práca: Claude urobí viac krokov a časti odovzdá pomocníkom</h3>
+      <div class="pair">
+        <div class="req"><span class="side">Cowork</span>
+          <p>Zadáš cieľ; Claude naplánuje kroky, zložitú prácu rozdelí na menšie úlohy a sám koordinuje <strong>subagentov</strong>. Akcie schvaľuješ podľa režimu. Práca beží v cloude, takže dlhá úloha nezávisí od tvojho počítača (iba prístup k lokálnym priečinkom potrebuje otvorenú desktop aplikáciu). Vlastných agentov môžu pridať pluginy.</p></div>
+        <div class="arch"><span class="side">Claude Code</span>
+          <p><strong>Agent</strong> je pomocník s vlastným čistým kontextom: dostane zadanie, urobí svoju časť a vráti krátku správu, takže hlavný chat zostane malý. Zabudovaných agentov (napríklad na vyhľadávanie) Claude používa sám, ďalších pridávajú pluginy (b6 pridáva <code>worker</code> a <code>reviewer</code>) a vlastného agenta si môžeš napísať ako súbor v <code>.claude\agents\</code> projektu alebo svojho používateľského priečinka. Dlhé príkazy môžu bežať na pozadí a viac session môže pracovať súbežne.</p></div>
+      </div>
+      <p>Oba sú agentové: Claude vykoná viac krokov bez toho, aby si ho viedol pri každom. Rozdiel je v kontrole. V Claude Code vidíš a rozhoduješ, kto čo robí, napríklad pravidlo b6, že každý krok skontroluje nový recenzent. Tímy agentov (viac agentov spolupracuje na jednej úlohe) sú iba vo verzii v termináli.</p>
+    </div>
+
+    <div class="detail" id="sk-run">
+      <h3>Kde práca beží a čo smie Claude</h3>
+      <div class="pair">
+        <div class="req"><span class="side">Cowork</span>
+          <p>Kód a príkazy bežia v izolovanom prostredí na serveroch Anthropic. Claude číta a zapisuje iba do priečinkov, ktoré si pripojil. Schvaľovanie: <strong>Manual</strong> (pýta sa), <strong>Auto</strong> (akcie posudzuje automatická kontrola), <strong>Skip</strong> (bez kontrol). Mazanie vždy potrebuje tvoje povolenie.</p></div>
+        <div class="arch"><span class="side">Claude Code</span>
+          <p><strong>Lokálna</strong> session beží na tvojom počítači s priamym prístupom k vybranému priečinku a k tomu, kam sa dostane tvoj používateľský účet. <strong>Cloudové</strong> a <strong>SSH</strong> session bežia inde. Režimy: <strong>Manual</strong>, <strong>Accept edits</strong>, <strong>Plan</strong> (navrhuje, nemení), <strong>Auto</strong>, <strong>Bypass</strong> (bez otázok; najprv sa musí povoliť v nastaveniach, nie na každom pláne).</p></div>
+      </div>
+      <p>Lokálna session Claude Code môže na tvojom počítači urobiť čokoľvek, čo môžeš ty, v rámci zvoleného režimu. Preto sa hodí ľuďom, ktorí rozumejú, čo príkaz alebo skript robí, skôr než ho schvália.</p>
+    </div>
+
+    <div class="detail" id="sk-history">
+      <h3>Predchádzajúca a opakovaná práca</h3>
+      <div class="pair">
+        <div class="req"><span class="side">Cowork</span>
+          <p>Úlohy zostávajú v projekte a v bočnom paneli. <strong>Naplánované úlohy</strong> (<code>/schedule</code> alebo Scheduled v bočnom paneli) bežia v cloude, aj keď je tvoj počítač vypnutý, a preberajú inštrukcie a pamäť projektu.</p></div>
+        <div class="arch"><span class="side">Claude Code</span>
+          <p><strong>Session</strong> sú v bočnom paneli; dajú sa premenovať, zoskupiť a archivovať. Dlhá session sa spomaľuje; na novú úlohu začni novú (pozri <a href="what-loads-when.html">What loads when</a>). Opakovaná práca beží ako <strong>rutiny</strong> v cloude.</p></div>
+      </div>
+    </div>
+
+    <div class="detail" id="sk-share">
+      <h3>Zdieľanie s tímom</h3>
+      <div class="pair">
+        <div class="req"><span class="side">Cowork</span>
+          <p>Organizácia zdieľa pluginy a skilly cez nastavenia administrátora. Či sa dá zdieľať samotný projekt Cowork, opisujú stránky Anthropic rôzne <span class="pill task">over v aplikácii</span>. Artefakty (stránky, ktoré Claude vytvoril) sa zdieľať dajú.</p></div>
+        <div class="arch"><span class="side">Claude Code</span>
+          <p>Projekt je priečinok, takže sa zdieľa ako súbory: git repozitár, zdieľaný disk alebo plugin pre skilly, ktoré používa viac ľudí. Všetci potom majú rovnaký CLAUDE.md a skilly projektu.</p></div>
+      </div>
+    </div>
+
+    <div class="detail" id="sk-only">
+      <h3>Iba v Claude Code</h3>
+      <ul class="plain">
+        <li><strong>História verzií.</strong> S gitom sa dá každá zmena pozrieť a vrátiť.</li>
+        <li><strong>Kontrola zmien.</strong> Karta Changes ukáže každý zmenený riadok; k riadku môžeš napísať komentár a Claude ho opraví.</li>
+        <li><strong>Vlastné skripty.</strong> Python alebo iné skripty bežia na tvojom počítači, nad tvojimi súbormi, zakaždým s rovnakým výsledkom.</li>
+        <li><strong>Hooky vo vlastných nastaveniach</strong>, nielen z pluginov.</li>
+        <li><strong>Súbežné session v samostatných kópiách</strong> projektu (worktrees, potrebuje git).</li>
+        <li><strong>Iba vo verzii v termináli:</strong> skriptované behy bez okna (na automatizáciu) a tímy agentov.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="stack">
+    <h2>Čo kedy</h2>
+    <p>Rozhoduje skôr človek než úloha: jeho technické zručnosti a to, ako rozumie skillom. Človeka posuň o úroveň vyššie, keď splní podmienku na konci svojej úrovne.</p>
+    <div class="levels">
+      <div class="level req"><span class="num">1</span>
+        <h3>Chat a projekty v Cowork</h3>
+        <p>Pracuje s dokumentmi a tabuľkami, zadáva jasné úlohy. Používa projekty s inštrukciami a pripojenými priečinkami.</p>
+        <p class="next">Ďalšia úroveň, keď: opakuje tie isté inštrukcie vo viacerých úlohách a vie postup opísať krok za krokom.</p></div>
+      <div class="level req"><span class="num">2</span>
+        <h3>Vlastné skilly v Cowork</h3>
+        <p>Opakovaný postup premení na skill v účte, popis píše slovami, ktoré ľudia naozaj používajú, inštaluje pluginy, ktoré organizácia ponúka.</p>
+        <p class="next">Ďalšia úroveň, keď: práca potrebuje presné súbory, skripty alebo veľa riadkov dát spracovaných zakaždým rovnako a priečinky a cesty k súborom mu nerobia problém.</p></div>
+      <div class="level arch"><span class="num">3</span>
+        <h3>Claude Code v desktop aplikácii</h3>
+        <p>Otvorí priečinok, drží v ňom CLAUDE.md a skilly projektu, pred schválením si prečíta, čo chce Claude spustiť, zmeny kontroluje po riadkoch.</p>
+        <p class="next">Ďalšia úroveň, keď: stavia nástroje pre iných a chce metódu s požiadavkami, plánmi a kontrolami.</p></div>
+      <div class="level arch"><span class="num">4</span>
+        <h3>Claude Code s pluginom b6</h3>
+        <p>Stavia a mení nástroje po krokoch: dohodnuté požiadavky, plán, malé kroky, ktoré robí worker a kontroluje nový reviewer, s gitom. Pozri <a href="getting-started.html">Getting started with b6</a>.</p></div>
+    </div>
+  </section>
+
+  <section class="stack">
+    <h2>Skill, ktorý funguje v oboch</h2>
+    <ul class="plain">
+      <li><strong>Daj ho do svojho účtu</strong> (nahraj ho alebo nainštaluj s pluginom). Skilly v účte sa načítajú v Cowork aj v Claude Code, lokálne aj v cloude.</li>
+      <li><strong>Stály obsah nos v skille.</strong> Šablóny, zoznamy kódov a vzorové výstupy patria do priečinka skillu (napríklad <code>references/</code>), nie do kontextu projektu.</li>
+      <li><strong>Na meniace sa dokumenty odkazuj menom a obsahom</strong>, napríklad „aktuálny cenník (tabuľka materiálov s cenou za kus)“, a pridaj záložný krok: „ak nie je k dispozícii, vypýtaj si ho od používateľa“.</li>
+      <li><strong>Žiadne pevné cesty.</strong> Cesta ako <code>C:\Users\…</code> existuje iba na jednom počítači a v Cowork nikdy.</li>
+      <li><strong>Slabé miesto sú skripty.</strong> V Claude Code bežia na tvojom počítači nad tvojimi súbormi; v Cowork bežia v cloudovom prostredí nad pripojenými priečinkami. Píš ich tak, aby súbor dostali ako vstup, a skill pred odovzdaním vyskúšaj v oboch.</li>
+    </ul>
+  </section>
+
+  <div class="note">
+    <p><strong>Zdroje.</strong> Overené v dokumentácii Anthropic k Cowork a Claude Code v novembri 2026. Oba produkty sa často menia. Kde sa stránky Anthropic nezhodujú, text uvádza <span class="pill task">over v aplikácii</span>.</p>
+  </div>
+
+  <footer>Interné · @panthea.sk</footer>
+</div>
+
+<!-- ============================== ENGLISH ============================== -->
+<div class="lang" id="lang-en" lang="en">
+
+  <section class="stack">
+    <a class="back" href="index.html">← All guides</a>
+    <span class="eyebrow">Guide · b6 plugin</span>
+    <h1>Cowork and Claude Code</h1>
+    <p class="lead">Both run on the same Claude and both can work with your files, skills and plugins. They differ in where the work runs, where things are stored and how much they expect you to know. This guide shows where to find in Claude Code what you know from Cowork, and helps you decide which one fits a person.</p>
+    <p>Claude Code here means the <strong>Code tab of the Claude desktop app</strong>. The terminal version (CLI) shares the same settings and is mentioned only where it can do something the desktop app cannot.</p>
+  </section>
+
+  <section class="stack">
+    <h2>Two workplaces, one Claude</h2>
+    <div class="cards">
+      <div class="card req">
+        <span class="tag">Cowork</span>
+        <h3>For office work, no terminal</h3>
+        <p>Documents, spreadsheets, research, reports. You connect folders and apps, describe the task and Claude carries it out. The work runs in an isolated environment on Anthropic's servers. Through the desktop app it reads and writes the folders you connected.</p>
+      </div>
+      <div class="card arch">
+        <span class="tag">Claude Code</span>
+        <h3>For work with files, scripts and code</h3>
+        <p>You open a folder on your computer and Claude works directly in it: reads files, runs scripts and commands, keeps versions in git. A local session runs on your computer. It can also run in the cloud or on another machine.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="stack">
+    <h2>Equivalents</h2>
+    <p>Rows are written as what you want to do. Click a row for details below the table.</p>
+    <div class="tbl-wrap">
+      <table>
+        <tr><th>What you want</th><th class="cw">In Cowork</th><th class="cc">In Claude Code (desktop)</th></tr>
+        <tr><td class="moment"><a href="#d-place">One place for one piece of work</a></td>
+          <td>A <strong>project</strong></td>
+          <td>A <strong>folder on your computer</strong>, chosen when you start a session</td></tr>
+        <tr><td class="moment"><a href="#d-rules">Standing rules for this work</a></td>
+          <td>Project <strong>instructions</strong> (and folder instructions)</td>
+          <td>A file <strong>CLAUDE.md</strong> in the folder</td></tr>
+        <tr><td class="moment"><a href="#d-rules">Rules for everything you do</a></td>
+          <td><strong>Global instructions</strong> in Settings</td>
+          <td>Your <strong>personal CLAUDE.md</strong>, valid in every folder</td></tr>
+        <tr><td class="moment"><a href="#d-docs">Documents Claude should use</a></td>
+          <td>Project <strong>context</strong>: connected folders, links, linked chat projects</td>
+          <td><strong>Files in the folder</strong>; Claude opens them when it needs them</td></tr>
+        <tr><td class="moment"><a href="#d-memory">What Claude remembers</a></td>
+          <td>Project <strong>memory</strong>, filled by Claude</td>
+          <td>What you write in <strong>CLAUDE.md</strong> and project documents, plus automatic memory</td></tr>
+        <tr><td class="moment"><a href="#d-skills">Procedures Claude follows (skills)</a></td>
+          <td>Skills <strong>in your account</strong> and from plugins</td>
+          <td>Skills in your account, <strong>your skills on this computer</strong> and <strong>skills of this project</strong></td></tr>
+        <tr><td class="moment"><a href="#d-plugins">Ready-made packages of skills and tools</a></td>
+          <td><strong>Plugins</strong> (Customize → Plugins)</td>
+          <td><strong>Plugins</strong> (+ next to the message box)</td></tr>
+        <tr><td class="moment"><a href="#d-plugins">Connections to other apps</a></td>
+          <td><strong>Connectors</strong></td>
+          <td><strong>Connectors</strong> (technically MCP servers)</td></tr>
+        <tr><td class="moment"><a href="#d-agents">Hand work to helpers (agentic work)</a></td>
+          <td>Claude splits a larger task into sub-tasks for <strong>sub-agents</strong> on its own; long tasks continue in the cloud</td>
+          <td><strong>Agents</strong> with their own context: built in, from plugins or your own; work in the background; parallel sessions</td></tr>
+        <tr><td class="moment"><a href="#d-run">Where the work runs</a></td>
+          <td>In the <strong>cloud</strong>, with access to connected folders</td>
+          <td><strong>On your computer</strong> (local), or in the cloud, or over SSH</td></tr>
+        <tr><td class="moment"><a href="#d-run">How much Claude may do without asking</a></td>
+          <td>Manual, Auto, Skip</td>
+          <td>Manual, Accept edits, Plan, Auto, Bypass</td></tr>
+        <tr><td class="moment"><a href="#d-history">Earlier work</a></td>
+          <td>Tasks in the project and sidebar</td>
+          <td><strong>Sessions</strong> in the sidebar</td></tr>
+        <tr><td class="moment"><a href="#d-history">Work that repeats on a schedule</a></td>
+          <td><strong>Scheduled tasks</strong> (<code>/schedule</code>)</td>
+          <td><strong>Routines</strong> in the cloud (<code>/schedule</code>)</td></tr>
+        <tr><td class="moment"><a href="#d-share">Sharing with the team</a></td>
+          <td>Organization plugins and skills; project sharing <span class="pill task">check in your app</span></td>
+          <td>Organization plugins; a <strong>git repository</strong> or a shared folder with the project</td></tr>
+        <tr><td class="moment"><a href="#d-only">Only in Claude Code</a></td>
+          <td class="none">–</td>
+          <td>Version history (git), review of changes line by line, your own scripts on your computer, hooks in your own settings, parallel sessions in separate copies (worktrees)</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section class="stack">
+    <h2>Details</h2>
+
+    <div class="detail" id="d-place">
+      <h3>One place for one piece of work</h3>
+      <div class="pair">
+        <div class="req"><span class="side">Cowork</span>
+          <p>A project groups related tasks with their own instructions, context and memory. You create it in the app and give it a name.</p></div>
+        <div class="arch"><span class="side">Claude Code</span>
+          <p>There is no project object. The project is the folder you choose under the message box before your first message. Everything Claude needs for the work is in that folder as ordinary files you can open, copy and back up.</p></div>
+      </div>
+      <p>Projects are a Cowork feature only; Claude Code does not show Cowork projects. Where Cowork stores a project (on the computer or in the account) is described differently in Anthropic's pages <span class="pill task">check in your app</span>.</p>
+    </div>
+
+    <div class="detail" id="d-rules">
+      <h3>Standing rules: instructions and CLAUDE.md</h3>
+      <div class="pair">
+        <div class="req"><span class="side">Cowork</span>
+          <p><strong>Global instructions</strong> (Settings → Cowork, or "Instructions for Claude" in newer versions) apply to every task. <strong>Project instructions</strong> apply to tasks in one project. <strong>Folder instructions</strong> add context for a connected folder; Claude may update them itself during a task.</p></div>
+        <div class="arch"><span class="side">Claude Code</span>
+          <p><strong>CLAUDE.md</strong> is a plain text file in the project folder. Claude reads it at the start of every session. Your <strong>personal CLAUDE.md</strong> is in your user folder (see <a href="#d-paths">Where these files are</a>) and applies in every project. Both are edited like any other file, by you or by Claude when you ask.</p></div>
+      </div>
+      <p>Keep in both places only what is always true. A procedure for one kind of task belongs in a skill.</p>
+    </div>
+
+    <div class="detail" id="d-docs">
+      <h3>Documents Claude should use</h3>
+      <div class="pair">
+        <div class="req"><span class="side">Cowork</span>
+          <p>Project context is made of <strong>connected local folders</strong>, <strong>links</strong> and <strong>linked chat projects</strong> (with the documents uploaded to them). Claude reads files from connected folders up to 50 MB each. The desktop app must be open for Claude to reach local folders.</p></div>
+        <div class="arch"><span class="side">Claude Code</span>
+          <p>Documents are files in the project folder. Only CLAUDE.md is loaded at the start; other files are opened when the work needs them. A small file that must be read every time can be pulled into CLAUDE.md with a line like <code>@docs/rules.md</code>.</p></div>
+      </div>
+      <p>In Claude Code a skill or an instruction can point to an exact file (<code>prices/2026.xlsx</code>) and a script can read every row of it. In Cowork, refer to a document by its name and what it contains.</p>
+    </div>
+
+    <div class="detail" id="d-memory">
+      <h3>What Claude remembers</h3>
+      <div class="pair">
+        <div class="req"><span class="side">Cowork</span>
+          <p>Each project has its own memory; what Claude learns in one project does not carry over to another. By default a project also uses your account memory from chats; you can turn this off on the project page ("Use account memory").</p></div>
+        <div class="arch"><span class="side">Claude Code</span>
+          <p>Claude remembers nothing between sessions except what is written down. The reliable memory is the project's own documents: CLAUDE.md, requirements, tasks and plans (see the <a href="project-memory.html">Project memory</a> guide). Automatic memory adds short notes Claude keeps per project on your computer.</p></div>
+      </div>
+    </div>
+
+    <div class="detail" id="d-skills">
+      <h3>Skills, and what <code>.claude/skills</code> means</h3>
+      <p>A skill is <strong>a folder with a file <code>SKILL.md</code></strong>: a short description at the top and a procedure below it. It may hold more files the procedure uses (templates, examples, scripts). Claude sees only the descriptions of all skills; it opens the whole skill when a description fits your request.</p>
+      <p>The same skill can live in three places. Which places an environment sees decides where the skill works:</p>
+      <div class="tbl-wrap">
+        <table>
+          <tr><th>Place</th><th>Where it is</th><th>Who sees it</th><th class="cw">Cowork</th><th class="cc">Claude Code, local</th><th class="cc">Claude Code, cloud</th></tr>
+          <tr><td class="moment">Your account</td><td>Uploaded in the Claude app or installed with a plugin</td><td>You, on every device</td><td>yes</td><td>yes</td><td>yes</td></tr>
+          <tr><td class="moment">Your computer (personal skills)</td><td><code>C:\Users\&lt;you&gt;\.claude\skills\</code></td><td>You, on this computer, in every project</td><td>no</td><td>yes</td><td>no</td></tr>
+          <tr><td class="moment">The project</td><td><code>&lt;project folder&gt;\.claude\skills\</code></td><td>Everyone who has the project folder</td><td>no</td><td>yes</td><td>yes, if the project is in the repository the session uses</td></tr>
+        </table>
+      </div>
+      <p><code>~/.claude/skills/</code> in documentation is the second row: <code>~</code> means your user folder. <code>.claude/skills/</code> without <code>~</code> is the third row, inside a project.</p>
+      <p>Organization skills managed by an admin appear in the account under the organization library <span class="pill task">check in your app</span>.</p>
+    </div>
+
+    <div class="detail" id="d-paths">
+      <h3>Where these files are on your computer</h3>
+      <ul class="plain">
+        <li><strong>The dot hides the folder.</strong> A name starting with a dot (<code>.claude</code>) is a hidden folder. In Windows 11 File Explorer: <em>View → Show → Hidden items</em>. On a Mac in Finder: <em>Cmd + Shift + .</em></li>
+        <li><strong>The quickest way in Windows:</strong> type <code>%USERPROFILE%\.claude</code> into the address bar of File Explorer and press Enter.</li>
+        <li><strong>Adding a personal skill</strong> means copying its folder into <code>.claude\skills\</code>, so that the path is <code>.claude\skills\&lt;skill name&gt;\SKILL.md</code>. A new session sees it.</li>
+        <li><strong>Your personal CLAUDE.md</strong> is <code>%USERPROFILE%\.claude\CLAUDE.md</code>.</li>
+      </ul>
+      <pre>C:\Users\&lt;you&gt;\.claude\
+  CLAUDE.md              rules for every project
+  skills\
+    meeting-notes\
+      SKILL.md           one personal skill
+my-project\
+  CLAUDE.md              rules for this project
+  .claude\
+    skills\
+      monthly-report\
+        SKILL.md         a skill of this project</pre>
+    </div>
+
+    <div class="detail" id="d-plugins">
+      <h3>Plugins and connectors</h3>
+      <div class="pair">
+        <div class="req"><span class="side">Cowork</span>
+          <p>Customize → Plugins: browse and install, add a marketplace by URL or GitHub <code>owner/repo</code>, or upload a file. A plugin is saved to your account, so its skills and connectors are also available in chat and in Claude Code. Connectors are in Customize → Connectors, with a permission per tool.</p></div>
+        <div class="arch"><span class="side">Claude Code</span>
+          <p>The + button next to the message box → Plugins. A plugin can be installed for your user account, for one project or only locally. Plugins work in local and SSH sessions, not in cloud sessions. Connectors are added through + as well.</p></div>
+      </div>
+      <p>A plugin is a package: skills, connectors, agents (helpers with their own context) and hooks (actions at fixed moments). An organization admin (Team, Enterprise) can set plugins as installed by default, available, not available or required.</p>
+    </div>
+
+    <div class="detail" id="d-agents">
+      <h3>Agentic work: Claude does several steps and hands parts to helpers</h3>
+      <div class="pair">
+        <div class="req"><span class="side">Cowork</span>
+          <p>You give the goal; Claude plans the steps, splits complex work into smaller tasks and coordinates <strong>sub-agents</strong> itself. You approve actions according to the mode. The work runs in the cloud, so a long task does not depend on your computer (only access to local folders needs the desktop app open). Plugins can add their own agents.</p></div>
+        <div class="arch"><span class="side">Claude Code</span>
+          <p>An <strong>agent</strong> is a helper with its own fresh context: it gets a brief, does its part and returns a short report, so the main chat stays small. Claude uses built-in agents (for example for searching) on its own, plugins add more (b6 adds <code>worker</code> and <code>reviewer</code>), and you can write your own as a file in <code>.claude\agents\</code> of the project or of your user folder. Long commands can run in the background and several sessions can work side by side.</p></div>
+      </div>
+      <p>Both are agentic: Claude carries out several steps without you guiding each one. The difference is control. In Claude Code you see and decide who does what, for example b6's rule that a fresh reviewer checks every step. Agent teams (several agents working together on one task) are available only in the terminal version.</p>
+    </div>
+
+    <div class="detail" id="d-run">
+      <h3>Where the work runs and what Claude may do</h3>
+      <div class="pair">
+        <div class="req"><span class="side">Cowork</span>
+          <p>Code and commands run in an isolated environment on Anthropic's servers. Claude reads and writes only the folders you connected. Approvals: <strong>Manual</strong> (asks), <strong>Auto</strong> (an automatic check reviews actions), <strong>Skip</strong> (no checks). Deleting always needs your permission.</p></div>
+        <div class="arch"><span class="side">Claude Code</span>
+          <p>A <strong>local</strong> session runs on your computer with direct access to the chosen folder and to what your user account can reach. <strong>Cloud</strong> and <strong>SSH</strong> sessions run elsewhere. Modes: <strong>Manual</strong>, <strong>Accept edits</strong>, <strong>Plan</strong> (proposes, does not change), <strong>Auto</strong>, <strong>Bypass</strong> (no questions; must be allowed in Settings first, not on every plan).</p></div>
+      </div>
+      <p>A local Claude Code session can do anything you can do on your computer, within the mode you chose. That is why it suits people who understand what a command or script does before they approve it.</p>
+    </div>
+
+    <div class="detail" id="d-history">
+      <h3>Earlier work and repeating work</h3>
+      <div class="pair">
+        <div class="req"><span class="side">Cowork</span>
+          <p>Tasks stay in the project and the sidebar. <strong>Scheduled tasks</strong> (<code>/schedule</code> or Scheduled in the sidebar) run in the cloud without your computer being on and inherit the project's instructions and memory.</p></div>
+        <div class="arch"><span class="side">Claude Code</span>
+          <p><strong>Sessions</strong> are listed in the sidebar; you can rename, group and archive them. A long session gets slower; start a new one for a new task (see <a href="what-loads-when.html">What loads when</a>). Repeating work runs as <strong>routines</strong> in the cloud.</p></div>
+      </div>
+    </div>
+
+    <div class="detail" id="d-share">
+      <h3>Sharing with the team</h3>
+      <div class="pair">
+        <div class="req"><span class="side">Cowork</span>
+          <p>The organization shares plugins and skills through the admin settings. Whether a Cowork project itself can be shared is described differently in Anthropic's pages <span class="pill task">check in your app</span>. Artifacts (pages Claude made) can be shared.</p></div>
+        <div class="arch"><span class="side">Claude Code</span>
+          <p>The project is a folder, so it is shared like files: a git repository, a shared drive, or a plugin for skills that more people use. Everyone then has the same CLAUDE.md and project skills.</p></div>
+      </div>
+    </div>
+
+    <div class="detail" id="d-only">
+      <h3>Only in Claude Code</h3>
+      <ul class="plain">
+        <li><strong>Version history.</strong> With git every change can be seen and undone.</li>
+        <li><strong>Review of changes.</strong> The Changes card shows each changed line; you can comment on a line and Claude fixes it.</li>
+        <li><strong>Your own scripts.</strong> Python or other scripts run on your computer, over your files, with the same result every time.</li>
+        <li><strong>Hooks in your own settings</strong>, not only from plugins.</li>
+        <li><strong>Parallel sessions in separate copies</strong> of the project (worktrees, needs git).</li>
+        <li><strong>Only in the terminal version:</strong> scripted runs without a window (for automation) and agent teams.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="stack">
+    <h2>Which one when</h2>
+    <p>The person decides it more than the task: their technical skills and how well they understand skills. Move a person one level up when they meet the condition at the end of their level.</p>
+    <div class="levels">
+      <div class="level req"><span class="num">1</span>
+        <h3>Chat and Cowork projects</h3>
+        <p>Works with documents and spreadsheets, writes clear tasks. Uses projects with instructions and connected folders.</p>
+        <p class="next">Next level when: they repeat the same instructions in several tasks and can describe the procedure step by step.</p></div>
+      <div class="level req"><span class="num">2</span>
+        <h3>Own skills in Cowork</h3>
+        <p>Turns a repeated procedure into a skill in the account, keeps the description in words people really use, installs plugins the organization offers.</p>
+        <p class="next">Next level when: the work needs exact files, scripts or many rows of data processed the same way every time, and they are comfortable with folders and file paths.</p></div>
+      <div class="level arch"><span class="num">3</span>
+        <h3>Claude Code in the desktop app</h3>
+        <p>Opens a folder, keeps CLAUDE.md and project skills there, reads what Claude wants to run before approving it, reviews changes line by line.</p>
+        <p class="next">Next level when: they build tools for others and want a method with requirements, plans and checks.</p></div>
+      <div class="level arch"><span class="num">4</span>
+        <h3>Claude Code with the b6 plugin</h3>
+        <p>Builds and changes tools step by step: agreed requirements, a plan, small steps done by a worker and checked by a fresh reviewer, with git. See <a href="getting-started.html">Getting started with b6</a>.</p></div>
+    </div>
+  </section>
+
+  <section class="stack">
+    <h2>A skill that works in both</h2>
+    <ul class="plain">
+      <li><strong>Put it in your account</strong> (upload it or install it with a plugin). Account skills load in Cowork and in Claude Code, local and cloud.</li>
+      <li><strong>Carry fixed content inside the skill.</strong> Templates, lists of codes and sample outputs go into the skill folder (for example <code>references/</code>), not into project context.</li>
+      <li><strong>Refer to changing documents by name and content</strong>, for example "the current price list (a table of materials with prices per piece)", and add a fallback: "if it is not available, ask the user for it".</li>
+      <li><strong>No fixed paths.</strong> A path like <code>C:\Users\…</code> exists only on one computer and never in Cowork.</li>
+      <li><strong>Scripts are the weak spot.</strong> In Claude Code they run on your computer over your files; in Cowork they run in the cloud environment over connected folders. Write them so they take the file as an input, and try the skill in both before you hand it over.</li>
+    </ul>
+  </section>
+
+  <div class="note">
+    <p><strong>Sources.</strong> Checked against Anthropic's Cowork and Claude Code documentation in November 2026. Both products change often. Where Anthropic's pages disagree, the text says <span class="pill task">check in your app</span>.</p>
+  </div>
+
+  <footer>Internal · @panthea.sk</footer>
+</div>
+
+</div>
+
+<script>
+(function () {
+  var blocks = { sk: document.getElementById('lang-sk'), en: document.getElementById('lang-en') };
+  var buttons = { sk: document.getElementById('btn-sk'), en: document.getElementById('btn-en') };
+  var current = 'en';
+  function show(lang) {
+    if (!blocks[lang]) lang = 'en';
+    current = lang;
+    for (var k in blocks) {
+      blocks[k].hidden = k !== lang;
+      buttons[k].setAttribute('aria-pressed', String(k === lang));
+    }
+    document.documentElement.lang = lang;
+  }
+  // The hash is either a language (#sk, #en) or a section link (#d-..., #sk-...); a section link keeps or picks its language.
+  function fromHash() {
+    var h = location.hash.replace('#', '');
+    if (h === 'sk' || h === 'en') { show(h); return; }
+    if (h.indexOf('sk-') === 0) { show('sk'); return; }
+    if (h.indexOf('d-') === 0) { show('en'); return; }
+    show(current);
+  }
+  for (var k in buttons) {
+    buttons[k].addEventListener('click', function () {
+      var lang = this.getAttribute('data-lang');
+      show(lang);
+      try { location.hash = lang; } catch (e) {}
+    });
+  }
+  window.addEventListener('hashchange', fromHash);
+  fromHash();
+  var target = location.hash && document.getElementById(location.hash.slice(1));
+  if (target && target.scrollIntoView) target.scrollIntoView();
+})();
+</script>
+
+</body></html>

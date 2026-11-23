@@ -18,7 +18,8 @@ SPRIEVODCA_SKILLY = DOCS / "skills-as-personal-and-company-knowledge.html"
 SPRIEVODCA_START = DOCS / "getting-started.html"
 SPRIEVODCA_KDE = DOCS / "what-loads-when.html"
 SPRIEVODCOVIA_TITLE = [(SPRIEVODCA, "Project memory"), (SPRIEVODCA_SKILLY, "Skills as company knowledge"),
-                       (SPRIEVODCA_START, "Getting started with b6"), (SPRIEVODCA_KDE, "What loads when")]
+                       (SPRIEVODCA_START, "Getting started with b6"), (SPRIEVODCA_KDE, "What loads when"),
+                       (DOCS / "cowork-vs-claude-code.html", "Cowork and Claude Code")]
 TEMPLATES = PLUGIN / "skills" / "workflow" / "references" / "templates.md"
 HOOKS = PLUGIN / "hooks" / "hooks.json"
 
@@ -358,7 +359,7 @@ ZAKAZANE_SLOVA_BEZ_VELKOSTI = ("fable",)
 
 
 def k10():
-    """K10: všetci štyria sprievodcovia majú obe jazykové časti, správny title a neobsahujú názvy klienta ani metodiky."""
+    """K10: všetci sprievodcovia v SPRIEVODCOVIA_TITLE majú obe jazykové časti, správny title a neobsahujú názvy klienta ani metodiky."""
     chyby = []
     for cesta, title in SPRIEVODCOVIA_TITLE:
         meno = cesta.name
